@@ -1,0 +1,42 @@
+{
+  "name": "stepfunctions-local",
+  "version": "1.0.0",
+  "description": "A local AWS Step Functions server",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "DEBUG=stepfunctions-local:* node src/index.js",
+    "lint": "./node_modules/eslint/bin/eslint.js src",
+    "test": "./node_modules/jest/bin/jest.js"
+  },
+  "keywords": [
+    "aws",
+    "local development",
+    "ci",
+    "continuous integration",
+    "step function",
+    "state machine",
+    "serverless"
+  ],
+  "author": "Christophe Bougère",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/airware/stepfunctions-local/issues"
+  },
+  "homepage": "https://github.com/airware/stepfunctions-local#readme",
+  "dependencies": {
+    "asl-validator": "^1.0.2",
+    "body-parser": "^1.18.2",
+    "debug": "^3.1.0",
+    "express": "^4.16.2",
+    "jsonpath": "^1.0.0",
+    "redux": "^3.7.2",
+    "uuid": "^3.1.0"
+  },
+  "devDependencies": {
+    "eslint": "^4.9.0",
+    "eslint-config-airbnb-base": "^12.1.0",
+    "eslint-plugin-import": "^2.8.0",
+    "eslint-plugin-jest": "^21.3.2",
+    "jest": "^21.2.1"
+  }
+}
