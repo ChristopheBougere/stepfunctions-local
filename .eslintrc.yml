@@ -3,3 +3,6 @@ plugins:
   - jest
 env:
   jest/globals: true
+rules:
+  guard-for-in: off
+  no-restricted-syntax: off
