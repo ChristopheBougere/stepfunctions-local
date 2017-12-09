@@ -1,4 +1,4 @@
-const { errors } = require('../constants');
+const { errors } = require('../../constants');
 
 function deleteStateMachine(params, stateMachines) {
   if (typeof params.stateMachineArn !== 'string') {

@@ -1,6 +1,6 @@
 const aslValidator = require('asl-validator');
 
-const { errors, status } = require('../constants');
+const { errors, status } = require('../../constants');
 
 function createStateMachine(params, stateMachines) {
   const regexp = /^arn:aws:iam::[0-9]+:role\/.+$/;

@@ -1,4 +1,4 @@
-const { errors } = require('../constants');
+const { errors } = require('../../constants');
 
 function describeStateMachines(params, stateMachines) {
   if (typeof params.stateMachineArn !== 'string') {

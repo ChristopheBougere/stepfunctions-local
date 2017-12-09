@@ -1,4 +1,4 @@
-const { errors } = require('../constants');
+const { errors } = require('../../constants');
 
 function listStateMachines(params, stateMachines) {
   if (params.maxResults && (params.maxResults < 0 || params.maxResults > 1000)) {

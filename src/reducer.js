@@ -1,9 +1,9 @@
 const constants = require('./constants');
-const listStateMachines = require('./lib/list-state-machines');
-const createStateMachine = require('./lib/create-state-machine');
-const deleteStateMachine = require('./lib/delete-state-machine');
-const describeStateMachine = require('./lib/describe-state-machine');
-const listExecutions = require('./lib/list-executions');
+const listStateMachines = require('./lib/actions/list-state-machines');
+const createStateMachine = require('./lib/actions/create-state-machine');
+const deleteStateMachine = require('./lib/actions/delete-state-machine');
+const describeStateMachine = require('./lib/actions/describe-state-machine');
+const listExecutions = require('./lib/actions/list-executions');
 
 const initialState = {
   stateMachines: [],

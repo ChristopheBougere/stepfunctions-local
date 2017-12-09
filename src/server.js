@@ -3,7 +3,7 @@ const bodyParser = require('body-parser');
 const { createStore } = require('redux');
 const uuidv4 = require('uuid/v4');
 
-const logger = require('./utils/logger')('stepfunctions-local');
+const logger = require('./lib/logger')('stepfunctions-local');
 const constants = require('./constants');
 const reducer = require('./reducer');
 
