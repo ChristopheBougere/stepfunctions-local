@@ -32,7 +32,9 @@ const state = {
   Default: 'DefaultState',
 };
 
-describe('choices', () => {
+describe('Choices', () => {
+  // TODO
+  // - validate output
   it('should return "Public" choice', async () => {
     const input = {
       type: 'NotPrivate',

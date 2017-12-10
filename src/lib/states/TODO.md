@@ -1,0 +1,5 @@
+- Retry & Catch
+- Result & ResultPath
+- Task (activity and lambda)
+- Succeed & Fail
+- Manage execution history (send signal for every update)
