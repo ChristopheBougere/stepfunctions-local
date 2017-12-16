@@ -4,6 +4,7 @@ const createStateMachine = require('./lib/actions/create-state-machine');
 const deleteStateMachine = require('./lib/actions/delete-state-machine');
 const describeStateMachine = require('./lib/actions/describe-state-machine');
 const listExecutions = require('./lib/actions/list-executions');
+const startExecutions = require('./lib/actions/start-execution');
 
 const initialState = {
   stateMachines: [],
@@ -14,6 +15,17 @@ const initialState = {
 // - reducer cases could be factorised, but when all actions will be coded
 // - add UpdateStateMachine new action
 // http://docs.aws.amazon.com/step-functions/latest/apireference/API_UpdateStateMachine.html
+
+function errorHandler(state, error, requestId) {
+  return Object.assign({}, state, {
+    responses: {
+      ...state.responses,
+      [requestId]: {
+        err: error.message,
+      },
+    },
+  });
+}
 
 function reducer(state = initialState, action) {
   const { actions } = constants;
@@ -54,14 +66,7 @@ function reducer(state = initialState, action) {
           },
         });
       } catch (e) {
-        return Object.assign({}, state, {
-          responses: {
-            ...state.responses,
-            [requestId]: {
-              err: e.message,
-            },
-          },
-        });
+        return errorHandler(state, e, requestId);
       }
     }
 
@@ -76,14 +81,7 @@ function reducer(state = initialState, action) {
         stateCopy.stateMachines.splice(index, 1);
         return stateCopy;
       } catch (e) {
-        return Object.assign({}, state, {
-          responses: {
-            ...state.responses,
-            [requestId]: {
-              err: e.message,
-            },
-          },
-        });
+        return errorHandler(state, e, requestId);
       }
     }
     case actions.DESCRIBE_STATE_MACHINE: {
@@ -98,14 +96,7 @@ function reducer(state = initialState, action) {
           },
         });
       } catch (e) {
-        return Object.assign({}, state, {
-          responses: {
-            ...state.responses,
-            [requestId]: {
-              err: e.message,
-            },
-          },
-        });
+        return errorHandler(state, e, requestId);
       }
     }
     case actions.LIST_EXECUTIONS: {
@@ -120,19 +111,28 @@ function reducer(state = initialState, action) {
           },
         });
       } catch (e) {
+        return errorHandler(state, e, requestId);
+      }
+    }
+    case actions.START_EXECUTION: {
+      try {
+        const { stateMachine, response } = startExecution(params, state.stateMachines);
         return Object.assign({}, state, {
+          stateMachines: [
+            ...state.stateMachines,
+            stateMachine,
+          ],
           responses: {
             ...state.responses,
             [requestId]: {
-              err: e.message,
+              data: response,
             },
           },
         });
+      } catch (e) {
+        return errorHandler(state, e, requestId);;
       }
     }
-    case actions.START_EXECUTION:
-      return Object.assign({}, state);
-
     // Related to one state machine execution
     case actions.DESCRIBE_EXECUTION:
       return Object.assign({}, state);
