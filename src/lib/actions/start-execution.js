@@ -15,6 +15,13 @@ function startExecution(params, stateMachines) {
     throw new Error(errors.startExecution.STATE_MACHINE_DOES_NOT_EXIST);
   }
   let name;
+  // TODO check name:
+  //   A name must not contain:
+  // • whitespace
+  // • brackets < > { } [ ]
+  // • wildcard characters ? *
+  // • special characters " # % \ ^ | ~ ` $ & , ; : /
+  // • control characters (U+0000-001F, U+007F-009F)
   if (typeof params.name === 'string' && params.name.length && params.name.length <= 80) {
     name = params.name;
   } else {
