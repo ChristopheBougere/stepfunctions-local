@@ -1,11 +1,13 @@
 const { status: { execution } } = require('../../constants');
+
 const EXECUTION_STATUS = execution;
+
 class Execution {
-  constructor () {
+  constructor() {
 
   }
 
-  static isRunning (status) {
+  static isRunning(status) {
     switch (status) {
       case EXECUTION_STATUS.SUCCEEDED:
       case EXECUTION_STATUS.FAILED:

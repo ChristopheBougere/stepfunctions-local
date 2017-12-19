@@ -112,7 +112,11 @@ function reducer(state = initialState, action) {
     }
     case actions.START_EXECUTION: {
       try {
-        const { execution, response } = startExecution(params, state.stateMachines, state.executions);
+        const { execution, response } = startExecution(
+          params,
+          state.stateMachines,
+          state.executions,
+        );
         return Object.assign({}, state, {
           executions: [
             ...state.executions,
@@ -130,7 +134,7 @@ function reducer(state = initialState, action) {
     // Related to one state machine execution
     case actions.DESCRIBE_EXECUTION: {
       try {
-        const { response } = describeExecution(params, state.stateMachines);
+        const { response } = describeExecution(params, state.executions);
         return Object.assign({}, state, {
           responses: getSuccessResponse(state, requestId, response),
         });
@@ -142,7 +146,7 @@ function reducer(state = initialState, action) {
     }
     case actions.GET_EXECUTION_HISTORY:
       try {
-        const { response } = describeExecution(params, state.stateMachines);
+        const { response } = getExecutionHistory(params, state.stateMachines);
         return Object.assign({}, state, {
           responses: getSuccessResponse(state, requestId, response),
         });

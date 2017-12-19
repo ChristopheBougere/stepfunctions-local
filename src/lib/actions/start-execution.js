@@ -64,7 +64,7 @@ function startExecution(params, stateMachines, executions) {
         },
       };
     }
-    if (sameName.filter(e => e.stopDate > (new Date() - SAME_NAME_MAX_DAYS * 24 * 60 * 60))) {
+    if (sameName.filter(e => e.stopDate > (new Date() - (SAME_NAME_MAX_DAYS * 24 * 60 * 60)))) {
       throw new Error(errors.startExecution.EXECUTION_ALREADY_EXISTS);
     }
   }
