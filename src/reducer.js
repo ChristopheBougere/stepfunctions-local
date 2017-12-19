@@ -4,12 +4,14 @@ const createStateMachine = require('./lib/actions/create-state-machine');
 const deleteStateMachine = require('./lib/actions/delete-state-machine');
 const describeStateMachine = require('./lib/actions/describe-state-machine');
 const listExecutions = require('./lib/actions/list-executions');
-const startExecutions = require('./lib/actions/start-execution');
+const startExecution = require('./lib/actions/start-execution');
 const describeExecution = require('./lib/actions/describe-execution');
 const getExecutionHistory = require('./lib/actions/get-execution-history');
 
 const initialState = {
   stateMachines: [],
+  executions: [],
+  events: [],
   responses: {},
 };
 
@@ -98,7 +100,7 @@ function reducer(state = initialState, action) {
     }
     case actions.LIST_EXECUTIONS: {
       try {
-        const { response } = listExecutions(params, state.stateMachines);
+        const { response } = listExecutions(params, state.stateMachines, state.executions);
         return Object.assign({}, state, {
           responses: getSuccessResponse(state, requestId, response),
         });
@@ -110,11 +112,11 @@ function reducer(state = initialState, action) {
     }
     case actions.START_EXECUTION: {
       try {
-        const { stateMachine, response } = startExecution(params, state.stateMachines);
+        const { execution, response } = startExecution(params, state.stateMachines, state.executions);
         return Object.assign({}, state, {
-          stateMachines: [
-            ...state.stateMachines,
-            stateMachine,
+          executions: [
+            ...state.executions,
+            execution,
           ],
           responses: getSuccessResponse(state, requestId, response),
         });

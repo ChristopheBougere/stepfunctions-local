@@ -1,12 +1,12 @@
 const uuidv4 = require('uuid/v4');
 
-const { errors } = require('../../constants');
-const StateMachine = require('../states/sate-machine');
+const { errors, status } = require('../../constants');
+const StateMachine = require('../states/state-machine');
 const Execution = require('../states/execution');
 
 const SAME_NAME_MAX_DAYS = 90;
 
-function startExecution(params, stateMachines) {
+function startExecution(params, stateMachines, executions) {
   if (typeof params.stateMachineArn !== 'string') {
     throw new Error(errors.startExecution.INVALID_ARN);
   }
@@ -46,34 +46,48 @@ function startExecution(params, stateMachines) {
   // the Success message is returned.
   // • When the original execution has been closed within 90 days, the
   // ExecutionAlreadyExists message is returned regardless of input.
-  const sameName = stateMachineObj.executions.filter(e => e.name === name);
-  if (sameName) {
+  const sameName = executions
+    .filter(e => e.stateMachineArn === stateMachineObj.stateMachineArn)
+    .filter(e => e.name === name);
+  if (sameName.length) {
     const running = sameName.filter(e => Execution.isRunning(e.status));
-    if (running) {
+    if (running.length) {
       if (running.find(e => e.input === input)) {
         throw new Error(errors.startExecution.EXECUTION_ALREADY_EXISTS);
       }
+      const runningExecution = running.splice(-1);
       return {
+        execution: runningExecution,
         response: {
-          executionArn: e.executionArn,
-          startDate: e.startDate,
+          executionArn: runningExecution.executionArn,
+          startDate: runningExecution.startDate,
         },
       };
     }
-    if (sameName.filter(e => e.stopDate > (new Date() - SAME_NAME_MAX_DAYS * 24 * 60 * 60)) {
+    if (sameName.filter(e => e.stopDate > (new Date() - SAME_NAME_MAX_DAYS * 24 * 60 * 60))) {
       throw new Error(errors.startExecution.EXECUTION_ALREADY_EXISTS);
     }
   }
 
   const stateMachine = new StateMachine(stateMachineObj.definition);
   stateMachine.execute(input);
-  const accountId = 'TODO'; // TODO find accountId
+  const accountId = stateMachineObj.stateMachineArn.split(':')[4];
+  const execution = {
+    name,
+    input,
+    executionArn: `arn:aws:states:local:${accountId}:execution:${name}`,
+    startDate: new Date().getTime() / 1000,
+    stateMachineArn: stateMachineObj.stateMachineArn,
+    status: status.execution.RUNNING,
+
+  };
   return {
+    execution,
     response: {
-      executionArn: `arn:aws:states:local:${accountId}:execution:${name}`,
-      startDate: new Date().getTime() / 1000,
+      executionArn: execution.executionArn,
+      startDate: execution.startDate,
     },
   };
 }
 
-module.exports = describeStateMachines;
+module.exports = startExecution;

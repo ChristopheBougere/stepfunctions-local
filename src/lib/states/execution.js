@@ -1,5 +1,5 @@
-const { status: { execution as EXECUTION_STATUS } } = require('../../constants');
-
+const { status: { execution } } = require('../../constants');
+const EXECUTION_STATUS = execution;
 class Execution {
   constructor () {
 
@@ -17,3 +17,5 @@ class Execution {
     }
   }
 }
+
+module.exports = Execution;

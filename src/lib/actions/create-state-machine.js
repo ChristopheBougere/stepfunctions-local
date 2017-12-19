@@ -10,25 +10,24 @@ function createStateMachine(params, stateMachines) {
   if (stateMachines.find(stateMachine => stateMachine.name === params.name)) {
     throw new Error(errors.createStateMachine.STATE_MACHINE_ALREADY_EXISTS);
   }
-  let parsedDefintion;
+  let parsedDefinition;
   try {
-    parsedDefintion = JSON.parse(params.definition);
+    parsedDefinition = JSON.parse(params.definition);
   } catch (e) {
     throw new Error(`${errors.createStateMachine.INVALID_DEFINITION}: INVALID_JSON_DESCRIPTION'`);
   }
-  const isValid = aslValidator(parsedDefintion);
+  const isValid = aslValidator(parsedDefinition);
   if (!isValid) {
     throw new Error(`${errors.createStateMachine.INVALID_DEFINITION}: SCHEMA_VALIDATION_FAILED`);
   }
   const accountId = params.roleArn.split(':')[4];
   const stateMachine = {
     stateMachineArn: `arn:aws:states:local:${accountId}:stateMachine:${params.name}`,
-    definition: parsedDefintion,
+    definition: parsedDefinition,
     creationDate: new Date().getTime() / 1000,
     roleArn: params.roleArn,
     name: params.name,
     status: status.stateMachine.ACTIVE,
-    executions: [],
   };
   return {
     stateMachine,

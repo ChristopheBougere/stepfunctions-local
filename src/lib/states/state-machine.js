@@ -45,6 +45,13 @@ class StateMachine {
       nextStateName = res.nextState || null;
     } while (typeof nextStateName === 'string');
 
+    // TODO: create FinishExecution action to store execution's stopDate
+    // store.dispatch({
+    //   type: 'FinishExecution',
+    //   params: ...
+    //   requestId: ...
+    // });
+
     return {
       output: this.output,
     };

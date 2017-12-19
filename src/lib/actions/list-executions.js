@@ -1,6 +1,6 @@
 const { errors, status } = require('../../constants');
 
-function listExecutions(params, stateMachines) {
+function listExecutions(params, stateMachines, executions) {
   if (params.maxResults && (params.maxResults < 0 || params.maxResults > 1000)) {
     throw new Error(errors.common.INVALID_PARAMETER_VALUE);
   }
@@ -28,7 +28,8 @@ function listExecutions(params, stateMachines) {
     status.execution[s] === params.statusFilter)) {
     throw new Error(errors.common.INVALID_PARAMETER_VALUE);
   }
-  const filteredExecutions = stateMachines[params.stateMachineArn].executions
+  const filteredExecutions = executions
+    .filter(execution => execution.stateMachineArn === params.stateMachineArn)
     .filter(execution => !params.statusFilter || params.statusFilter === execution.statusFilter);
 
   let nextToken = null;
