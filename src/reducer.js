@@ -7,11 +7,11 @@ const listExecutions = require('./lib/actions/list-executions');
 const startExecution = require('./lib/actions/start-execution');
 const describeExecution = require('./lib/actions/describe-execution');
 const getExecutionHistory = require('./lib/actions/get-execution-history');
+const addHistoryEvent = require('./lib/actions/add-history-event');
 
 const initialState = {
   stateMachines: [],
   executions: [],
-  events: [],
   responses: {},
 };
 
@@ -146,7 +146,7 @@ function reducer(state = initialState, action) {
     }
     case actions.GET_EXECUTION_HISTORY:
       try {
-        const { response } = getExecutionHistory(params, state.stateMachines);
+        const { response } = getExecutionHistory(params, state.executions);
         return Object.assign({}, state, {
           responses: getSuccessResponse(state, requestId, response),
         });
@@ -161,6 +161,23 @@ function reducer(state = initialState, action) {
       return Object.assign({}, state);
     case actions.LIST_ACTIVITIES:
       return Object.assign({}, state);
+    case actions.ADD_HISTORY_EVENT: {
+      try {
+        const execution = state.executions.find(e => e.executionArn === params.executionArn);
+        const event = addHistoryEvent(params, execution);
+        execution.events.push(event);
+        return Object.assign({}, state, {
+          executions: [
+            ...state.executions,
+            execution,
+          ],
+          responses: getSuccessResponse(state, requestId),
+        });
+      } catch (e) {
+        const responses = getErrorResponse(state, requestId, e);
+        return Object.assign({}, state, { responses });
+      }
+    }
 
     // Related to one execution activity
     case actions.DELETE_ACTIVITY:

@@ -2,7 +2,8 @@ module.exports = {
   actions: {
     // Custom
     REMOVE_RESPONSE: 'RemoveResponse',
-    ADD_HISTORY_EVENT: 'addHistoryEvent',
+    ADD_HISTORY_EVENT: 'AddHistoryEvent',
+    FINISH_EXECUTION: 'FinishExecution',
     // Step functions
     CREATE_ACTIVITY: 'CreateActivity',
     CREATE_STATE_MACHINE: 'CreateStateMachine',
@@ -311,5 +312,5 @@ module.exports = {
       detailsName: 'stateExitedEventDetails',
       detailsFields: ['name', 'output'],
     },
-  }
+  },
 };
