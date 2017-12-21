@@ -43,15 +43,14 @@ class StateMachine {
       const currentStateName = nextStateName;
       const nextState = StateMachine.instanciateState(this.findStateByName(currentStateName));
 
-      // TODO: Add TASK_STATE_ENTERED event to execution's history
-
       const res = await nextState.execute(lastIO);
       lastIO = res.output;
       nextStateName = res.nextState || null;
     } while (typeof nextStateName === 'string');
 
+    // TODO: Add EXECUTION_SUCCEEDED event to execution's history
     // TODO: actions.FINISH_EXECUTION
-    // TODO: actions.UPDATE_EXECUTION -> status: status.execution.SUCCEEDED;
+    // TODO: when actions.UPDATE_EXECUTION -> status: status.execution.SUCCEEDED;
 
     return {
       output: this.output,

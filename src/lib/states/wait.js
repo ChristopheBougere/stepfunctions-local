@@ -3,6 +3,7 @@ const jp = require('jsonpath');
 const State = require('./state');
 
 class Wait extends State {
+  // TODO: Add WAIT_STATE_ENTERED event to execution's history
   async execute(input) {
     this.input = input;
 
@@ -17,6 +18,8 @@ class Wait extends State {
       seconds = new Date(jp.value(this.input, this.state.TimestampPath)) - new Date();
     }
     await new Promise(resolve => setTimeout(resolve, seconds * 1000));
+
+    // TODO: Add WAIT_STATE_EXITED event to execution's history
 
     return {
       output: this.output,

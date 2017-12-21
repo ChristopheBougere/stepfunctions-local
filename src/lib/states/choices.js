@@ -3,6 +3,9 @@ const jp = require('jsonpath');
 const State = require('./state');
 
 class Choices extends State {
+  // TODO: Add CHOICE_STATE_ENTERED event to execution's history in constructor
+  // TODO: Add CHOICE_STATE_EXITED event to execution's history when finished
+
   process(choice) {
     const variable = choice.Variable && jp.value(this.input, choice.Variable);
     const next = choice.Next || true;
