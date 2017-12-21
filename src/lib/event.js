@@ -6,7 +6,7 @@ class Event {
     if (Object.keys(events).indexOf(params.type) === -1) {
       throw new Error(errors.common.INVALID_PARAMETER_VALUE);
     }
-    this.type = params.type;
+    this.type = events[params.type].type;
     // add event specific details
     const detailsNameKey = events[params.type].detailsName;
     if (detailsNameKey) {
