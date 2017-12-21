@@ -1,11 +1,10 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const { createStore } = require('redux');
 const uuidv4 = require('uuid/v4');
 
 const logger = require('./lib/logger')('stepfunctions-local');
 const constants = require('./constants');
-const reducer = require('./reducer');
+const store = require('./store');
 
 function start(config) {
   // Server creation
@@ -13,12 +12,6 @@ function start(config) {
   app.use(bodyParser.json({
     type: 'application/x-amz-json-1.0',
   }));
-
-  // Store creation
-  const store = createStore(reducer);
-  store.subscribe(() => {
-    logger.log('%O', store.getState());
-  });
 
   app.post('/', (req, res) => {
     try {

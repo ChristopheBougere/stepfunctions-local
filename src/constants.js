@@ -3,7 +3,7 @@ module.exports = {
     // Custom
     REMOVE_RESPONSE: 'RemoveResponse',
     ADD_HISTORY_EVENT: 'AddHistoryEvent',
-    FINISH_EXECUTION: 'FinishExecution',
+    UPDATE_EXECUTION: 'UpdateExecution',
     // Step functions
     CREATE_ACTIVITY: 'CreateActivity',
     CREATE_STATE_MACHINE: 'CreateStateMachine',

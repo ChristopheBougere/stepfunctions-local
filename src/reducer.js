@@ -178,6 +178,9 @@ function reducer(state = initialState, action) {
         return Object.assign({}, state, { responses });
       }
     }
+    case actions.UPDATE_EXECUTION: {
+      return Object.assign({}, state);
+    }
 
     // Related to one execution activity
     case actions.DELETE_ACTIVITY:

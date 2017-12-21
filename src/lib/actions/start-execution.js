@@ -69,8 +69,7 @@ function startExecution(params, stateMachines, executions) {
     }
   }
 
-  const stateMachine = new StateMachine(stateMachineObj.definition);
-  stateMachine.execute(input);
+  // Create execution
   const accountId = stateMachineObj.stateMachineArn.split(':')[4];
   const execution = {
     name,
@@ -79,8 +78,15 @@ function startExecution(params, stateMachines, executions) {
     startDate: new Date().getTime() / 1000,
     stateMachineArn: stateMachineObj.stateMachineArn,
     status: status.execution.RUNNING,
-
+    events: [],
   };
+
+  // TODO: Add EXECUTION_STARTED event to execution's history
+
+  // Execute state machine
+  const stateMachine = new StateMachine(stateMachineObj.definition, execution);
+  stateMachine.execute(input);
+
   return {
     execution,
     response: {

@@ -2,6 +2,9 @@ const StateMachine = require('./state-machine');
 const State = require('./state');
 
 class Parallel extends State {
+  // TODO: Add PARALLEL_STATE_ENTERED event to execution's history
+  // Use super constructor
+
   async execute(input) {
     this.input = input;
 

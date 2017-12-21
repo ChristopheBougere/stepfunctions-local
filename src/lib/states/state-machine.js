@@ -7,8 +7,9 @@ const Task = require('./task');
 const Wait = require('./wait');
 
 class StateMachine {
-  constructor(stateMachine) {
+  constructor(stateMachine, execution) {
     this.stateMachine = stateMachine;
+    this.execution = execution;
   }
 
   findStateByName(name) {
@@ -17,7 +18,7 @@ class StateMachine {
 
   static instanciateState(state) {
     switch (state.Type) {
-      case 'Choices': return new Choices(state);
+      case 'Choice': return new Choices(state);
       case 'Fail': return new Fail(state);
       case 'Parallel': return new Parallel(state);
       case 'Pass': return new Pass(state);
@@ -39,18 +40,18 @@ class StateMachine {
     let lastIO = input;
     let nextStateName = this.stateMachine.StartAt;
     do {
-      const nextState = StateMachine.instanciateState(this.findStateByName(nextStateName));
+      const currentStateName = nextStateName;
+      const nextState = StateMachine.instanciateState(this.findStateByName(currentStateName));
+
+      // TODO: Add TASK_STATE_ENTERED event to execution's history
+
       const res = await nextState.execute(lastIO);
       lastIO = res.output;
       nextStateName = res.nextState || null;
     } while (typeof nextStateName === 'string');
 
-    // TODO: create FinishExecution action to store execution's stopDate
-    // store.dispatch({
-    //   type: 'FinishExecution',
-    //   params: ...
-    //   requestId: ...
-    // });
+    // TODO: actions.FINISH_EXECUTION
+    // TODO: actions.UPDATE_EXECUTION -> status: status.execution.SUCCEEDED;
 
     return {
       output: this.output,
