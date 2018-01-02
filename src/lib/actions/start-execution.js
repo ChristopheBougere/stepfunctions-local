@@ -1,8 +1,10 @@
 const uuidv4 = require('uuid/v4');
 
-const { errors, status } = require('../../constants');
+const { events, errors, status } = require('../../constants');
 const StateMachine = require('../states/state-machine');
 const Execution = require('../states/execution');
+
+const addHistoryEvent = require('./add-history-event');
 
 const SAME_NAME_MAX_DAYS = 90;
 
@@ -82,6 +84,11 @@ function startExecution(params, stateMachines, executions) {
   };
 
   // TODO: Add EXECUTION_STARTED event to execution's history
+  execution.events.push(addHistoryEvent({
+    type: 'EXECUTION_STARTED',
+    input,
+    roleArn: stateMachineObj.roleArn,
+  }, execution));
 
   // Execute state machine
   const stateMachine = new StateMachine(stateMachineObj.definition, execution);

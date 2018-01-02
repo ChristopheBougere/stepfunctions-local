@@ -5,6 +5,7 @@ const deleteStateMachine = require('./lib/actions/delete-state-machine');
 const describeStateMachine = require('./lib/actions/describe-state-machine');
 const listExecutions = require('./lib/actions/list-executions');
 const startExecution = require('./lib/actions/start-execution');
+const stopExecution = require('./lib/actions/stop-execution');
 const describeExecution = require('./lib/actions/describe-execution');
 const getExecutionHistory = require('./lib/actions/get-execution-history');
 const addHistoryEvent = require('./lib/actions/add-history-event');
@@ -156,7 +157,17 @@ function reducer(state = initialState, action) {
         });
       }
     case actions.STOP_EXECUTION:
-      return Object.assign({}, state);
+      try {
+        const newState = Object.assign({}, state);
+        const { response } = stopExecution(params, newState.executions);
+        return Object.assign({}, newState, {
+          responses: getSuccessResponse(state, requestId, response),
+        });
+      } catch (e) {
+        return Object.assign({}, state, {
+          responses: getErrorResponse(state, requestId, e),
+        });
+      }
     case actions.CREATE_ACTIVITY:
       return Object.assign({}, state);
     case actions.LIST_ACTIVITIES:

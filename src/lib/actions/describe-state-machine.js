@@ -1,6 +1,6 @@
 const { errors } = require('../../constants');
 
-function describeStateMachines(params, stateMachines) {
+function describeStateMachine(params, stateMachines) {
   if (typeof params.stateMachineArn !== 'string') {
     throw new Error(errors.common.INVALID_ARN);
   }
@@ -20,4 +20,4 @@ function describeStateMachines(params, stateMachines) {
   };
 }
 
-module.exports = describeStateMachines;
+module.exports = describeStateMachine;
