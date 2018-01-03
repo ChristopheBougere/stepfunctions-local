@@ -2,7 +2,7 @@ const { errors } = require('../../constants');
 
 function describeExecution(params, executions) {
   if (typeof params.executionArn !== 'string') {
-    throw new Error(errors.startExecution.INVALID_ARN);
+    throw new Error(errors.describeExecution.INVALID_ARN);
   }
   const match = executions.find(e => e.executionArn === params.executionArn);
   if (!match) {

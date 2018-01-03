@@ -89,6 +89,7 @@ module.exports = {
       STATE_MACHINE_DOES_NOT_EXIST: 'StateMachineDoesNotExist',
     },
     describeExecution: {
+      INVALID_ARN: 'InvalidArn',
       EXECUTION_DOES_NOT_EXIST: 'ExecutionDoesNotExist',
       INVALID_NAME: 'InvalidName',
     },

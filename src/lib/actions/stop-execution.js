@@ -1,19 +1,18 @@
 const { errors, status } = require('../../constants');
-const updateExecution = require('./update-execution');
 
 function stopExecution(params, executions) {
   if (typeof params.executionArn !== 'string') {
-    throw new Error(errors.startExecution.INVALID_ARN);
+    throw new Error(errors.stopExecution.INVALID_ARN);
   }
   const execution = executions.find(e => e.executionArn === params.executionArn);
   if (!execution) {
-    throw new Error(errors.describeExecution.EXECUTION_DOES_NOT_EXIST);
+    throw new Error(errors.stopExecution.EXECUTION_DOES_NOT_EXIST);
   }
   if (params.cause && (typeof params.cause !== 'string' || params.cause.length > 32768)) {
-    throw new Error(errors.startExecution.INVALID_PARAMETER_VALUE);
+    throw new Error(errors.common.INVALID_PARAMETER_VALUE);
   }
   if (params.error && (typeof params.error !== 'string' || params.error.length > 256)) {
-    throw new Error(errors.startExecution.INVALID_PARAMETER_VALUE);
+    throw new Error(errors.common.INVALID_PARAMETER_VALUE);
   }
 
   // TODO: Add EXECUTION_ABORTED event to execution's history ?

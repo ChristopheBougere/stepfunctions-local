@@ -1,6 +1,6 @@
 const uuidv4 = require('uuid/v4');
 
-const { events, errors, status } = require('../../constants');
+const { errors, status } = require('../../constants');
 const StateMachine = require('../states/state-machine');
 const Execution = require('../states/execution');
 
@@ -54,7 +54,7 @@ function startExecution(params, stateMachines, executions) {
   if (sameName.length) {
     const running = sameName.filter(e => Execution.isRunning(e.status));
     if (running.length) {
-      if (running.find(e => e.input === input)) {
+      if (running.find(e => e.input !== input)) {
         throw new Error(errors.startExecution.EXECUTION_ALREADY_EXISTS);
       }
       const runningExecution = running.splice(-1);
@@ -66,7 +66,8 @@ function startExecution(params, stateMachines, executions) {
         },
       };
     }
-    if (sameName.filter(e => e.stopDate > (new Date() - (SAME_NAME_MAX_DAYS * 24 * 60 * 60)))) {
+    const limitDate = (new Date().getTime() - (SAME_NAME_MAX_DAYS * 24 * 60 * 60)) / 1000;
+    if (sameName.find(e => e.stopDate > limitDate)) {
       throw new Error(errors.startExecution.EXECUTION_ALREADY_EXISTS);
     }
   }

@@ -13,19 +13,19 @@ function getExecutionHistory(params, executions) {
         throw new Error('nextToken.boto_truncate_amount should be a number');
       }
     } catch (e) {
-      throw new Error(errors.listExecutions.INVALID_TOKEN);
+      throw new Error(errors.getExecutionHistory.INVALID_TOKEN);
     }
   }
 
   if (typeof params.executionArn !== 'string' || params.executionArn.length > 256
   ) {
-    throw new Error(errors.common.INVALID_PARAMETER);
+    throw new Error(errors.common.INVALID_PARAMETER_VALUE);
   }
   const match = executions.find(e => e.executionArn === params.executionArn);
   if (!match) {
-    throw new Error(errors.common.INVALID_ARN);
+    throw new Error(errors.getExecutionHistory.INVALID_ARN);
   }
-  // TODO: check reverseOrder parameter
+  // TODO: implement reverseOrder
   const { events } = match;
   let nextToken = null;
   if (truncateAmount + maxResults < events.length) {

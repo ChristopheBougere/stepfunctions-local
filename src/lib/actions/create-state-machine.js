@@ -14,9 +14,9 @@ function createStateMachine(params, stateMachines) {
   try {
     parsedDefinition = JSON.parse(params.definition);
   } catch (e) {
-    throw new Error(`${errors.createStateMachine.INVALID_DEFINITION}: INVALID_JSON_DESCRIPTION'`);
+    throw new Error(`${errors.createStateMachine.INVALID_DEFINITION}: INVALID_JSON_DESCRIPTION`);
   }
-  const isValid = aslValidator(parsedDefinition);
+  const { isValid } = aslValidator(parsedDefinition);
   if (!isValid) {
     throw new Error(`${errors.createStateMachine.INVALID_DEFINITION}: SCHEMA_VALIDATION_FAILED`);
   }
