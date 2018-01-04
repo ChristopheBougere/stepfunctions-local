@@ -2,6 +2,8 @@ module.exports = {
   actions: {
     // Custom
     REMOVE_RESPONSE: 'RemoveResponse',
+    ADD_HISTORY_EVENT: 'AddHistoryEvent',
+    UPDATE_EXECUTION: 'UpdateExecution',
     // Step functions
     CREATE_ACTIVITY: 'CreateActivity',
     CREATE_STATE_MACHINE: 'CreateStateMachine',
@@ -87,6 +89,7 @@ module.exports = {
       STATE_MACHINE_DOES_NOT_EXIST: 'StateMachineDoesNotExist',
     },
     describeExecution: {
+      INVALID_ARN: 'InvalidArn',
       EXECUTION_DOES_NOT_EXIST: 'ExecutionDoesNotExist',
       INVALID_NAME: 'InvalidName',
     },
@@ -133,6 +136,182 @@ module.exports = {
       INVALID_TOKEN: 'InvalidToken',
       TASK_DOES_NOT_EXIST: 'TaskDoesNotExist',
       TASK_TIMED_OUT: 'TaskTimedOut',
+    },
+  },
+  events: {
+    commonDetailsFields: ['id', 'previousEventId', 'timestamp', 'type'],
+    ACTIVITY_FAILED: {
+      type: 'ActivityFailed',
+      detailsName: 'activityFailedEventDetails',
+      detailsFields: ['cause', 'error'],
+    },
+    ACTIVITY_SCHEDULE_FAILED: {
+      type: 'ActivityScheduleFailed',
+      detailsName: 'activityScheduleFailedEventDetails',
+      detailsFields: ['cause', 'error'],
+    },
+    ACTIVITY_SCHEDULED: {
+      type: 'ActivityScheduled',
+      detailsName: 'activityScheduledEventDetails',
+      detailsFields: ['heartBeatInSeconds', 'input', 'resource', 'timeoutInSeconds'],
+    },
+    ACTIVITY_STARTED: {
+      type: 'ActivityStarted',
+      detailsName: 'activityStartedEventDetails',
+      detailsFields: ['workerName'],
+    },
+    ACTIVITY_SUCCEEDED: {
+      type: 'ActivitySucceeded',
+      detailsName: 'activitySucceededEventDetails',
+      detailsFields: ['output'],
+    },
+    ACTIVITY_TIMED_OUT: {
+      type: 'ActivityTimedOut',
+      detailsName: 'activityTimedOutEventDetails',
+      detailsFields: ['cause', 'error'],
+    },
+    CHOICE_STATE_ENTERED: {
+      type: 'ChoiceStateEntered',
+      detailsName: 'stateEnteredEventDetails',
+      detailsFields: ['input', 'name'],
+    },
+    CHOICE_STATE_EXITED: {
+      type: 'ChoiceStateExited',
+      detailsName: 'stateExitedEventDetails',
+      detailsFields: ['name', 'output'],
+    },
+    EXECUTION_FAILED: {
+      type: 'ExecutionFailed',
+      detailsName: 'executionFailedEventDetails',
+      detailsFields: ['cause', 'error'],
+    },
+    EXECUTION_STARTED: {
+      type: 'ExecutionStarted',
+      detailsName: 'executionStartedEventDetails',
+      detailsFields: ['input', 'roleArn'],
+    },
+    EXECUTION_SUCCEEDED: {
+      type: 'ExecutionSucceeded',
+      detailsName: 'executionSucceededEventDetails',
+      detailsFields: ['output'],
+    },
+    EXECUTION_ABORTED: {
+      type: 'ExecutionAborted',
+      detailsName: 'executionAbortedEventDetails',
+      detailsFields: ['cause', 'error'],
+    },
+    EXECUTION_TIMEDOUT: {
+      type: 'ExecutionTimedOut',
+      detailsName: 'executionTimedOutEventDetails',
+      detailsFields: ['cause', 'error'],
+    },
+    FAIL_STATE_ENTERED: {
+      type: 'FailStateEntered',
+      detailsName: 'stateEnteredEventDetails',
+      detailsFields: ['input', 'name'],
+    },
+    LAMBDA_FUNCTION_FAILED: {
+      type: 'LambdaFunctionFailed',
+      detailsName: 'lambdaFunctionFailedEventDetails',
+      detailsFields: ['cause', 'error'],
+    },
+    LAMBDA_FUNCTION_SCHEDULE_FAILED: {
+      type: 'LambdaFunctionScheduleFailed',
+      detailsName: 'lambdaFunctionScheduleFailedEventDetails',
+      detailsFields: ['cause', 'error'],
+    },
+    LAMBDA_FUNCTION_SCHEDULED: {
+      type: 'LambdaFunctionScheduled',
+      detailsName: 'lambdaFunctionScheduledEventDetails',
+      detailsFields: ['input', 'resource', 'timeoutInSeconds'],
+    },
+    LAMBDA_FUNCTION_START_FAILED: {
+      type: 'LambdaFunctionStartFailed',
+      detailsName: 'lambdaFunctionStartFailedEventDetails',
+      detailsFields: ['cause', 'error'],
+    },
+    LAMBDA_FUNCTION_STARTED: {
+      type: 'LambdaFunctionStarted',
+    },
+    LAMBDA_FUNCTION_SUCCEEDED: {
+      type: 'LambdaFunctionSucceeded',
+      detailsName: 'lambdaFunctionSucceededEventDetails',
+      detailsFields: ['output'],
+    },
+    LAMBDA_FUNCTION_TIMED_OUT: {
+      type: 'LambdaFunctionTimedOut',
+      detailsName: 'lambdaFunctionTimedOutEventDetails',
+      detailsFields: ['cause', 'error'],
+    },
+    SUCCEED_STATE_ENTERED: {
+      type: 'SucceedStateEntered',
+      detailsName: 'stateEnteredEventDetails',
+      detailsFields: ['input', 'name'],
+    },
+    SUCCEED_STATE_EXITED: {
+      type: 'SucceedStateExited',
+      detailsName: 'stateExitedEventDetails',
+      detailsFields: ['name', 'output'],
+    },
+    TASK_STATE_ABORTED: {
+      type: 'TaskStateAborted',
+    },
+    TASK_STATE_ENTERED: {
+      type: 'TaskStateEntered',
+      detailsName: 'stateEnteredEventDetails',
+      detailsFields: ['input', 'name'],
+    },
+    TASK_STATE_EXITED: {
+      type: 'TaskStateExited',
+      detailsName: 'stateExitedEventDetails',
+      detailsFields: ['name', 'output'],
+    },
+    PASS_STATE_ENTERED: {
+      type: 'PassStateEntered',
+      detailsName: 'stateEnteredEventDetails',
+      detailsFields: ['input', 'name'],
+    },
+    PASS_STATE_EXITED: {
+      type: 'PassStateExited',
+      detailsName: 'stateExitedEventDetails',
+      detailsFields: ['name', 'output'],
+    },
+    PARALLEL_STATE_ABORTED: {
+      type: 'ParallelStateAborted',
+    },
+    PARALLEL_STATE_ENTERED: {
+      type: 'ParallelStateEntered',
+      detailsName: 'stateEnteredEventDetails',
+      detailsFields: ['input', 'name'],
+    },
+    PARALLEL_STATE_EXITED: {
+      type: 'ParallelStateExited',
+      detailsName: 'stateExitedEventDetails',
+      detailsFields: ['name', 'output'],
+    },
+    PARALLEL_STATE_FAILED: {
+      type: 'ParallelStateFailed',
+      detailsName: '',
+      detailsFields: [],
+    },
+    PARALLEL_STATE_STARTED: {
+      type: 'ParallelStateStarted',
+    },
+    PARALLEL_STATE_SUCCEEDED: {
+      type: 'ParallelStateSucceeded',
+    },
+    WAIT_STATE_ABORTED: {
+      type: 'WaitStateAborted',
+    },
+    WAIT_STATE_ENTERED: {
+      type: 'WaitStateEntered',
+      detailsName: 'stateEnteredEventDetails',
+      detailsFields: ['input', 'name'],
+    },
+    WAIT_STATE_EXITED: {
+      type: 'WaitStateExited',
+      detailsName: 'stateExitedEventDetails',
+      detailsFields: ['name', 'output'],
     },
   },
 };

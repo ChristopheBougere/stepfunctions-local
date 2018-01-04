@@ -1,10 +1,10 @@
-const { errors } = require('../constants');
+const { errors } = require('../../constants');
 
 function deleteStateMachine(params, stateMachines) {
   if (typeof params.stateMachineArn !== 'string') {
-    throw new Error(errors.common.INVALID_PARAMETER);
+    throw new Error(errors.common.INVALID_PARAMETER_VALUE);
   }
-  const index = stateMachines.indexOf(o => o.stateMachineArn === params.stateMachineArn);
+  const index = stateMachines.findIndex(o => o.stateMachineArn === params.stateMachineArn);
   if (index === -1) {
     // Could be StateMachineDoesNotExist, but not referenced in the API doc...
     // http://docs.aws.amazon.com/step-functions/latest/apireference/API_DeleteStateMachine.html#API_DeleteStateMachine_Errors

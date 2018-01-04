@@ -1,6 +1,6 @@
-const { errors, status } = require('../constants');
+const { errors, status } = require('../../constants');
 
-function listExecutions(params, stateMachines) {
+function listExecutions(params, stateMachines, executions) {
   if (params.maxResults && (params.maxResults < 0 || params.maxResults > 1000)) {
     throw new Error(errors.common.INVALID_PARAMETER_VALUE);
   }
@@ -18,18 +18,19 @@ function listExecutions(params, stateMachines) {
   }
 
   if (typeof params.stateMachineArn !== 'string') {
-    throw new Error(errors.common.INVALID_ARN);
+    throw new Error(errors.listExecutions.INVALID_ARN);
   }
   const match = stateMachines.find(o => o.stateMachineArn === params.stateMachineArn);
   if (!match) {
-    throw new Error(errors.describeStateMachine.STATE_MACHINE_DOES_NOT_EXISTS);
+    throw new Error(errors.listExecutions.STATE_MACHINE_DOES_NOT_EXIST);
   }
-  if (params.statusFilter && !status.execution.keys().find(s =>
+  if (params.statusFilter && !Object.keys(status.execution).find(s =>
     status.execution[s] === params.statusFilter)) {
     throw new Error(errors.common.INVALID_PARAMETER_VALUE);
   }
-  const filteredExecutions = stateMachines[params.stateMachineArn].executions
-    .filter(execution => !params.statusFilter || params.statusFilter === execution.statusFilter);
+  const filteredExecutions = executions
+    .filter(execution => execution.stateMachineArn === params.stateMachineArn)
+    .filter(execution => !params.statusFilter || params.statusFilter === execution.status);
 
   let nextToken = null;
   if (truncateAmount + maxResults < filteredExecutions.length) {
