@@ -16,15 +16,15 @@ class StateMachine {
     return this.stateMachine.States[name];
   }
 
-  static instanciateState(state) {
+  static instanciateState(state, execution) {
     switch (state.Type) {
-      case 'Choice': return new Choices(state);
-      case 'Fail': return new Fail(state);
-      case 'Parallel': return new Parallel(state);
-      case 'Pass': return new Pass(state);
-      case 'Succeed': return new Succeed(state);
-      case 'Task': return new Task(state);
-      case 'Wait': return new Wait(state);
+      case 'Choice': return new Choices(state, execution);
+      case 'Fail': return new Fail(state, execution);
+      case 'Parallel': return new Parallel(state, execution);
+      case 'Pass': return new Pass(state, execution);
+      case 'Succeed': return new Succeed(state, execution);
+      case 'Task': return new Task(state, execution);
+      case 'Wait': return new Wait(state, execution);
       default: throw new Error(`Invalid state type: ${state.Type}`);
     }
   }
@@ -41,16 +41,14 @@ class StateMachine {
     let nextStateName = this.stateMachine.StartAt;
     do {
       const currentStateName = nextStateName;
-      const nextState = StateMachine.instanciateState(this.findStateByName(currentStateName));
-
+      const nextState = StateMachine.instanciateState(
+        this.findStateByName(currentStateName),
+        this.execution,
+      );
       const res = await nextState.execute(lastIO);
       lastIO = res.output;
       nextStateName = res.nextState || null;
     } while (typeof nextStateName === 'string');
-
-    // TODO: Add EXECUTION_SUCCEEDED event to execution's history
-    // TODO: actions.FINISH_EXECUTION
-    // TODO: when actions.UPDATE_EXECUTION -> status: status.execution.SUCCEEDED;
 
     return {
       output: this.output,

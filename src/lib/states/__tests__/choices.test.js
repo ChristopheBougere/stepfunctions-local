@@ -322,7 +322,7 @@ describe('Choices > other operators', () => {
           {
             Variable: '$.value',
             NumericLessThan: 30,
-          }
+          },
         ],
         Next: 'ValueInTwenties',
       },
@@ -333,11 +333,11 @@ describe('Choices > other operators', () => {
             StringEquals: 'Public',
           },
           {
-            Not : {
+            Not: {
               Variable: '$.type',
               StringEquals: 'Private',
             },
-          }
+          },
         ],
         Next: 'Public',
       },

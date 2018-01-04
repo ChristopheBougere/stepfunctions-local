@@ -1,6 +1,7 @@
 const uuidv4 = require('uuid/v4');
 
-const { errors, status } = require('../../constants');
+const store = require('../../store');
+const { errors, status, actions } = require('../../constants');
 const StateMachine = require('../states/state-machine');
 const Execution = require('../states/execution');
 
@@ -92,7 +93,54 @@ function startExecution(params, stateMachines, executions) {
 
   // Execute state machine
   const stateMachine = new StateMachine(stateMachineObj.definition, execution);
-  stateMachine.execute(input);
+  stateMachine.execute(input)
+    .then((result) => {
+      store.dispatch({
+        type: actions.ADD_HISTORY_EVENT,
+        result: {
+          executionArn: execution.executionArn,
+          event: addHistoryEvent({
+            type: 'EXECUTION_SUCCEEDED',
+            input,
+            roleArn: stateMachine.roleArn,
+            output: result.output,
+          }, execution),
+        },
+      });
+      store.dispatch({
+        type: actions.UPDATE_EXECUTION,
+        result: {
+          executionArn: execution.executionArn,
+          updateFields: {
+            status: status.execution.SUCCEEDED,
+            stopDate: new Date().getTime() / 1000,
+            output: result.output,
+          },
+        },
+      });
+    })
+    .catch((e) => {
+      store.dispatch({
+        type: actions.ADD_HISTORY_EVENT,
+        result: {
+          executionArn: execution.executionArn,
+          event: addHistoryEvent({
+            type: 'EXECUTION_FAILED',
+            cause: e.name,
+            error: e.message,
+          }, execution),
+        },
+      });
+      store.dispatch({
+        type: actions.UPDATE_EXECUTION,
+        result: {
+          executionArn: execution.executionArn,
+          updateFields: {
+            status: status.execution.FAILED,
+          },
+        },
+      });
+    });
 
   return {
     execution,

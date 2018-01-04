@@ -3,14 +3,28 @@ const { actions } = require('./constants');
 const initialState = {
   stateMachines: [],
   executions: [],
-  responses: {},
 };
 
 function reducer(state = initialState, action) {
   const { type, result } = action;
   switch (type) {
-    // aws step function actions
-    // actions related to state machines
+    // custom actions
+    case actions.ADD_HISTORY_EVENT: {
+      const stateCopy = Object.assign({}, state);
+      const execution = stateCopy.executions.find(e => e.executionArn === result.executionArn);
+      execution.events.push(result.event);
+      return Object.assign({}, stateCopy);
+    }
+    case actions.UPDATE_EXECUTION: {
+      const stateCopy = Object.assign({}, state);
+      const execution = stateCopy.executions.find(e => e.executionArn === result.executionArn);
+      Object.keys(result.updateFields).forEach((field) => {
+        execution[field] = result.updateFields[field];
+      });
+      return stateCopy;
+    }
+    // AWS Step Functions actions
+    // Actions related to state machines
     case actions.CREATE_STATE_MACHINE:
       return Object.assign({}, state, {
         stateMachines: [
@@ -31,7 +45,7 @@ function reducer(state = initialState, action) {
       stateCopy.stateMachines.splice(result.index, 1);
       return stateCopy;
     }
-    // actions related to activities
+    // Actions related to activities
     case actions.CREATE_ACTIVITY:
       // TODO
       return Object.assign({}, state);
@@ -56,7 +70,7 @@ function reducer(state = initialState, action) {
     case actions.SEND_TASK_SUCCESS:
       // TODO
       return Object.assign({}, state);
-    // actions related to executions
+    // Actions related to executions
     case actions.START_EXECUTION:
       return Object.assign({}, state, {
         executions: [
@@ -66,17 +80,6 @@ function reducer(state = initialState, action) {
       });
     case actions.LIST_EXECUTIONS:
       return Object.assign({}, state);
-    case actions.ADD_HISTORY_EVENT: {
-      const stateCopy = Object.assign({}, state);
-      const execution = stateCopy.executions.find(e => e.executionArn === result.executionArn);
-      execution.events.push(result.event);
-      return Object.assign({}, stateCopy, {
-        executions: [
-          ...stateCopy.executions,
-          execution,
-        ],
-      });
-    }
     case actions.DESCRIBE_EXECUTION:
       return Object.assign({}, state);
     case actions.GET_EXECUTION_HISTORY:
@@ -86,7 +89,7 @@ function reducer(state = initialState, action) {
       stateCopy.executions[result.index] = result.execution;
       return Object.assign({}, stateCopy);
     }
-    // default action
+    // Default action
     default:
       return state;
   }

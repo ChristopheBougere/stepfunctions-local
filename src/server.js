@@ -1,6 +1,5 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const uuidv4 = require('uuid/v4');
 
 const logger = require('./lib/logger')('stepfunctions-local');
 const { actions, errors } = require('./constants');
@@ -67,16 +66,12 @@ function callAction(state, action, params) {
         return {};
       // default action
       default:
-        return {
-          response: {},
-        };
+        return {};
     }
   } catch (e) {
     logger.error(`Error while calling action "${action}": %O`, e);
     return {
-      response: {
-        err: e,
-      },
+      err: e,
     };
   }
 }
@@ -103,10 +98,10 @@ function start(config) {
       if (!action) {
         return res.status(400).send({ error: 'Unknown action' });
       }
-      logger.log('-> %s: %s %O', action, req.body);
+      logger.log('-> %s: %O', action, req.body);
       const result = callAction(store.getState(), action, req.body);
-      if (result.response.err) {
-        return res.status(400).send(result.response.err);
+      if (result.err) {
+        return res.status(400).send(result.err);
       }
       store.dispatch({
         type: action,

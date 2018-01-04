@@ -3,9 +3,10 @@ const jp = require('jsonpath');
 const State = require('./state');
 
 class Wait extends State {
-  // TODO: Add WAIT_STATE_ENTERED event to execution's history
   async execute(input) {
     this.input = input;
+
+    // TODO: Add WAIT_STATE_ENTERED event to execution's history
 
     let seconds = 0;
     if (Object.prototype.hasOwnProperty.call(this.state, 'Seconds')) {
