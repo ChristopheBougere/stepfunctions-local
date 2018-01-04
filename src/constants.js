@@ -282,12 +282,10 @@ module.exports = {
     PARALLEL_STATE_ENTERED: {
       type: 'ParallelStateEntered',
       detailsName: 'stateEnteredEventDetails',
-      detailsFields: ['input', 'name'],
     },
     PARALLEL_STATE_EXITED: {
       type: 'ParallelStateExited',
       detailsName: 'stateExitedEventDetails',
-      detailsFields: ['name', 'output'],
     },
     PARALLEL_STATE_FAILED: {
       type: 'ParallelStateFailed',

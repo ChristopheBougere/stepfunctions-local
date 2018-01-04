@@ -82,19 +82,19 @@ function startExecution(params, stateMachines, executions) {
     startDate: new Date().getTime() / 1000,
     stateMachineArn: stateMachineObj.stateMachineArn,
     status: status.execution.RUNNING,
-    events: [
-      addHistoryEvent({
-        type: 'EXECUTION_STARTED',
-        input,
-        roleArn: stateMachineObj.roleArn,
-      }, { events: [] }),
-    ],
+    events: [],
   };
+  execution.events.push(addHistoryEvent({
+    type: 'EXECUTION_STARTED',
+    input,
+    roleArn: stateMachineObj.roleArn,
+  }, execution));
 
   // Execute state machine
   const stateMachine = new StateMachine(stateMachineObj.definition, execution);
-  stateMachine.execute(input)
-    .then((result) => {
+  process.nextTick(async () => {
+    try {
+      const result = await stateMachine.execute(input);
       store.dispatch({
         type: actions.ADD_HISTORY_EVENT,
         result: {
@@ -118,8 +118,7 @@ function startExecution(params, stateMachines, executions) {
           },
         },
       });
-    })
-    .catch((e) => {
+    } catch (e) {
       store.dispatch({
         type: actions.ADD_HISTORY_EVENT,
         result: {
@@ -140,7 +139,8 @@ function startExecution(params, stateMachines, executions) {
           },
         },
       });
-    });
+    }
+  });
 
   return {
     execution,

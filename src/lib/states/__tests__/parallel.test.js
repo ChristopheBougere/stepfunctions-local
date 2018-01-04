@@ -1,5 +1,10 @@
 const Parallel = require('../parallel');
 
+const execution = {
+  executionArn: 'my-execution-arn',
+  events: [],
+};
+
 const state = {
   Type: 'Parallel',
   Next: 'Final State',
@@ -34,7 +39,7 @@ describe('Parallel', () => {
   // - validate output
   it('should execute both branches in parallel', async () => {
     const input = {};
-    const stateInstance = new Parallel(state);
+    const stateInstance = new Parallel(state, execution);
     const { nextState } = await stateInstance.execute(input);
     expect(nextState).toEqual('Final State');
   });

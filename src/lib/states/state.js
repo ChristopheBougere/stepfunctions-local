@@ -1,7 +1,8 @@
 class State {
-  constructor(state, execution) {
+  constructor(state, execution, name) {
     this.state = state;
     this.execution = execution;
+    this.name = name;
   }
 
   /* Default behaviour: do nothing

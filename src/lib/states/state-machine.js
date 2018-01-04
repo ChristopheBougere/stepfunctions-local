@@ -16,15 +16,15 @@ class StateMachine {
     return this.stateMachine.States[name];
   }
 
-  static instanciateState(state, execution) {
+  static instanciateState(state, execution, name) {
     switch (state.Type) {
-      case 'Choice': return new Choices(state, execution);
-      case 'Fail': return new Fail(state, execution);
-      case 'Parallel': return new Parallel(state, execution);
-      case 'Pass': return new Pass(state, execution);
-      case 'Succeed': return new Succeed(state, execution);
-      case 'Task': return new Task(state, execution);
-      case 'Wait': return new Wait(state, execution);
+      case 'Choice': return new Choices(state, execution, name);
+      case 'Fail': return new Fail(state, execution, name);
+      case 'Parallel': return new Parallel(state, execution, name);
+      case 'Pass': return new Pass(state, execution, name);
+      case 'Succeed': return new Succeed(state, execution, name);
+      case 'Task': return new Task(state, execution, name);
+      case 'Wait': return new Wait(state, execution, name);
       default: throw new Error(`Invalid state type: ${state.Type}`);
     }
   }
@@ -44,6 +44,7 @@ class StateMachine {
       const nextState = StateMachine.instanciateState(
         this.findStateByName(currentStateName),
         this.execution,
+        currentStateName,
       );
       const res = await nextState.execute(lastIO);
       lastIO = res.output;

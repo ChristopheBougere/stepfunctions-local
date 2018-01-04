@@ -12,7 +12,9 @@ function reducer(state = initialState, action) {
     case actions.ADD_HISTORY_EVENT: {
       const stateCopy = Object.assign({}, state);
       const execution = stateCopy.executions.find(e => e.executionArn === result.executionArn);
-      execution.events.push(result.event);
+      if (execution) {
+        execution.events.push(result.event);
+      }
       return Object.assign({}, stateCopy);
     }
     case actions.UPDATE_EXECUTION: {
