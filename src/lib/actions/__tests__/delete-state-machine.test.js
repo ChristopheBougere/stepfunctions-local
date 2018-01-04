@@ -1,5 +1,3 @@
-const console = require('console');
-
 const deleteStateMachine = require('../delete-state-machine');
 const { errors } = require('../../../constants');
 
@@ -26,7 +24,6 @@ describe('Delete state machine', () => {
       expect(index).toEqual(machineIndex);
       expect(response).toBeNull();
     } catch (e) {
-      console.error(e);
       expect(e).not.toBeDefined();
     }
   });
@@ -39,7 +36,6 @@ describe('Delete state machine', () => {
       };
       deleteStateMachine(params, stateMachines);
     } catch (e) {
-      console.error(e);
       expect(e.message).toEqual(errors.common.INVALID_PARAMETER_VALUE);
     }
   });
@@ -63,7 +59,6 @@ describe('Delete state machine', () => {
       };
       deleteStateMachine(params, stateMachines);
     } catch (e) {
-      console.error(e);
       expect(e.message).toEqual(errors.deleteStateMachine.INVALID_ARN);
     }
   });

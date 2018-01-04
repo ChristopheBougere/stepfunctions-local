@@ -1,5 +1,3 @@
-const console = require('console');
-
 const createStateMachine = require('../create-state-machine');
 const { status, errors } = require('../../../constants');
 
@@ -19,7 +17,6 @@ describe('Create state machine', () => {
       expect(stateMachine.name).toEqual(params.name);
       expect(stateMachine.status).toEqual(status.stateMachine.ACTIVE);
     } catch (e) {
-      console.error(e);
       expect(e).not.toBeDefined();
     }
   });
@@ -40,7 +37,6 @@ describe('Create state machine', () => {
       };
       createStateMachine(params, stateMachines);
     } catch (e) {
-      console.error(e);
       expect(e.message).toEqual(errors.createStateMachine.STATE_MACHINE_ALREADY_EXISTS);
     }
   });
@@ -55,7 +51,6 @@ describe('Create state machine', () => {
       };
       createStateMachine(params, stateMachines);
     } catch (e) {
-      console.error(e);
       expect(e.message).toEqual(`${errors.createStateMachine.INVALID_ARN}: ${arn}`);
     }
   });
@@ -70,7 +65,6 @@ describe('Create state machine', () => {
       };
       createStateMachine(params, stateMachines);
     } catch (e) {
-      console.error(e);
       expect(e.message).toEqual(`${errors.createStateMachine.INVALID_DEFINITION}: INVALID_JSON_DESCRIPTION`);
     }
   });
@@ -85,7 +79,6 @@ describe('Create state machine', () => {
       };
       createStateMachine(params, stateMachines);
     } catch (e) {
-      console.error(e);
       expect(e.message).toEqual(`${errors.createStateMachine.INVALID_DEFINITION}: SCHEMA_VALIDATION_FAILED`);
     }
   });

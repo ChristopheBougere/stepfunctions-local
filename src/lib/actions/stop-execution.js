@@ -4,8 +4,8 @@ function stopExecution(params, executions) {
   if (typeof params.executionArn !== 'string') {
     throw new Error(errors.stopExecution.INVALID_ARN);
   }
-  const execution = executions.find(e => e.executionArn === params.executionArn);
-  if (!execution) {
+  const index = executions.findIndex(e => e.executionArn === params.executionArn);
+  if (index === -1) {
     throw new Error(errors.stopExecution.EXECUTION_DOES_NOT_EXIST);
   }
   if (params.cause && (typeof params.cause !== 'string' || params.cause.length > 32768)) {
@@ -15,16 +15,17 @@ function stopExecution(params, executions) {
     throw new Error(errors.common.INVALID_PARAMETER_VALUE);
   }
 
-  // TODO: Add EXECUTION_ABORTED event to execution's history ?
-  Object.assign(execution, {
-    status: status.execution.ABORTED,
-    stopDate: new Date().getTime() / 1000,
-  });
+  const execution = executions[index];
+  const stopDate = new Date().getTime() / 1000;
 
   return {
-    execution,
+    index,
+    execution: Object.assign({}, execution, {
+      status: status.execution.ABORTED,
+      stopDate,
+    }),
     response: {
-      stopDate: execution.stopDate,
+      stopDate,
     },
   };
 }

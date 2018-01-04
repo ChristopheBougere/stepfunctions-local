@@ -1,5 +1,3 @@
-const console = require('console');
-
 const getExecutionHistory = require('../get-execution-history');
 const { errors } = require('../../../constants');
 
@@ -35,7 +33,6 @@ describe('Get execution history', () => {
       const { response } = getExecutionHistory(params, executions);
       expect(response.events).toMatchObject(execution.events);
     } catch (e) {
-      console.error(e);
       expect(e).not.toBeDefined();
     }
   });
@@ -51,7 +48,6 @@ describe('Get execution history', () => {
       const { response } = getExecutionHistory(params, executions);
       expect(response.events).toMatchObject(execution.events);
     } catch (e) {
-      console.error(e);
       expect(e).not.toBeDefined();
     }
   });
@@ -63,7 +59,6 @@ describe('Get execution history', () => {
       };
       getExecutionHistory(params, executions);
     } catch (e) {
-      console.error(e);
       expect(e.message).toEqual(errors.common.INVALID_PARAMETER_VALUE);
     }
   });
@@ -75,7 +70,6 @@ describe('Get execution history', () => {
       };
       getExecutionHistory(params, executions);
     } catch (e) {
-      console.error(e);
       expect(e.message).toEqual(errors.common.INVALID_PARAMETER_VALUE);
     }
   });
@@ -87,7 +81,6 @@ describe('Get execution history', () => {
       };
       getExecutionHistory(params, executions);
     } catch (e) {
-      console.error(e);
       expect(e.message).toEqual(errors.getExecutionHistory.INVALID_TOKEN);
     }
   });
@@ -99,7 +92,6 @@ describe('Get execution history', () => {
       };
       getExecutionHistory(params, executions);
     } catch (e) {
-      console.error(e);
       expect(e.message).toEqual(errors.getExecutionHistory.INVALID_ARN);
     }
   });

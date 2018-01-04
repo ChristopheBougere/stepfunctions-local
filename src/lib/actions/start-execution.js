@@ -81,15 +81,14 @@ function startExecution(params, stateMachines, executions) {
     startDate: new Date().getTime() / 1000,
     stateMachineArn: stateMachineObj.stateMachineArn,
     status: status.execution.RUNNING,
-    events: [],
+    events: [
+      addHistoryEvent({
+        type: 'EXECUTION_STARTED',
+        input,
+        roleArn: stateMachineObj.roleArn,
+      }, { events: [] }),
+    ],
   };
-
-  // TODO: Add EXECUTION_STARTED event to execution's history
-  execution.events.push(addHistoryEvent({
-    type: 'EXECUTION_STARTED',
-    input,
-    roleArn: stateMachineObj.roleArn,
-  }, execution));
 
   // Execute state machine
   const stateMachine = new StateMachine(stateMachineObj.definition, execution);
