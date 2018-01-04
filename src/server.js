@@ -18,57 +18,66 @@ const describeExecution = require('./lib/actions/describe-execution');
 const getExecutionHistory = require('./lib/actions/get-execution-history');
 
 function callAction(state, action, params) {
-  switch (action) {
-    // actions related to state machine
-    case actions.CREATE_STATE_MACHINE:
-      return createStateMachine(params, state.stateMachines);
-    case actions.LIST_STATE_MACHINES:
-      return listStateMachines(params, state.stateMachines);
-    case actions.DESCRIBE_STATE_MACHINE:
-      return describeStateMachine(params, state.stateMachines);
-    case actions.UPDATE_STATE_MACHINE:
-      // TODO
-      return {};
-    case actions.DELETE_STATE_MACHINE:
-      return deleteStateMachine(params, state.stateMachines);
-    // actions related to executions
-    case actions.START_EXECUTION:
-      return startExecution(params, state.stateMachines, state.executions);
-    case actions.STOP_EXECUTION:
-      return stopExecution(params, state.executions);
-    case actions.LIST_EXECUTIONS:
-      return listExecutions(params, state.stateMachines, state.executions);
-    case actions.DESCRIBE_EXECUTION:
-      return describeExecution(params, state.executions);
-    case actions.GET_EXECUTION_HISTORY:
-      return getExecutionHistory(params, state.executions);
-    // actions related to activities
-    case actions.CREATE_ACTIVITY:
-      // TODO
-      return {};
-    case actions.GET_ACTIVITY_TASK:
-      // TODO
-      return {};
-    case actions.LIST_ACTIVITIES:
-      // TODO
-      return {};
-    case actions.SEND_TASK_FAILURE:
-      // TODO
-      return {};
-    case actions.SEND_TASK_HEARTBEAT:
-      // TODO
-      return {};
-    case actions.SEND_TASK_SUCCESS:
-      // TODO
-      return {};
-    case actions.DELETE_ACTIVITY:
-      // TODO
-      return {};
-    // default action
-    default:
-      return {
-        response: {},
-      };
+  try {
+    switch (action) {
+      // actions related to state machine
+      case actions.CREATE_STATE_MACHINE:
+        return createStateMachine(params, state.stateMachines);
+      case actions.LIST_STATE_MACHINES:
+        return listStateMachines(params, state.stateMachines);
+      case actions.DESCRIBE_STATE_MACHINE:
+        return describeStateMachine(params, state.stateMachines);
+      case actions.UPDATE_STATE_MACHINE:
+        // TODO
+        return {};
+      case actions.DELETE_STATE_MACHINE:
+        return deleteStateMachine(params, state.stateMachines);
+      // actions related to executions
+      case actions.START_EXECUTION:
+        return startExecution(params, state.stateMachines, state.executions);
+      case actions.STOP_EXECUTION:
+        return stopExecution(params, state.executions);
+      case actions.LIST_EXECUTIONS:
+        return listExecutions(params, state.stateMachines, state.executions);
+      case actions.DESCRIBE_EXECUTION:
+        return describeExecution(params, state.executions);
+      case actions.GET_EXECUTION_HISTORY:
+        return getExecutionHistory(params, state.executions);
+      // actions related to activities
+      case actions.CREATE_ACTIVITY:
+        // TODO
+        return {};
+      case actions.GET_ACTIVITY_TASK:
+        // TODO
+        return {};
+      case actions.LIST_ACTIVITIES:
+        // TODO
+        return {};
+      case actions.SEND_TASK_FAILURE:
+        // TODO
+        return {};
+      case actions.SEND_TASK_HEARTBEAT:
+        // TODO
+        return {};
+      case actions.SEND_TASK_SUCCESS:
+        // TODO
+        return {};
+      case actions.DELETE_ACTIVITY:
+        // TODO
+        return {};
+      // default action
+      default:
+        return {
+          response: {},
+        };
+    }
+  } catch (e) {
+    logger.error(`Error while calling action "${action}": %O`, e);
+    return {
+      response: {
+        err: e,
+      },
+    };
   }
 }
 
@@ -94,22 +103,16 @@ function start(config) {
       if (!action) {
         return res.status(400).send({ error: 'Unknown action' });
       }
-      const requestId = uuidv4();
-      logger.log('-> %s: %s %O', requestId, action, req.body);
+      logger.log('-> %s: %s %O', action, req.body);
+      const result = callAction(store.getState(), action, req.body);
+      if (result.response.err) {
+        return res.status(400).send(result.response.err);
+      }
       store.dispatch({
         type: action,
-        requestId,
-        result: callAction(store.getState(), action, req.body),
+        result,
       });
-      const response = store.getState().responses[requestId];
-      store.dispatch({
-        type: actions.REMOVE_RESPONSE,
-        requestId,
-      });
-      if (response.err) {
-        return res.status(400).send(response.err);
-      }
-      return res.send(response.data);
+      return res.send(result.response);
     } catch (e) {
       logger.error('Internal error: %O', e);
       return res.status(500).send({ error: errors.common.INTERNAL_ERROR });

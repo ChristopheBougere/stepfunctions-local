@@ -24,7 +24,7 @@
   },
   "homepage": "https://github.com/airware/stepfunctions-local#readme",
   "dependencies": {
-    "asl-validator": "^1.0.4",
+    "asl-validator": "^1.0.6",
     "body-parser": "^1.18.2",
     "debug": "^3.1.0",
     "express": "^4.16.2",
