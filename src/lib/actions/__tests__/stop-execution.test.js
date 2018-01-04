@@ -1,5 +1,3 @@
-const console = require('console');
-
 const stopExecution = require('../stop-execution');
 const { status, errors } = require('../../../constants');
 
@@ -24,7 +22,6 @@ describe('Stop execution', () => {
       expect(execution.stopDate).toBeDefined();
       expect(response).toBeDefined();
     } catch (e) {
-      console.error(e);
       expect(e).not.toBeDefined();
     }
   });
@@ -36,7 +33,6 @@ describe('Stop execution', () => {
       };
       stopExecution(params, executions);
     } catch (e) {
-      console.error(e);
       expect(e.message).toEqual(errors.stopExecution.INVALID_ARN);
     }
   });
@@ -48,7 +44,6 @@ describe('Stop execution', () => {
       };
       stopExecution(params, executions);
     } catch (e) {
-      console.error(e);
       expect(e.message).toEqual(errors.stopExecution.EXECUTION_DOES_NOT_EXIST);
     }
   });
@@ -61,7 +56,6 @@ describe('Stop execution', () => {
       };
       stopExecution(params, executions);
     } catch (e) {
-      console.error(e);
       expect(e.message).toEqual(errors.common.INVALID_PARAMETER_VALUE);
     }
   });
@@ -74,7 +68,6 @@ describe('Stop execution', () => {
       };
       stopExecution(params, executions);
     } catch (e) {
-      console.error(e);
       expect(e.message).toEqual(errors.common.INVALID_PARAMETER_VALUE);
     }
   });

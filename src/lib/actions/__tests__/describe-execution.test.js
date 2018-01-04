@@ -1,5 +1,3 @@
-const console = require('console');
-
 const describeExecution = require('../describe-execution');
 const { errors } = require('../../../constants');
 
@@ -33,7 +31,6 @@ describe('Describe execution', () => {
       expect(Object.keys(response)).toHaveLength(8);
       expect(response).toMatchObject(execution);
     } catch (e) {
-      console.error(e);
       expect(e).not.toBeDefined();
     }
   });
@@ -45,7 +42,6 @@ describe('Describe execution', () => {
       };
       describeExecution(params, executions);
     } catch (e) {
-      console.error(e);
       expect(e.message).toEqual(errors.describeExecution.INVALID_ARN);
     }
   });
@@ -57,7 +53,6 @@ describe('Describe execution', () => {
       };
       describeExecution(params, executions);
     } catch (e) {
-      console.error(e);
       expect(e.message).toEqual(errors.describeExecution.EXECUTION_DOES_NOT_EXIST);
     }
   });

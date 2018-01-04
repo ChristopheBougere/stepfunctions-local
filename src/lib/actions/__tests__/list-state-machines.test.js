@@ -1,5 +1,3 @@
-const console = require('console');
-
 const listStateMachines = require('../list-state-machines');
 const { errors } = require('../../../constants');
 
@@ -22,7 +20,6 @@ describe('List state machines', () => {
       expect(response.stateMachines).toHaveLength(3);
       expect(response.NextToken).toBeNull();
     } catch (e) {
-      console.error(e);
       expect(e).not.toBeDefined();
     }
   });
@@ -33,11 +30,9 @@ describe('List state machines', () => {
         maxResults: 2,
       };
       const { response } = listStateMachines(params, stateMachines);
-      console.log('===', response);
       expect(response.stateMachines).toHaveLength(params.maxResults);
       expect(response.NextToken).toBeDefined();
     } catch (e) {
-      console.error(e);
       expect(e).not.toBeDefined();
     }
   });
@@ -49,7 +44,6 @@ describe('List state machines', () => {
       };
       listStateMachines(params, stateMachines);
     } catch (e) {
-      console.error(e);
       expect(e.message).toEqual(errors.common.INVALID_PARAMETER_VALUE);
     }
   });
@@ -61,7 +55,6 @@ describe('List state machines', () => {
       };
       listStateMachines(params, stateMachines);
     } catch (e) {
-      console.error(e);
       expect(e.message).toEqual(errors.listStateMachines.INVALID_TOKEN);
     }
   });
