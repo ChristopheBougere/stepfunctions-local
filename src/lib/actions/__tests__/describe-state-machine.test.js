@@ -1,5 +1,3 @@
-const console = require('console');
-
 const describeStateMachine = require('../describe-state-machine');
 const { errors } = require('../../../constants');
 
@@ -25,7 +23,6 @@ describe('Describe state machine', () => {
       expect(Object.keys(response)).toHaveLength(6);
       expect(response).toMatchObject(stateMachine);
     } catch (e) {
-      console.error(e);
       expect(e).not.toBeDefined();
     }
   });
@@ -37,7 +34,6 @@ describe('Describe state machine', () => {
       };
       describeStateMachine(params, stateMachines);
     } catch (e) {
-      console.error(e);
       expect(e.message).toEqual(errors.describeStateMachine.INVALID_ARN);
     }
   });
@@ -49,7 +45,6 @@ describe('Describe state machine', () => {
       };
       describeStateMachine(params, stateMachines);
     } catch (e) {
-      console.error(e);
       expect(e.message).toEqual(errors.describeStateMachine.STATE_MACHINE_DOES_NOT_EXIST);
     }
   });

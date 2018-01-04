@@ -1,4 +1,3 @@
-const console = require('console');
 const uuid = require('uuid');
 
 const startExecution = require('../start-execution');
@@ -59,7 +58,6 @@ describe('Start execution', () => {
       expect(execution.events).toHaveLength(1);
       expect(response).toBeDefined();
     } catch (e) {
-      console.error(e);
       expect(e).not.toBeDefined();
     }
   });
@@ -77,7 +75,6 @@ describe('Start execution', () => {
       expect(execution.events).toHaveLength(1);
       expect(response).toBeDefined();
     } catch (e) {
-      console.error(e);
       expect(e).not.toBeDefined();
     }
   });
@@ -89,7 +86,6 @@ describe('Start execution', () => {
       };
       startExecution(params, stateMachines, executions);
     } catch (e) {
-      console.error(e);
       expect(e.message).toEqual(errors.startExecution.STATE_MACHINE_DOES_NOT_EXIST);
     }
   });
@@ -101,7 +97,6 @@ describe('Start execution', () => {
       };
       startExecution(params, stateMachines, executions);
     } catch (e) {
-      console.error(e);
       expect(e.message).toEqual(errors.startExecution.INVALID_ARN);
     }
   });
@@ -114,7 +109,6 @@ describe('Start execution', () => {
       };
       startExecution(params, stateMachines, executions);
     } catch (e) {
-      console.error(e);
       expect(e.message).toEqual(errors.startExecution.INVALID_EXECUTION_INPUT);
     }
   });
@@ -128,7 +122,6 @@ describe('Start execution', () => {
       };
       startExecution(params, stateMachines, executions);
     } catch (e) {
-      console.error(e);
       expect(e.message).toEqual(errors.startExecution.EXECUTION_ALREADY_EXISTS);
     }
   });
@@ -141,7 +134,6 @@ describe('Start execution', () => {
       };
       startExecution(params, stateMachines, executions);
     } catch (e) {
-      console.error(e);
       expect(e.message).toEqual(errors.startExecution.EXECUTION_ALREADY_EXISTS);
     }
   });

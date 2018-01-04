@@ -1,5 +1,3 @@
-const console = require('console');
-
 const addHistoryEvent = require('../add-history-event');
 const { errors } = require('../../../constants');
 
@@ -13,7 +11,6 @@ describe('Add history event', () => {
         input: {},
       }, execution);
     } catch (e) {
-      console.error(e);
       expect(e.name).toEqual('TypeError');
     }
   });
@@ -30,7 +27,6 @@ describe('Add history event', () => {
         input: {},
       }, execution);
     } catch (e) {
-      console.error(e);
       expect(e.message).toEqual(errors.common.INVALID_PARAMETER_VALUE);
     }
   });
@@ -48,7 +44,6 @@ describe('Add history event', () => {
       expect(event.previousEventId).toEqual(0);
       expect(event.id).toEqual(1);
     } catch (e) {
-      console.error(e);
       expect(e).not.toBeDefined();
     }
   });
@@ -73,7 +68,6 @@ describe('Add history event', () => {
       expect(event.previousEventId).toEqual(1);
       expect(event.id).toEqual(2);
     } catch (e) {
-      console.error(e);
       expect(e).not.toBeDefined();
     }
   });

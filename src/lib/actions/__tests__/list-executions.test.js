@@ -1,5 +1,3 @@
-const console = require('console');
-
 const listExecutions = require('../list-executions');
 const { errors } = require('../../../constants');
 
@@ -39,7 +37,6 @@ describe('List executions', () => {
       const { response } = listExecutions(params, stateMachines, executions);
       expect(response.executions).toHaveLength(2);
     } catch (e) {
-      console.error(e);
       expect(e).not.toBeDefined();
     }
   });
@@ -53,7 +50,6 @@ describe('List executions', () => {
       const { response } = listExecutions(params, stateMachines, executions);
       expect(response.executions).toHaveLength(1);
     } catch (e) {
-      console.error(e);
       expect(e).not.toBeDefined();
     }
   });
@@ -66,7 +62,6 @@ describe('List executions', () => {
       const { response } = listExecutions(params, stateMachines, executions);
       expect(response.executions).toHaveLength(1);
     } catch (e) {
-      console.error(e);
       expect(e).not.toBeDefined();
     }
   });
@@ -78,7 +73,6 @@ describe('List executions', () => {
       };
       listExecutions(params, stateMachines, executions);
     } catch (e) {
-      console.error(e);
       expect(e.message).toEqual(errors.common.INVALID_PARAMETER_VALUE);
     }
   });
@@ -90,7 +84,6 @@ describe('List executions', () => {
       };
       listExecutions(params, stateMachines, executions);
     } catch (e) {
-      console.error(e);
       expect(e.message).toEqual(errors.listExecutions.INVALID_TOKEN);
     }
   });
@@ -102,7 +95,6 @@ describe('List executions', () => {
       };
       listExecutions(params, stateMachines, executions);
     } catch (e) {
-      console.error(e);
       expect(e.message).toEqual(errors.listExecutions.INVALID_ARN);
     }
   });
@@ -114,7 +106,6 @@ describe('List executions', () => {
       };
       listExecutions(params, stateMachines, executions);
     } catch (e) {
-      console.error(e);
       expect(e.message).toEqual(errors.listExecutions.STATE_MACHINE_DOES_NOT_EXIST);
     }
   });
@@ -127,7 +118,6 @@ describe('List executions', () => {
       };
       listExecutions(params, stateMachines, executions);
     } catch (e) {
-      console.error(e);
       expect(e.message).toEqual(errors.common.INVALID_PARAMETER_VALUE);
     }
   });
