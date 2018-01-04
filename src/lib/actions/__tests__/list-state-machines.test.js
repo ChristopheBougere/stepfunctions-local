@@ -33,7 +33,6 @@ describe('List state machines', () => {
         maxResults: 2,
       };
       const { response } = listStateMachines(params, stateMachines);
-      console.log('===', response);
       expect(response.stateMachines).toHaveLength(params.maxResults);
       expect(response.NextToken).toBeDefined();
     } catch (e) {
