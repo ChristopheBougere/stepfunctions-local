@@ -9,6 +9,8 @@ const listStateMachines = require('./lib/actions/list-state-machines');
 const createStateMachine = require('./lib/actions/create-state-machine');
 const deleteStateMachine = require('./lib/actions/delete-state-machine');
 const describeStateMachine = require('./lib/actions/describe-state-machine');
+const describeStateMachineForExecution = require('./lib/actions/describe-state-machine-for-execution');
+const updateStateMachine = require('./lib/actions/update-state-machine');
 
 const startExecution = require('./lib/actions/start-execution');
 const stopExecution = require('./lib/actions/stop-execution');
@@ -26,9 +28,12 @@ function callAction(state, action, params) {
         return listStateMachines(params, state.stateMachines);
       case actions.DESCRIBE_STATE_MACHINE:
         return describeStateMachine(params, state.stateMachines);
+      case actions.DESCRIBE_STATE_MACHINE_FOR_EXECUTION:
+        // NOTE: This action is not yet implemented in AWS CLI
+        return describeStateMachineForExecution(params, state.stateMachines, state.executions);
       case actions.UPDATE_STATE_MACHINE:
-        // TODO
-        return {};
+        // NOTE: This action is not yet implemented in AWS CLI
+        return updateStateMachine(params, state.stateMachines);
       case actions.DELETE_STATE_MACHINE:
         return deleteStateMachine(params, state.stateMachines);
       // actions related to executions

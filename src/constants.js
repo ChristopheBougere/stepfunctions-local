@@ -12,6 +12,8 @@ module.exports = {
     DESCRIBE_ACTIVITY: 'DescribeActivity',
     DESCRIBE_EXECUTION: 'DescribeExecution',
     DESCRIBE_STATE_MACHINE: 'DescribeStateMachine',
+    DESCRIBE_STATE_MACHINE_FOR_EXECUTION: 'DescribeStateMachineForExecution',
+    UPDATE_STATE_MACHINE: 'UpdateStateMachine',
     GET_ACTIVITY_TASK: 'GetActivityTask',
     GET_EXECUTION_HISTORY: 'GetExecutionHistory',
     LIST_ACTIVITIES: 'ListActivities',
@@ -50,6 +52,7 @@ module.exports = {
       MISSING_ACTION: 'MissingAction',
       MISSING_AUTHENTICATION_TOKEN: 'MissingAuthenticationToken', // HTTP 403
       MISSING_PARAMETER: 'MissingParameter',
+      MISSING_REQUIRED_PARAMETER: 'MissingRequiredParameter',
       OPT_IN_REQUIRED: 'OptInRequired', // HTTP 403
       REQUEST_EXPIRED: 'RequestExpired',
       SERVICE_UNAVAILABLE: 'ServiceUnavailable', // HTTP 503
@@ -72,6 +75,16 @@ module.exports = {
     },
     describeStateMachine: {
       INVALID_ARN: 'InvalidArn',
+      STATE_MACHINE_DOES_NOT_EXIST: 'StateMachineDoesNotExist',
+    },
+    describeStateMachineForExecution: {
+      INVALID_ARN: 'InvalidArn',
+      EXECUTION_DOES_NOT_EXIST: 'ExecutionDoesNotExist',
+    },
+    updateStateMachine: {
+      INVALID_ARN: 'InvalidArn',
+      INVALID_DEFINITION: 'InvalidDefinition',
+      STATE_MACHINE_DELETING: 'StateMachineDeleting',
       STATE_MACHINE_DOES_NOT_EXIST: 'StateMachineDoesNotExist',
     },
     listExecutions: {

@@ -15,7 +15,7 @@ function reducer(state = initialState, action) {
       if (execution) {
         execution.events.push(result.event);
       }
-      return Object.assign({}, stateCopy);
+      return stateCopy;
     }
     case actions.UPDATE_EXECUTION: {
       const stateCopy = Object.assign({}, state);
@@ -38,10 +38,18 @@ function reducer(state = initialState, action) {
       return Object.assign({}, state);
     case actions.DESCRIBE_STATE_MACHINE:
       return Object.assign({}, state);
-    case actions.UPDATE_STATE_MACHINE:
-      // TODO
-      // http://docs.aws.amazon.com/step-functions/latest/apireference/API_UpdateStateMachine.html
+    case actions.DESCRIBE_STATE_MACHINE_FOR_EXECUTION:
       return Object.assign({}, state);
+    case actions.UPDATE_STATE_MACHINE: {
+      const { stateMachine } = result.stateMachine;
+      const stateCopy = Object.assign({}, state);
+      let updatedStateMachine = stateCopy.stateMachines.find(e =>
+        e.stateMachineArn === stateMachine.stateMachineArn);
+      if (updatedStateMachine) {
+        updatedStateMachine = stateMachine;
+      }
+      return stateCopy;
+    }
     case actions.DELETE_STATE_MACHINE: {
       const stateCopy = Object.assign({}, state);
       stateCopy.stateMachines.splice(result.index, 1);

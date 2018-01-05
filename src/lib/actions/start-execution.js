@@ -10,6 +10,7 @@ const addHistoryEvent = require('./add-history-event');
 const SAME_NAME_MAX_DAYS = 90;
 
 function startExecution(params, stateMachines, executions) {
+  const { name: paramsName } = params;
   if (typeof params.stateMachineArn !== 'string') {
     throw new Error(errors.startExecution.INVALID_ARN);
   }
@@ -25,8 +26,8 @@ function startExecution(params, stateMachines, executions) {
   // • wildcard characters ? *
   // • special characters " # % \ ^ | ~ ` $ & , ; : /
   // • control characters (U+0000-001F, U+007F-009F)
-  if (typeof params.name === 'string' && params.name.length && params.name.length <= 80) {
-    name = params.name;
+  if (typeof paramsName === 'string' && paramsName.length && paramsName.length <= 80) {
+    name = paramsName;
   } else {
     name = uuidv4();
   }
