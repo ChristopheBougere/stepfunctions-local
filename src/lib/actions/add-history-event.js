@@ -1,12 +1,16 @@
-const Event = require('../event');
+const createHistoryEvent = require('./create-history-event');
 
-function addHistoryEvent(params, execution) {
-  const event = Object.assign({}, {
-    id: execution.events.length ? (execution.events.length + 1) : 1,
-    previousEventId: execution.events.length,
-    timestamp: new Date().getTime() / 1000,
-  }, new Event(params));
-  return event;
+const store = require('../../store');
+const { actions } = require('../../constants');
+
+function addHistoryEvent(execution, type, params = {}) {
+  store.dispatch({
+    type: actions.ADD_HISTORY_EVENT,
+    result: {
+      executionArn: execution.executionArn,
+      event: createHistoryEvent({ ...params, type }, execution),
+    },
+  });
 }
 
 module.exports = addHistoryEvent;

@@ -85,28 +85,20 @@ function startExecution(params, stateMachines, executions) {
     status: status.execution.RUNNING,
     events: [],
   };
-  execution.events.push(addHistoryEvent({
-    type: 'EXECUTION_STARTED',
-    input,
-    roleArn: stateMachineObj.roleArn,
-  }, execution));
 
   // Execute state machine
   const stateMachine = new StateMachine(stateMachineObj.definition, execution);
   process.nextTick(async () => {
     try {
+      addHistoryEvent(execution, 'EXECUTION_STARTED', {
+        input,
+        roleArn: stateMachine.roleArn,
+      });
       const result = await stateMachine.execute(input);
-      store.dispatch({
-        type: actions.ADD_HISTORY_EVENT,
-        result: {
-          executionArn: execution.executionArn,
-          event: addHistoryEvent({
-            type: 'EXECUTION_SUCCEEDED',
-            input,
-            roleArn: stateMachine.roleArn,
-            output: result.output,
-          }, execution),
-        },
+      addHistoryEvent(execution, 'EXECUTION_SUCCEEDED', {
+        input,
+        roleArn: stateMachine.roleArn,
+        output: result.output,
       });
       store.dispatch({
         type: actions.UPDATE_EXECUTION,
@@ -120,16 +112,9 @@ function startExecution(params, stateMachines, executions) {
         },
       });
     } catch (e) {
-      store.dispatch({
-        type: actions.ADD_HISTORY_EVENT,
-        result: {
-          executionArn: execution.executionArn,
-          event: addHistoryEvent({
-            type: 'EXECUTION_FAILED',
-            cause: e.name,
-            error: e.message,
-          }, execution),
-        },
+      addHistoryEvent(execution, 'EXECUTION_FAILED', {
+        cause: e.name,
+        error: e.message,
       });
       store.dispatch({
         type: actions.UPDATE_EXECUTION,

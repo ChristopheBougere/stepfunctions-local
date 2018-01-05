@@ -55,7 +55,7 @@ describe('Start execution', () => {
       const { execution, response } = startExecution(params, stateMachines, executions);
       expect(execution.executionArn).toBeDefined();
       expect(execution.startDate).toBeCloseTo(new Date().getTime() / 1000, 2);
-      expect(execution.events).toHaveLength(1);
+      expect(execution.events).toBeDefined();
       expect(response).toBeDefined();
     } catch (e) {
       expect(e).not.toBeDefined();
@@ -72,7 +72,7 @@ describe('Start execution', () => {
       const { execution, response } = startExecution(params, stateMachines, executions);
       expect(execution.executionArn).toBeDefined();
       expect(execution.startDate).toBeCloseTo(new Date().getTime() / 1000, 2);
-      expect(execution.events).toHaveLength(1);
+      expect(execution.events).toBeDefined();
       expect(response).toBeDefined();
     } catch (e) {
       expect(e).not.toBeDefined();

@@ -1,15 +1,13 @@
-const addHistoryEvent = require('../add-history-event');
+const createHistoryEvent = require('../create-history-event');
 const { errors } = require('../../../constants');
 
 describe('Add history event', () => {
   it('should fail because no "events" key in execution', async () => {
     try {
-      const execution = {};
-      addHistoryEvent({
-        type: 'EXECUTION_STARTED',
-        roleArn: 'this-is-my-role',
-        input: {},
-      }, execution);
+      const execution = {
+        executionArn: 'my-arn',
+      };
+      createHistoryEvent({ type: 'EXECUTION_STARTED' }, execution);
     } catch (e) {
       expect(e.name).toEqual('TypeError');
     }
@@ -19,13 +17,12 @@ describe('Add history event', () => {
   it('should fail because invalid parameter', async () => {
     try {
       const execution = {
+        executionArn: 'my-arn',
         events: [],
       };
-      addHistoryEvent({
-        type: 'INVALID_EVENT_VALUE',
+      createHistoryEvent(Object.assign({ type: 'INVALID_EVENT_VALUE' }, {
         roleArn: 'this-is-my-role',
-        input: {},
-      }, execution);
+      }), execution);
     } catch (e) {
       expect(e.message).toEqual(errors.common.INVALID_PARAMETER_VALUE);
     }
@@ -34,13 +31,12 @@ describe('Add history event', () => {
   it('should return an event (from an empty history)', async () => {
     try {
       const execution = {
+        executionArn: 'my-arn',
         events: [],
       };
-      const event = addHistoryEvent({
-        type: 'EXECUTION_STARTED',
+      const event = createHistoryEvent(Object.assign({ type: 'EXECUTION_STARTED' }, {
         roleArn: 'this-is-my-role',
-        input: {},
-      }, execution);
+      }), execution);
       expect(event.previousEventId).toEqual(0);
       expect(event.id).toEqual(1);
     } catch (e) {
@@ -51,6 +47,7 @@ describe('Add history event', () => {
   it('should return an event', async () => {
     try {
       const execution = {
+        executionArn: 'my-arn',
         events: [
           {
             executionStartedEventDetails: {
@@ -60,11 +57,9 @@ describe('Add history event', () => {
           },
         ],
       };
-      const event = addHistoryEvent({
-        type: 'EXECUTION_STARTED',
+      const event = createHistoryEvent(Object.assign({ type: 'EXECUTION_STARTED' }, {
         roleArn: 'this-is-my-role',
-        input: {},
-      }, execution);
+      }), execution);
       expect(event.previousEventId).toEqual(1);
       expect(event.id).toEqual(2);
     } catch (e) {

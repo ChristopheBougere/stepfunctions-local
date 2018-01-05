@@ -39,6 +39,7 @@ class StateMachine {
     this.input = input;
     let lastIO = input;
     let nextStateName = this.stateMachine.StartAt;
+    let running = true;
     do {
       const currentStateName = nextStateName;
       const nextState = StateMachine.instanciateState(
@@ -46,10 +47,14 @@ class StateMachine {
         this.execution,
         currentStateName,
       );
-      const res = await nextState.execute(lastIO);
-      lastIO = res.output;
-      nextStateName = res.nextState || null;
-    } while (typeof nextStateName === 'string');
+      try {
+        const res = await nextState.execute(lastIO);
+        lastIO = res.output;
+        nextStateName = res.nextState || null;
+      } catch (e) {
+        running = false;
+      }
+    } while (typeof nextStateName === 'string' && running);
 
     return {
       output: this.output,
