@@ -8,6 +8,10 @@
     "lint": "./node_modules/eslint/bin/eslint.js src",
     "test": "./node_modules/jest/bin/jest.js --coverage"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/airware/stepfunctions-local.git"
+  },
   "keywords": [
     "aws",
     "local development",
