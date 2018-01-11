@@ -1,9 +1,11 @@
 # stepfunctions-local
 
 [![license](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://github.com/airware/stepfunctions-local/blob/master/LICENSE)
+[![Dependency Status](https://www.versioneye.com/user/projects/5a571bfa0fb24f1a8fb2861d/badge.svg?style=flat)](https://www.versioneye.com/user/projects/5a571bfa0fb24f1a8fb2861d)
 
 A local AWS Step Functions server
-**Important:** this package is a work in progress. It is not ready to be used yet, but you can contribute if you are interested.
+
+**Important:** this package is a work in progress. It is not ready to be used yet. Any contribution is warm welcomed!
 
 ## Prerequisites
 
