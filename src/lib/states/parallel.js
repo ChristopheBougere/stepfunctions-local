@@ -1,6 +1,4 @@
-
 const State = require('./state');
-
 const addHistoryEvent = require('../actions/add-history-event');
 
 class Parallel extends State {
@@ -16,7 +14,7 @@ class Parallel extends State {
     this.branchesOutputs = await Promise.all(this.state.Branches.map(async (branchObj) => {
       // NOTE: this require here because of circular depencies
       //       between StateMachine and Parallel
-      const StateMachine = require('./state-machine');
+      const StateMachine = require('./state-machine'); // eslint-disable-line global-require
       const branch = new StateMachine(branchObj, this.execution);
       const res = await branch.execute(input);
       return res.output;
