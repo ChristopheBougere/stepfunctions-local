@@ -1,6 +1,8 @@
 # stepfunctions-local
 
 [![license](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://github.com/airware/stepfunctions-local/blob/master/LICENSE)
+[![CircleCI](https://circleci.com/gh/airware/stepfunctions-local/tree/master.svg?style=shield&circle-token=75641357fe0d5c8f643d714aa37009fa65037f40)](https://circleci.com/gh/airware/stepfunctions-local/tree/master)
+[![codecov](https://codecov.io/gh/airware/stepfunctions-local/branch/master/graph/badge.svg)](https://codecov.io/gh/airware/stepfunctions-local)
 [![Dependency Status](https://www.versioneye.com/user/projects/5a571bfa0fb24f1a8fb2861d/badge.svg?style=flat)](https://www.versioneye.com/user/projects/5a571bfa0fb24f1a8fb2861d)
 
 A local AWS Step Functions server
