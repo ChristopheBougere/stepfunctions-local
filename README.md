@@ -1,6 +1,6 @@
 # stepfunctions-local
 
-[![license](https://img.shields.io/github/license/mashape/apistatus.svg)](https://github.com/airware/stepfunctions-local/blob/master/LICENSE)
+[![license](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://github.com/airware/stepfunctions-local/blob/master/LICENSE)
 
 A local AWS Step Functions server
 **Important:** this package is a work in progress. It is not ready to be used yet, but you can contribute if you are interested.
