@@ -11,13 +11,20 @@ const ACTIVITY = 'activity';
 class Task extends State {
   // TODO: Add TASK_STATE_ABORTED event to execution's history when aborted
 
+  constructor(state, execution, name, config) {
+    super(state, execution, name);
+    this.config = config;
+  }
+
   async invokeLambda() {
     addHistoryEvent(this.execution, 'LAMBDA_FUNCTION_STARTED');
-    // TODO the config (regoin + lambda endpoint/port) should be in parameters
+    // TODO: retrieve Retry / Catch / TimeoutSeconds / ResultPath
+    // TODO the config (region + lambda endpoint/port) should be in parameters
     AWS.config.region = 'us-east-1';
     const lambda = new AWS.Lambda();
     const params = {
       FunctionName: this.arn,
+      Payload: JSON.stringify(this.input),
     };
     return lambda.invoke(params).promise();
   }

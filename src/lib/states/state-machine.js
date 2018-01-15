@@ -7,23 +7,24 @@ const Task = require('./task');
 const Wait = require('./wait');
 
 class StateMachine {
-  constructor(stateMachine, execution) {
+  constructor(stateMachine, execution, config) {
     this.stateMachine = stateMachine;
     this.execution = execution;
+    this.config = config;
   }
 
   findStateByName(name) {
     return this.stateMachine.States[name];
   }
 
-  static instanciateState(state, execution, name) {
+  static instanciateState(state, execution, name, config) {
     switch (state.Type) {
       case 'Choice': return new Choices(state, execution, name);
       case 'Fail': return new Fail(state, execution, name);
       case 'Parallel': return new Parallel(state, execution, name);
       case 'Pass': return new Pass(state, execution, name);
       case 'Succeed': return new Succeed(state, execution, name);
-      case 'Task': return new Task(state, execution, name);
+      case 'Task': return new Task(state, execution, name, config);
       case 'Wait': return new Wait(state, execution, name);
       default: throw new Error(`Invalid state type: ${state.Type}`);
     }
