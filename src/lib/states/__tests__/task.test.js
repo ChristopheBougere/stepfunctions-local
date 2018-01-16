@@ -4,10 +4,10 @@ const Task = require('../task');
 
 // TODO: add tests for activity execution
 
-describe('Test lambda task', () => {
+describe('Test mocked lambda task', () => {
   const state = {
     Type: 'Task',
-    Resource: 'arn:aws:lambda:us-east-1:000000000000:function:FirstLambda',
+    Resource: 'arn:aws:lambda:us-east-1:000000000000:function:MyLambda',
     Next: 'NextState',
   };
   const execution = {
@@ -43,15 +43,17 @@ describe('Test lambda task', () => {
 
   it('should mock the failure of the execution of the lambda', async () => {
     try {
-      // mock successfull execution
+      // mock failing execution
       AWS.mock('Lambda', 'invoke', Promise.resolve({
         StatusCode: 500,
         Payload: '{"errorMessage":"error"}',
       }));
       const input = { comment: 'input' };
-      await task.execute(input);
+      const res = await task.execute(input);
+      expect(res).not.toBeDefined();
     } catch (e) {
-      expect(e).toBeDefined();
+      expect(e.name).toEqual('Error');
+      expect(e.message).toEqual('error');
     }
   });
 });
@@ -78,7 +80,60 @@ describe('Test task of unknown type', () => {
       const input = { comment: 'input' };
       await task.execute(input);
     } catch (e) {
-      expect(e).toMatchObject(new Error(`Error while retrieving task type of resource: ${state.Resource}`));
+      expect(e.name).toEqual('Error');
+      expect(e.message).toEqual(`Error while retrieving task type of resource: ${state.Resource}`);
+    }
+  });
+});
+
+describe.skip('Test lambda task', () => {
+  const execution = {
+    executionArn: 'my-execution-arn',
+    events: [],
+  };
+  const name = 'MyTask';
+  const config = {
+    lambdaEndpoint: 'http://localhost',
+    lambdaPort: 4574,
+  };
+
+  it('should execute a simple lambda', async () => {
+    try {
+      const state = {
+        Type: 'Task',
+        Resource: 'arn:aws:lambda:us-east-1:000000000000:function:PublicMatch',
+        Next: 'NextState',
+      };
+      const input = { type: 'Public' };
+      const task = new Task(state, execution, name, config);
+      const res = await task.execute(input);
+      expect(res.output).toMatchObject({
+        type: 'Public',
+        output: 'Public',
+      });
+      expect(res.nextState).toEqual('NextState');
+    } catch (e) {
+      expect(e).not.toBeDefined();
+    }
+  });
+
+  it('should execute a complex lambda', async () => {
+    try {
+      const state = {
+        Type: 'Task',
+        Resource: 'arn:aws:lambda:us-east-1:000000000000:function:TestLambda',
+        Next: 'NextState',
+      };
+      const input = { type: 'Public' };
+      const task = new Task(state, execution, name, config);
+      const res = await task.execute(input);
+      expect(res.output).toMatchObject({
+        type: 'Public',
+        output: 'Public',
+      });
+      expect(res.nextState).toEqual('NextState');
+    } catch (e) {
+      expect(e).not.toBeDefined();
     }
   });
 });

@@ -7,15 +7,22 @@
 
 A local AWS Step Functions server
 
-**Important:** this package is a work in progress. It is not ready to be used yet. Any contribution is warm welcomed!
+**Important:** this package is a work in progress. It is not ready to be used yet. Any contribution is warm welcome!
 
 ## Prerequisites
 
 * Node 8 or greater
+* [Localstack](https://github.com/localstack/localstack)
+* Docker
 
 ## Install
 ```bash
 npm install
+```
+
+## Start localstack server
+```bash
+LAMBDA_EXECUTOR=docker localstack start
 ```
 
 ## Start local server
