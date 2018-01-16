@@ -19,9 +19,10 @@ class Task extends State {
   async invokeLambda() {
     addHistoryEvent(this.execution, 'LAMBDA_FUNCTION_STARTED');
     // TODO: retrieve Retry / Catch / TimeoutSeconds / ResultPath
-    // TODO the config (region + lambda endpoint/port) should be in parameters
     AWS.config.region = 'us-east-1';
-    const lambda = new AWS.Lambda();
+    const lambda = new AWS.Lambda({
+      endpoint: `${this.config.lambdaEndpoint}:${this.config.lambdaPort}`,
+    });
     const params = {
       FunctionName: this.arn,
       Payload: JSON.stringify(this.input),
@@ -64,7 +65,7 @@ class Task extends State {
               }
             }
           } while (!result);
-
+          // TODO: use StatusCode value to check if result OK
           if (result.Payload) {
             const payload = JSON.parse(result.Payload);
             if (payload.errorMessage) {
