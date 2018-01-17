@@ -41,13 +41,9 @@ function reducer(state = initialState, action) {
     case actions.DESCRIBE_STATE_MACHINE_FOR_EXECUTION:
       return Object.assign({}, state);
     case actions.UPDATE_STATE_MACHINE: {
-      const { stateMachine } = result;
+      const { index, stateMachine } = result;
       const stateCopy = Object.assign({}, state);
-      const updatedStateMachine = stateCopy.stateMachines.find(e =>
-        e.stateMachineArn === stateMachine.stateMachineArn);
-      if (updatedStateMachine) {
-        Object.assign(updatedStateMachine, stateMachine);
-      }
+      stateCopy.stateMachines[index] = stateMachine;
       return stateCopy;
     }
     case actions.DELETE_STATE_MACHINE: {

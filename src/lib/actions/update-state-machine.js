@@ -14,11 +14,11 @@ function updateStateMachine(params, stateMachines) {
   if (typeof params.stateMachineArn !== 'string') {
     throw new Error(`${errors.updateStateMachine.INVALID_ARN}`);
   }
-  const match = stateMachines.find(o => o.stateMachineArn === params.stateMachineArn);
-  if (!match) {
+  const index = stateMachines.findIndex(o => o.stateMachineArn === params.stateMachineArn);
+  if (index < 0) {
     throw new Error(errors.updateStateMachine.STATE_MACHINE_DOES_NOT_EXIST);
   }
-  const stateMachine = Object.assign({}, match, {
+  const stateMachine = Object.assign({}, stateMachines[index], {
     updateDate: new Date().getTime() / 1000,
   });
   if (params.definition) {
@@ -42,6 +42,7 @@ function updateStateMachine(params, stateMachines) {
     stateMachine.roleArn = params.roleArn;
   }
   return {
+    index,
     stateMachine,
     response: {
       updateDate: stateMachine.updateDate,
