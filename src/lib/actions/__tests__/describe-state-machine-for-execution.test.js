@@ -8,7 +8,8 @@ describe('Describe state machine for execution', () => {
   it('should return the state machine description', () => {
     try {
       const execution = executions[0];
-      const responseStateMachine = stateMachines.find(s => s.stateMachineArn === execution.stateMachineArn);
+      const responseStateMachine = stateMachines
+        .find(s => s.stateMachineArn === execution.stateMachineArn);
       const params = {
         executionArn: execution.executionArn,
       };
@@ -26,7 +27,8 @@ describe('Describe state machine for execution', () => {
   it('should return the state machine description (updated state machine)', () => {
     try {
       const execution = executions[2];
-      const responseStateMachine = stateMachines.find(s => s.stateMachineArn === execution.stateMachineArn);
+      const responseStateMachine = stateMachines
+        .find(s => s.stateMachineArn === execution.stateMachineArn);
       const params = {
         executionArn: execution.executionArn,
       };
@@ -43,7 +45,6 @@ describe('Describe state machine for execution', () => {
 
   it('should fail because missing required parameter execution arn', () => {
     try {
-      const execution = executions[0];
       const params = {};
       const res = describeStateMachineForExecution(params, stateMachines, executions);
       expect(res).not.toBeDefined();
@@ -54,7 +55,6 @@ describe('Describe state machine for execution', () => {
 
   it('should fail because invalid execution arn', () => {
     try {
-      const execution = executions[0];
       const params = {
         executionArn: 123,
       };
