@@ -1,0 +1,37 @@
+[
+  {
+    "stateMachineArn": "arn:aws:states:local:0123456789:stateMachine:my-state-machine-1",
+    "name": "my-state-machine-1",
+    "status": "ACTIVE",
+    "definition": {
+      "StartAt": "FirstState",
+      "States": {
+        "FirstState": {
+          "Type": "Task",
+          "Resource": "arn:aws:lambda:us-east-1:000000000000:function:MyLambda",
+          "End": true
+        }
+      }
+    },
+    "roleArn": "arn:aws:iam::0123456789:role/service-role/StatesExecutionRole-us-east-1",
+    "creationDate": 1516182908.211
+  },
+  {
+    "stateMachineArn": "arn:aws:states:local:0123456789:stateMachine:my-state-machine-2",
+    "name": "my-state-machine-2",
+    "status": "ACTIVE",
+    "definition": {
+      "StartAt": "FirstState",
+      "States": {
+        "FirstState": {
+          "Type": "Task",
+          "Resource": "arn:aws:lambda:us-east-1:000000000000:function:MyLambda",
+          "End": true
+        }
+      }
+    },
+    "roleArn": "arn:aws:iam::0123456789:role/service-role/StatesExecutionRole-us-east-1",
+    "creationDate": 1516183908.211,
+    "updateDate": 1516193918.211
+  }
+]

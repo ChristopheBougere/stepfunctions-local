@@ -11,10 +11,18 @@ const executions = [
     },
     events: [
       {
+        timestamp: Date.now() / 1000,
+        id: 1,
+        previousEventId: 0,
         executionStartedEventDetails: {
           input: 'this-is-my-input',
           roleArn: 'this-is-my-role',
         },
+      },
+      {
+        timestamp: Date.now() / 1000,
+        id: 2,
+        previousEventId: 1,
         executionSucceededEventDetails: {
           output: 'this-is-my-output',
         },
@@ -30,23 +38,24 @@ describe('Get execution history', () => {
       const params = {
         executionArn: execution.executionArn,
       };
-      const { response } = getExecutionHistory(params, executions);
-      expect(response.events).toMatchObject(execution.events);
+      const { response: { events } } = getExecutionHistory(params, executions);
+      expect(events).toMatchObject(execution.events);
     } catch (e) {
       expect(e).not.toBeDefined();
     }
   });
 
   // TODO: fix this
-  it.skip('should return the execution history with maxResults', () => {
+  it('should return the execution history with maxResults', () => {
     try {
       const execution = executions[0];
       const params = {
         executionArn: execution.executionArn,
         maxResults: 1,
       };
-      const { response } = getExecutionHistory(params, executions);
-      expect(response.events).toMatchObject(execution.events);
+      const { response: { events, nextToken } } = getExecutionHistory(params, executions);
+      expect(events).toHaveLength(params.maxResults);
+      expect(nextToken).toBeTruthy();
     } catch (e) {
       expect(e).not.toBeDefined();
     }
@@ -57,7 +66,8 @@ describe('Get execution history', () => {
       const params = {
         maxResults: 2000,
       };
-      getExecutionHistory(params, executions);
+      const res = getExecutionHistory(params, executions);
+      expect(res).not.toBeDefined();
     } catch (e) {
       expect(e.message).toEqual(errors.common.INVALID_PARAMETER_VALUE);
     }
@@ -68,7 +78,8 @@ describe('Get execution history', () => {
       const params = {
         executionArn: 123,
       };
-      getExecutionHistory(params, executions);
+      const res = getExecutionHistory(params, executions);
+      expect(res).not.toBeDefined();
     } catch (e) {
       expect(e.message).toEqual(errors.common.INVALID_PARAMETER_VALUE);
     }
@@ -79,7 +90,8 @@ describe('Get execution history', () => {
       const params = {
         nextToken: 'my-invalid-token',
       };
-      getExecutionHistory(params, executions);
+      const res = getExecutionHistory(params, executions);
+      expect(res).not.toBeDefined();
     } catch (e) {
       expect(e.message).toEqual(errors.getExecutionHistory.INVALID_TOKEN);
     }
@@ -90,7 +102,8 @@ describe('Get execution history', () => {
       const params = {
         executionArn: 'non-existing',
       };
-      getExecutionHistory(params, executions);
+      const res = getExecutionHistory(params, executions);
+      expect(res).not.toBeDefined();
     } catch (e) {
       expect(e.message).toEqual(errors.getExecutionHistory.INVALID_ARN);
     }

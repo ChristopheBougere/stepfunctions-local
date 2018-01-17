@@ -41,12 +41,12 @@ function reducer(state = initialState, action) {
     case actions.DESCRIBE_STATE_MACHINE_FOR_EXECUTION:
       return Object.assign({}, state);
     case actions.UPDATE_STATE_MACHINE: {
-      const { stateMachine } = result.stateMachine;
+      const { stateMachine } = result;
       const stateCopy = Object.assign({}, state);
-      let updatedStateMachine = stateCopy.stateMachines.find(e =>
+      const updatedStateMachine = stateCopy.stateMachines.find(e =>
         e.stateMachineArn === stateMachine.stateMachineArn);
       if (updatedStateMachine) {
-        updatedStateMachine = stateMachine;
+        Object.assign(updatedStateMachine, stateMachine);
       }
       return stateCopy;
     }

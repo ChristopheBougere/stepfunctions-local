@@ -2,8 +2,10 @@ const aslValidator = require('asl-validator');
 
 const { errors } = require('../../constants');
 
+// TODO: throw STATE_MACHINE_DELETING if specified state machine is being deleted
+
 function updateStateMachine(params, stateMachines) {
-  if (!params.roleArn || !params.definition) {
+  if (!params.roleArn && !params.definition) {
     throw new Error(errors.common.MISSING_REQUIRED_PARAMETER);
   }
   if (typeof params.stateMachineArn !== 'string') {

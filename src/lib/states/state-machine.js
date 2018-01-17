@@ -53,6 +53,7 @@ class StateMachine {
         nextStateName = res.nextState || null;
       } catch (e) {
         running = false;
+        throw e;
       }
     } while (typeof nextStateName === 'string' && running);
 
