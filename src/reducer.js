@@ -57,28 +57,28 @@ function reducer(state = initialState, action) {
     }
     // Actions related to activities
     case actions.CREATE_ACTIVITY:
-      // TODO
+      // TODO activities to be implemented
       return Object.assign({}, state);
     case actions.LIST_ACTIVITIES:
-      // TODO
+      // TODO activities to be implemented
       return Object.assign({}, state);
     case actions.DELETE_ACTIVITY:
-      // TODO
+      // TODO activities to be implemented
       return Object.assign({}, state);
     case actions.DESCRIBE_ACTIVITY:
-      // TODO
+      // TODO activities to be implemented
       return Object.assign({}, state);
     case actions.GET_ACTIVITY_TASK:
-      // TODO
+      // TODO activities to be implemented
       return Object.assign({}, state);
     case actions.SEND_TASK_FAILURE:
-      // TODO
+      // TODO activities to be implemented
       return Object.assign({}, state);
     case actions.SEND_TASK_HEARTBEAT:
-      // TODO
+      // TODO activities to be implemented
       return Object.assign({}, state);
     case actions.SEND_TASK_SUCCESS:
-      // TODO
+      // TODO activities to be implemented
       return Object.assign({}, state);
     // Actions related to executions
     case actions.START_EXECUTION:

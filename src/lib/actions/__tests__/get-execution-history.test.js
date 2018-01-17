@@ -1,35 +1,7 @@
 const getExecutionHistory = require('../get-execution-history');
 const { errors } = require('../../../constants');
 
-const executions = [
-  {
-    executionArn: 'my-execution-arn',
-    stateMachineArn: 'my-state-marchine-arn',
-    name: 'my-execution-name',
-    input: {
-      comment: 'This is my input',
-    },
-    events: [
-      {
-        timestamp: Date.now() / 1000,
-        id: 1,
-        previousEventId: 0,
-        executionStartedEventDetails: {
-          input: 'this-is-my-input',
-          roleArn: 'this-is-my-role',
-        },
-      },
-      {
-        timestamp: Date.now() / 1000,
-        id: 2,
-        previousEventId: 1,
-        executionSucceededEventDetails: {
-          output: 'this-is-my-output',
-        },
-      },
-    ],
-  },
-];
+const executions = require('./data/executions');
 
 describe('Get execution history', () => {
   it('should return the execution history', () => {
@@ -45,7 +17,6 @@ describe('Get execution history', () => {
     }
   });
 
-  // TODO: fix this
   it('should return the execution history with maxResults', () => {
     try {
       const execution = executions[0];
@@ -61,15 +32,93 @@ describe('Get execution history', () => {
     }
   });
 
-  it('should fail because invalid naxResults parameter', () => {
+  it('should return the execution history with reverseOrder', () => {
     try {
+      const execution = executions[0];
       const params = {
+        executionArn: execution.executionArn,
+        reverseOrder: true,
+      };
+      const { response: { events, nextToken } } = getExecutionHistory(params, executions);
+      expect(nextToken).not.toBeTruthy();
+      for (let i = 0; i < events.length; i += 1) {
+        if (i > 0) {
+          expect(events[i].id).toBeLessThan(events[i - 1].id);
+        }
+      }
+    } catch (e) {
+      expect(e).not.toBeDefined();
+    }
+  });
+
+  it('should fail because missing required executionArn', () => {
+    try {
+      const params = {};
+      const res = getExecutionHistory(params, executions);
+      expect(res).not.toBeDefined();
+    } catch (e) {
+      expect(e.message)
+        .toEqual(expect.stringContaining(errors.common.MISSING_REQUIRED_PARAMETER));
+    }
+  });
+
+  it('should fail because invalid reverseOrder parameter', () => {
+    try {
+      const execution = executions[0];
+      const params = {
+        executionArn: execution.executionArn,
+        reverseOrder: 'true',
+      };
+      const res = getExecutionHistory(params, executions);
+      expect(res).not.toBeDefined();
+    } catch (e) {
+      expect(e.message)
+        .toEqual(expect.stringContaining(errors.common.INVALID_PARAMETER_VALUE));
+    }
+  });
+
+  it('should fail because invalid maxResults parameter (too high)', () => {
+    try {
+      const execution = executions[0];
+      const params = {
+        executionArn: execution.executionArn,
         maxResults: 2000,
       };
       const res = getExecutionHistory(params, executions);
       expect(res).not.toBeDefined();
     } catch (e) {
-      expect(e.message).toEqual(errors.common.INVALID_PARAMETER_VALUE);
+      expect(e.message)
+        .toEqual(expect.stringContaining(errors.common.INVALID_PARAMETER_VALUE));
+    }
+  });
+
+  it('should fail because invalid maxResults parameter (negative)', () => {
+    try {
+      const execution = executions[0];
+      const params = {
+        executionArn: execution.executionArn,
+        maxResults: -1,
+      };
+      const res = getExecutionHistory(params, executions);
+      expect(res).not.toBeDefined();
+    } catch (e) {
+      expect(e.message)
+        .toEqual(expect.stringContaining(errors.common.INVALID_PARAMETER_VALUE));
+    }
+  });
+
+  it('should fail because invalid maxResults parameter (not a number)', () => {
+    try {
+      const execution = executions[0];
+      const params = {
+        executionArn: execution.executionArn,
+        maxResults: '2000',
+      };
+      const res = getExecutionHistory(params, executions);
+      expect(res).not.toBeDefined();
+    } catch (e) {
+      expect(e.message)
+        .toEqual(expect.stringContaining(errors.common.INVALID_PARAMETER_VALUE));
     }
   });
 
@@ -81,13 +130,16 @@ describe('Get execution history', () => {
       const res = getExecutionHistory(params, executions);
       expect(res).not.toBeDefined();
     } catch (e) {
-      expect(e.message).toEqual(errors.common.INVALID_PARAMETER_VALUE);
+      expect(e.message)
+        .toEqual(expect.stringContaining(errors.common.INVALID_PARAMETER_VALUE));
     }
   });
 
   it('should fail because invalid token', () => {
     try {
+      const execution = executions[0];
       const params = {
+        executionArn: execution.executionArn,
         nextToken: 'my-invalid-token',
       };
       const res = getExecutionHistory(params, executions);

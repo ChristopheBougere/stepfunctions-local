@@ -5,7 +5,29 @@
     "name": "my-execution-1",
     "status": "SUCCEEDED",
     "startDate": 1516182923.189,
-    "stopDate": 1516182954.534
+    "stopDate": 1516182954.534,
+    "input": {
+      "comment": "This is my input"
+    },
+    "events": [
+      {
+        "timestamp": 1516182923.189,
+        "id": 1,
+        "previousEventId": 0,
+        "executionStartedEventDetails": {
+          "input": "this-is-my-input",
+          "roleArn": "this-is-my-role"
+        }
+      },
+      {
+        "timestamp": 1516182954.534,
+        "id": 2,
+        "previousEventId": 1,
+        "executionSucceededEventDetails": {
+          "output": "this-is-my-output"
+        }
+      }
+    ]
   },
   {
     "executionArn": "arn:aws:states:local:0123456789:execution:my-execution-2",
