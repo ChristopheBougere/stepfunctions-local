@@ -2,7 +2,7 @@ const createHistoryEvent = require('../create-history-event');
 const { errors } = require('../../../constants');
 
 describe('Add history event', () => {
-  it('should fail because no "events" key in execution', async () => {
+  it('should fail because no "events" key in execution', () => {
     try {
       const execution = {
         executionArn: 'my-arn',
@@ -14,7 +14,7 @@ describe('Add history event', () => {
   });
 
   // TODO: this should rather be in event.test.js
-  it('should fail because invalid parameter', async () => {
+  it('should fail because invalid parameter', () => {
     try {
       const execution = {
         executionArn: 'my-arn',
@@ -24,11 +24,12 @@ describe('Add history event', () => {
         roleArn: 'this-is-my-role',
       }), execution);
     } catch (e) {
-      expect(e.message).toEqual(errors.common.INVALID_PARAMETER_VALUE);
+      expect(e.message)
+        .toEqual(expect.stringContaining(errors.common.INVALID_PARAMETER_VALUE));
     }
   });
 
-  it('should return an event (from an empty history)', async () => {
+  it('should return an event (from an empty history)', () => {
     try {
       const execution = {
         executionArn: 'my-arn',
@@ -44,7 +45,7 @@ describe('Add history event', () => {
     }
   });
 
-  it('should return an event', async () => {
+  it('should return an event', () => {
     try {
       const execution = {
         executionArn: 'my-arn',

@@ -33,9 +33,9 @@
     "executionArn": "arn:aws:states:local:0123456789:execution:my-execution-2",
     "stateMachineArn": "arn:aws:states:local:0123456789:stateMachine:my-state-machine-1",
     "name": "my-execution-2",
-    "status": "SUCCEEDED",
+    "status": "RUNNING",
     "startDate": 1516183123.189,
-    "stopDate": 1516183254.534
+    "events": []
   },
   {
     "executionArn": "arn:aws:states:local:0123456789:execution:my-execution-3",
@@ -43,6 +43,17 @@
     "name": "my-execution-3",
     "status": "FAILED",
     "startDate": 1516283123.189,
-    "stopDate": 1516283254.534
+    "stopDate": 1516283254.534,
+    "events": [
+      {
+        "timestamp": 1516182923.189,
+        "id": 1,
+        "previousEventId": 0,
+        "executionStartedEventDetails": {
+          "input": "this-is-my-input",
+          "roleArn": "this-is-my-role"
+        }
+      }
+    ]
   }
 ]
