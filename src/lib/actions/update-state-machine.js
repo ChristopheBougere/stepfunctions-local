@@ -5,8 +5,11 @@ const { errors } = require('../../constants');
 // TODO: throw STATE_MACHINE_DELETING if specified state machine is being deleted
 
 function updateStateMachine(params, stateMachines) {
+  if (!params.stateMachineArn) {
+    throw new Error(`${errors.common.MISSING_REQUIRED_PARAMETER}: --state-machine-arn`);
+  }
   if (!params.roleArn && !params.definition) {
-    throw new Error(errors.common.MISSING_REQUIRED_PARAMETER);
+    throw new Error(`${errors.common.MISSING_REQUIRED_PARAMETER}: --role-arn or --definition`);
   }
   if (typeof params.stateMachineArn !== 'string') {
     throw new Error(`${errors.updateStateMachine.INVALID_ARN}`);
