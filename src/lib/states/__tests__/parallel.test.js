@@ -40,7 +40,8 @@ describe('Parallel', () => {
   it('should execute both branches in parallel', async () => {
     const input = {};
     const stateInstance = new Parallel(state, execution);
-    const { nextState } = await stateInstance.execute(input);
+    const { output, nextState } = await stateInstance.execute(input);
+    expect(output).toHaveLength(2);
     expect(nextState).toEqual('Final State');
   });
 });

@@ -17,6 +17,7 @@ class Pass extends State {
 
     return {
       output: this.output,
+      nextState: this.nextState,
     };
   }
 }
