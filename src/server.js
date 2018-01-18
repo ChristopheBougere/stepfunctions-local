@@ -29,10 +29,8 @@ function callAction(state, action, params) {
       case actions.DESCRIBE_STATE_MACHINE:
         return describeStateMachine(params, state.stateMachines);
       case actions.DESCRIBE_STATE_MACHINE_FOR_EXECUTION:
-        // NOTE: This action is not yet implemented in AWS CLI
         return describeStateMachineForExecution(params, state.stateMachines, state.executions);
       case actions.UPDATE_STATE_MACHINE:
-        // NOTE: This action is not yet implemented in AWS CLI
         return updateStateMachine(params, state.stateMachines);
       case actions.DELETE_STATE_MACHINE:
         return deleteStateMachine(params, state.stateMachines);

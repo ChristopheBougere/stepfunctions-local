@@ -1,0 +1,59 @@
+[
+  {
+    "executionArn": "arn:aws:states:local:0123456789:execution:my-execution-1",
+    "stateMachineArn": "arn:aws:states:local:0123456789:stateMachine:my-state-machine-1",
+    "name": "my-execution-1",
+    "status": "SUCCEEDED",
+    "startDate": 1516182923.189,
+    "stopDate": 1516182954.534,
+    "input": {
+      "comment": "This is my input"
+    },
+    "events": [
+      {
+        "timestamp": 1516182923.189,
+        "id": 1,
+        "previousEventId": 0,
+        "executionStartedEventDetails": {
+          "input": "this-is-my-input",
+          "roleArn": "this-is-my-role"
+        }
+      },
+      {
+        "timestamp": 1516182954.534,
+        "id": 2,
+        "previousEventId": 1,
+        "executionSucceededEventDetails": {
+          "output": "this-is-my-output"
+        }
+      }
+    ]
+  },
+  {
+    "executionArn": "arn:aws:states:local:0123456789:execution:my-execution-2",
+    "stateMachineArn": "arn:aws:states:local:0123456789:stateMachine:my-state-machine-1",
+    "name": "my-execution-2",
+    "status": "RUNNING",
+    "startDate": 1516183123.189,
+    "events": []
+  },
+  {
+    "executionArn": "arn:aws:states:local:0123456789:execution:my-execution-3",
+    "stateMachineArn": "arn:aws:states:local:0123456789:stateMachine:my-state-machine-2",
+    "name": "my-execution-3",
+    "status": "FAILED",
+    "startDate": 1516283123.189,
+    "stopDate": 1516283254.534,
+    "events": [
+      {
+        "timestamp": 1516182923.189,
+        "id": 1,
+        "previousEventId": 0,
+        "executionStartedEventDetails": {
+          "input": "this-is-my-input",
+          "roleArn": "this-is-my-role"
+        }
+      }
+    ]
+  }
+]

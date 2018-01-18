@@ -19,11 +19,11 @@ class Wait extends State {
     if (Object.prototype.hasOwnProperty.call(this.state, 'Seconds')) {
       seconds = this.state.Seconds;
     } else if (Object.prototype.hasOwnProperty.call(this.state, 'Timestamp')) {
-      seconds = new Date(this.state.Timestamp) - new Date();
+      seconds = (new Date(this.state.Timestamp) - Date.now()) / 1000;
     } else if (Object.prototype.hasOwnProperty.call(this.state, 'SecondsPath')) {
       seconds = jp.value(this.input, this.state.SecondsPath);
     } else if (Object.prototype.hasOwnProperty.call(this.state, 'TimestampPath')) {
-      seconds = new Date(jp.value(this.input, this.state.TimestampPath)) - new Date();
+      seconds = (new Date(jp.value(this.input, this.state.TimestampPath)) - Date.now()) / 1000;
     }
 
     await new Promise(resolve => setTimeout(resolve, seconds * 1000));

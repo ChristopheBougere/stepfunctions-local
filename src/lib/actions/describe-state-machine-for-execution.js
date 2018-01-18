@@ -1,6 +1,9 @@
 const { errors } = require('../../constants');
 
 function describeStateMachineForExecution(params, stateMachines, executions) {
+  if (!params.executionArn) {
+    throw new Error(errors.common.MISSING_REQUIRED_PARAMETER);
+  }
   if (typeof params.executionArn !== 'string') {
     throw new Error(`${errors.describeStateMachineForExecution.INVALID_ARN}`);
   }

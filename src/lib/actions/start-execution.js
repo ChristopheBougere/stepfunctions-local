@@ -68,7 +68,7 @@ function startExecution(params, stateMachines, executions) {
         },
       };
     }
-    const limitDate = (new Date().getTime() - (SAME_NAME_MAX_DAYS * 24 * 60 * 60)) / 1000;
+    const limitDate = (Date.now() - (SAME_NAME_MAX_DAYS * 24 * 60 * 60)) / 1000;
     if (sameName.find(e => e.stopDate > limitDate)) {
       throw new Error(errors.startExecution.EXECUTION_ALREADY_EXISTS);
     }
@@ -80,7 +80,7 @@ function startExecution(params, stateMachines, executions) {
     name,
     input,
     executionArn: `arn:aws:states:local:${accountId}:execution:${name}`,
-    startDate: new Date().getTime() / 1000,
+    startDate: Date.now() / 1000,
     stateMachineArn: stateMachineObj.stateMachineArn,
     status: status.execution.RUNNING,
     events: [],
@@ -106,7 +106,7 @@ function startExecution(params, stateMachines, executions) {
           executionArn: execution.executionArn,
           updateFields: {
             status: status.execution.SUCCEEDED,
-            stopDate: new Date().getTime() / 1000,
+            stopDate: Date.now() / 1000,
             output: result.output,
           },
         },
@@ -121,6 +121,7 @@ function startExecution(params, stateMachines, executions) {
         result: {
           executionArn: execution.executionArn,
           updateFields: {
+            stopDate: Date.now() / 1000,
             status: status.execution.FAILED,
           },
         },

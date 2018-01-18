@@ -39,22 +39,21 @@ class StateMachine {
     this.input = input;
     let lastIO = input;
     let nextStateName = this.stateMachine.StartAt;
-    let running = true;
     do {
-      const currentStateName = nextStateName;
-      const nextState = StateMachine.instanciateState(
-        this.findStateByName(currentStateName),
-        this.execution,
-        currentStateName,
-      );
       try {
+        const currentStateName = nextStateName;
+        const nextState = StateMachine.instanciateState(
+          this.findStateByName(currentStateName),
+          this.execution,
+          currentStateName,
+        );
         const res = await nextState.execute(lastIO);
         lastIO = res.output;
         nextStateName = res.nextState || null;
       } catch (e) {
-        running = false;
+        throw e;
       }
-    } while (typeof nextStateName === 'string' && running);
+    } while (typeof nextStateName === 'string');
 
     return {
       output: this.output,

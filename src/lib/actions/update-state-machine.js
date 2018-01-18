@@ -2,19 +2,24 @@ const aslValidator = require('asl-validator');
 
 const { errors } = require('../../constants');
 
+// TODO: throw STATE_MACHINE_DELETING if specified state machine is being deleted
+
 function updateStateMachine(params, stateMachines) {
-  if (!params.roleArn || !params.definition) {
-    throw new Error(errors.common.MISSING_REQUIRED_PARAMETER);
+  if (!params.stateMachineArn) {
+    throw new Error(`${errors.common.MISSING_REQUIRED_PARAMETER}: --state-machine-arn`);
+  }
+  if (!params.roleArn && !params.definition) {
+    throw new Error(`${errors.common.MISSING_REQUIRED_PARAMETER}: --role-arn or --definition`);
   }
   if (typeof params.stateMachineArn !== 'string') {
     throw new Error(`${errors.updateStateMachine.INVALID_ARN}`);
   }
-  const match = stateMachines.find(o => o.stateMachineArn === params.stateMachineArn);
-  if (!match) {
+  const index = stateMachines.findIndex(o => o.stateMachineArn === params.stateMachineArn);
+  if (index < 0) {
     throw new Error(errors.updateStateMachine.STATE_MACHINE_DOES_NOT_EXIST);
   }
-  const stateMachine = Object.assign({}, match, {
-    updateDate: new Date().getTime() / 1000,
+  const stateMachine = Object.assign({}, stateMachines[index], {
+    updateDate: Date.now() / 1000,
   });
   if (params.definition) {
     let parsedDefinition;
@@ -37,6 +42,7 @@ function updateStateMachine(params, stateMachines) {
     stateMachine.roleArn = params.roleArn;
   }
   return {
+    index,
     stateMachine,
     response: {
       updateDate: stateMachine.updateDate,

@@ -1,8 +1,11 @@
 const { errors } = require('../../constants');
 
 function getExecutionHistory(params, executions) {
-  if (params.maxResults && (params.maxResults < 0 || params.maxResults > 1000)) {
-    throw new Error(errors.common.INVALID_PARAMETER_VALUE);
+  if (!params.executionArn) {
+    throw new Error(`${errors.common.MISSING_REQUIRED_PARAMETER}: --execution-arn`);
+  }
+  if (params.maxResults && ((typeof params.maxResults !== 'number') || (params.maxResults < 0 || params.maxResults > 1000))) {
+    throw new Error(`${errors.common.INVALID_PARAMETER_VALUE}: --max-results`);
   }
   const maxResults = params.maxResults || 100;
   let truncateAmount = 0;
@@ -17,9 +20,8 @@ function getExecutionHistory(params, executions) {
     }
   }
 
-  if (typeof params.executionArn !== 'string' || params.executionArn.length > 256
-  ) {
-    throw new Error(errors.common.INVALID_PARAMETER_VALUE);
+  if (typeof params.executionArn !== 'string' || params.executionArn.length > 256) {
+    throw new Error(`${errors.common.INVALID_PARAMETER_VALUE}: --execution-arn`);
   }
   const match = executions.find(e => e.executionArn === params.executionArn);
   if (!match) {
@@ -27,6 +29,12 @@ function getExecutionHistory(params, executions) {
   }
   // TODO: implement reverseOrder
   const { events } = match;
+  if (params.reverseOrder) {
+    if (typeof params.reverseOrder !== 'boolean') {
+      throw new Error(`${errors.common.INVALID_PARAMETER_VALUE}: --reverse-order`);
+    }
+    events.reverse();
+  }
   let nextToken = null;
   if (truncateAmount + maxResults < events.length) {
     nextToken = Buffer.from(JSON.stringify({

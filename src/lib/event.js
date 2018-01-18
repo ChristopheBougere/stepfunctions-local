@@ -4,7 +4,7 @@ class Event {
   constructor(params) {
     // check if event type exists
     if (Object.keys(events).indexOf(params.type) === -1) {
-      throw new Error(errors.common.INVALID_PARAMETER_VALUE);
+      throw new Error(`${errors.common.INVALID_PARAMETER_VALUE}: ${params.type}`);
     }
     this.type = events[params.type].type;
     // add event specific details
