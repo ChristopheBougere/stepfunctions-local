@@ -4,7 +4,7 @@ const { errors } = require('../../../constants');
 const stateMachines = [
   {
     stateMachineArn: 'my-first-state-machine-arn',
-    creationDate: new Date().getTime() / 1000,
+    creationDate: Date.now() / 1000,
     name: 'my-machine-name',
     roleArn: 'this-is-my-role',
     status: 'MY_STATUS',

@@ -14,23 +14,23 @@ const executions = [
     stateMachineArn: 'arn:aws:::1234:my-state-machine-arn',
     executionArn: 'my-first-execution-arn',
     name: uuid.v4(),
-    startDate: (new Date().getTime() / 1000) - 10,
-    stopDate: new Date().getTime() / 1000, // stops now
+    startDate: (Date.now() / 1000) - 10,
+    stopDate: Date.now() / 1000, // stops now
     status: 'SUCCEEDED',
   },
   {
     stateMachineArn: 'arn:aws:::1234:my-state-machine-arn',
     executionArn: 'my-second-execution-arn',
     name: 'my-chosen-name',
-    startDate: (new Date().getTime() - (91 * 24 * 60 * 60) - 10) / 1000,
-    stopDate: (new Date().getTime() - (91 * 24 * 60 * 60)) / 1000, // stop 91 days ago
+    startDate: (Date.now() - (91 * 24 * 60 * 60) - 10) / 1000,
+    stopDate: (Date.now() - (91 * 24 * 60 * 60)) / 1000, // stop 91 days ago
     status: 'SUCCEEDED',
   },
   {
     stateMachineArn: 'arn:aws:::1234:my-state-machine-arn',
     executionArn: 'my-third-execution-arn',
     name: 'my-second-chosen-name',
-    startDate: (new Date().getTime() / 1000) - 10,
+    startDate: (Date.now() / 1000) - 10,
     status: 'RUNNING',
     input: '{ "comment": "This is my input"}',
   },
@@ -38,8 +38,8 @@ const executions = [
     stateMachineArn: 'arn:aws:::1234:my-state-machine-arn',
     executionArn: 'my-fourth-execution-arn',
     name: 'my-third-chosen-name',
-    startDate: (new Date().getTime() / 1000) - 10,
-    stopDate: new Date().getTime() / 1000, // stops now
+    startDate: (Date.now() / 1000) - 10,
+    stopDate: Date.now() / 1000, // stops now
     status: 'SUCCEEDED',
     input: '{ "comment": "This is my input"}',
   },
@@ -54,7 +54,7 @@ describe('Start execution', () => {
       };
       const { execution, response } = startExecution(params, stateMachines, executions);
       expect(execution.executionArn).toBeDefined();
-      expect(execution.startDate).toBeCloseTo(new Date().getTime() / 1000, 2);
+      expect(execution.startDate).toBeCloseTo(Date.now() / 1000, 0);
       expect(execution.events).toBeDefined();
       expect(response).toBeDefined();
     } catch (e) {
@@ -71,7 +71,7 @@ describe('Start execution', () => {
       };
       const { execution, response } = startExecution(params, stateMachines, executions);
       expect(execution.executionArn).toBeDefined();
-      expect(execution.startDate).toBeCloseTo(new Date().getTime() / 1000, 2);
+      expect(execution.startDate).toBeCloseTo(Date.now() / 1000, 0);
       expect(execution.events).toBeDefined();
       expect(response).toBeDefined();
     } catch (e) {

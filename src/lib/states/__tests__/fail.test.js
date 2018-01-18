@@ -4,14 +4,12 @@ describe('Fail', () => {
   it('should execute a fail state', async () => {
     try {
       const state = {
-        executions: [
-          {
-            executionArn: 'my-execution-arn',
-            events: [],
-          },
-        ],
+        Type: 'Fail',
       };
-      const execution = state.executions[0];
+      const execution = {
+        executionArn: 'my-execution-arn',
+        events: [],
+      };
       const input = {};
       const failInstance = new Fail(state, execution, 'FailState');
       const { output } = await failInstance.execute(input);

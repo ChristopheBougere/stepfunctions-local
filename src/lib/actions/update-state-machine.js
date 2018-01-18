@@ -19,7 +19,7 @@ function updateStateMachine(params, stateMachines) {
     throw new Error(errors.updateStateMachine.STATE_MACHINE_DOES_NOT_EXIST);
   }
   const stateMachine = Object.assign({}, stateMachines[index], {
-    updateDate: new Date().getTime() / 1000,
+    updateDate: Date.now() / 1000,
   });
   if (params.definition) {
     let parsedDefinition;

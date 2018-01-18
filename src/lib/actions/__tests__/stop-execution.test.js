@@ -5,7 +5,7 @@ const executions = [
   {
     stateMachineArn: 'arn:aws:::1234:my-state-machine-arn',
     executionArn: 'my-execution-arn',
-    startDate: (new Date().getTime()) / 1000,
+    startDate: (Date.now()) / 1000,
     status: 'RUNNING',
   },
 ];

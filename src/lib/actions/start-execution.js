@@ -68,7 +68,7 @@ function startExecution(params, stateMachines, executions) {
         },
       };
     }
-    const limitDate = (new Date().getTime() - (SAME_NAME_MAX_DAYS * 24 * 60 * 60)) / 1000;
+    const limitDate = (Date.now() - (SAME_NAME_MAX_DAYS * 24 * 60 * 60)) / 1000;
     if (sameName.find(e => e.stopDate > limitDate)) {
       throw new Error(errors.startExecution.EXECUTION_ALREADY_EXISTS);
     }

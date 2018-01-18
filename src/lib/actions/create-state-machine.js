@@ -24,7 +24,7 @@ function createStateMachine(params, stateMachines) {
   const stateMachine = {
     stateMachineArn: `arn:aws:states:local:${accountId}:stateMachine:${params.name}`,
     definition: parsedDefinition,
-    creationDate: new Date().getTime() / 1000,
+    creationDate: Date.now() / 1000,
     roleArn: params.roleArn,
     name: params.name,
     status: status.stateMachine.ACTIVE,

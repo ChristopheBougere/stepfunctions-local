@@ -44,7 +44,7 @@ describe('Choices > string values', () => {
     const input = {
       type: 'Echo',
     };
-    const stateInstance = new Choices(state, execution);
+    const stateInstance = new Choices(state, execution, 'ChoiceState');
     const { nextState } = await stateInstance.execute(input);
     expect(nextState).toEqual('StringEquals');
   });
@@ -53,7 +53,7 @@ describe('Choices > string values', () => {
     const input = {
       type: 'Papa',
     };
-    const stateInstance = new Choices(state, execution);
+    const stateInstance = new Choices(state, execution, 'ChoiceState');
     const { nextState } = await stateInstance.execute(input);
     expect(nextState).toEqual('StringGreaterThan');
   });
@@ -62,7 +62,7 @@ describe('Choices > string values', () => {
     const input = {
       type: 'Oscar',
     };
-    const stateInstance = new Choices(state, execution);
+    const stateInstance = new Choices(state, execution, 'ChoiceState');
     const { nextState } = await stateInstance.execute(input);
     expect(nextState).toEqual('StringGreaterThanEquals');
   });
@@ -71,7 +71,7 @@ describe('Choices > string values', () => {
     const input = {
       type: 'Bravo',
     };
-    const stateInstance = new Choices(state, execution);
+    const stateInstance = new Choices(state, execution, 'ChoiceState');
     const { nextState } = await stateInstance.execute(input);
     expect(nextState).toEqual('StringLessThanEquals');
   });
@@ -80,7 +80,7 @@ describe('Choices > string values', () => {
     const input = {
       type: 'India',
     };
-    const stateInstance = new Choices(state, execution);
+    const stateInstance = new Choices(state, execution, 'ChoiceState');
     const { nextState } = await stateInstance.execute(input);
     expect(nextState).toEqual('StringLessThan');
   });
@@ -89,7 +89,7 @@ describe('Choices > string values', () => {
     const input = {
       type: 'Mike',
     };
-    const stateInstance = new Choices(state, execution);
+    const stateInstance = new Choices(state, execution, 'ChoiceState');
     const { nextState } = await stateInstance.execute(input);
     expect(nextState).toEqual('DefaultState');
   });
@@ -132,7 +132,7 @@ describe('Choices > numeric values', () => {
     const input = {
       value: 42,
     };
-    const stateInstance = new Choices(state, execution);
+    const stateInstance = new Choices(state, execution, 'ChoiceState');
     const { nextState } = await stateInstance.execute(input);
     expect(nextState).toEqual('NumericEquals');
   });
@@ -141,7 +141,7 @@ describe('Choices > numeric values', () => {
     const input = {
       value: 51,
     };
-    const stateInstance = new Choices(state, execution);
+    const stateInstance = new Choices(state, execution, 'ChoiceState');
     const { nextState } = await stateInstance.execute(input);
     expect(nextState).toEqual('NumericGreaterThan');
   });
@@ -150,7 +150,7 @@ describe('Choices > numeric values', () => {
     const input = {
       value: 50,
     };
-    const stateInstance = new Choices(state, execution);
+    const stateInstance = new Choices(state, execution, 'ChoiceState');
     const { nextState } = await stateInstance.execute(input);
     expect(nextState).toEqual('NumericGreaterThanEquals');
   });
@@ -159,7 +159,7 @@ describe('Choices > numeric values', () => {
     const input = {
       value: 20,
     };
-    const stateInstance = new Choices(state, execution);
+    const stateInstance = new Choices(state, execution, 'ChoiceState');
     const { nextState } = await stateInstance.execute(input);
     expect(nextState).toEqual('NumericLessThanEquals');
   });
@@ -168,7 +168,7 @@ describe('Choices > numeric values', () => {
     const input = {
       value: 19,
     };
-    const stateInstance = new Choices(state, execution);
+    const stateInstance = new Choices(state, execution, 'ChoiceState');
     const { nextState } = await stateInstance.execute(input);
     expect(nextState).toEqual('NumericLessThan');
   });
@@ -177,7 +177,7 @@ describe('Choices > numeric values', () => {
     const input = {
       value: 30,
     };
-    const stateInstance = new Choices(state, execution);
+    const stateInstance = new Choices(state, execution, 'ChoiceState');
     const { nextState } = await stateInstance.execute(input);
     expect(nextState).toEqual('DefaultState');
   });
@@ -220,7 +220,7 @@ describe('Choices > timestamp values', () => {
     const input = {
       time: new Date('2001/01/01').getTime(),
     };
-    const stateInstance = new Choices(state, execution);
+    const stateInstance = new Choices(state, execution, 'ChoiceState');
     const { nextState } = await stateInstance.execute(input);
     expect(nextState).toEqual('TimestampEquals');
   });
@@ -229,7 +229,7 @@ describe('Choices > timestamp values', () => {
     const input = {
       time: Date.now(),
     };
-    const stateInstance = new Choices(state, execution);
+    const stateInstance = new Choices(state, execution, 'ChoiceState');
     const { nextState } = await stateInstance.execute(input);
     expect(nextState).toEqual('TimestampGreaterThan');
   });
@@ -238,7 +238,7 @@ describe('Choices > timestamp values', () => {
     const input = {
       time: new Date('2018/01/02').getTime(),
     };
-    const stateInstance = new Choices(state, execution);
+    const stateInstance = new Choices(state, execution, 'ChoiceState');
     const { nextState } = await stateInstance.execute(input);
     expect(nextState).toEqual('TimestampGreaterThanEquals');
   });
@@ -247,7 +247,7 @@ describe('Choices > timestamp values', () => {
     const input = {
       time: new Date('2017/01/01').getTime(),
     };
-    const stateInstance = new Choices(state, execution);
+    const stateInstance = new Choices(state, execution, 'ChoiceState');
     const { nextState } = await stateInstance.execute(input);
     expect(nextState).toEqual('TimestampLessThanEquals');
   });
@@ -256,7 +256,7 @@ describe('Choices > timestamp values', () => {
     const input = {
       time: new Date('2017/01/15').getTime(),
     };
-    const stateInstance = new Choices(state, execution);
+    const stateInstance = new Choices(state, execution, 'ChoiceState');
     const { nextState } = await stateInstance.execute(input);
     expect(nextState).toEqual('TimestampLessThan');
   });
@@ -265,7 +265,7 @@ describe('Choices > timestamp values', () => {
     const input = {
       time: new Date('2017/06/01').getTime(),
     };
-    const stateInstance = new Choices(state, execution);
+    const stateInstance = new Choices(state, execution, 'ChoiceState');
     const { nextState } = await stateInstance.execute(input);
     expect(nextState).toEqual('DefaultState');
   });
@@ -299,7 +299,7 @@ describe('Choices > boolean values', () => {
     const input = {
       bool: true,
     };
-    const stateInstance = new Choices(state, execution);
+    const stateInstance = new Choices(state, execution, 'ChoiceState');
     const { nextState } = await stateInstance.execute(input);
     expect(nextState).toEqual('BooleanEquals');
   });
@@ -308,7 +308,7 @@ describe('Choices > boolean values', () => {
     const input = {
       bool: false,
     };
-    const stateInstance = new Choices(state, execution);
+    const stateInstance = new Choices(state, execution, 'ChoiceState');
     const { nextState } = await stateInstance.execute(input);
     expect(nextState).toEqual('DefaultState');
   });
@@ -354,7 +354,7 @@ describe('Choices > other operators', () => {
     const input = {
       value: 25,
     };
-    const stateInstance = new Choices(state, execution);
+    const stateInstance = new Choices(state, execution, 'ChoiceState');
     const { nextState } = await stateInstance.execute(input);
     expect(nextState).toEqual('ValueInTwenties');
   });
@@ -363,7 +363,7 @@ describe('Choices > other operators', () => {
     const input = {
       type: 'Public',
     };
-    const stateInstance = new Choices(state, execution);
+    const stateInstance = new Choices(state, execution, 'ChoiceState');
     const { nextState } = await stateInstance.execute(input);
     expect(nextState).toEqual('Public');
   });
@@ -372,7 +372,7 @@ describe('Choices > other operators', () => {
     const input = {
       type: 'NotPrivate',
     };
-    const stateInstance = new Choices(state, execution);
+    const stateInstance = new Choices(state, execution, 'ChoiceState');
     const { nextState } = await stateInstance.execute(input);
     expect(nextState).toEqual('Public');
   });
@@ -381,7 +381,7 @@ describe('Choices > other operators', () => {
     const input = {
       type: 'Private',
     };
-    const stateInstance = new Choices(state, execution);
+    const stateInstance = new Choices(state, execution, 'ChoiceState');
     const { nextState } = await stateInstance.execute(input);
     expect(nextState).toEqual('DefaultState');
   });
