@@ -1,5 +1,6 @@
 const uuidv4 = require('uuid/v4');
 
+const { isValidArn, isValidName } = require('./tools/validate');
 const store = require('../../store');
 const { errors, status, actions } = require('../../constants');
 const StateMachine = require('../states/state-machine');
@@ -11,26 +12,33 @@ const SAME_NAME_MAX_DAYS = 90;
 
 function startExecution(params, stateMachines, executions) {
   const { name: paramsName } = params;
-  if (typeof params.stateMachineArn !== 'string') {
+
+  /* check request parameters */
+  if (typeof params.stateMachineArn !== 'string'
+    || params.stateMachineArn.length < 1
+    || params.stateMachineArn.length > 256
+  ) {
+    throw new Error(`${errors.common.INVALID_PARAMETER_VALUE}: --state-machine-arn`);
+  }
+  if (params.input && (params.input.length < 0 || params.input.length > 32768)) {
+    throw new Error(`${errors.common.INVALID_PARAMETER_VALUE}: --input`);
+  }
+  if (typeof paramsName !== 'string' || paramsName.length < 1 || paramsName.length > 80) {
+    throw new Error(`${errors.common.INVALID_PARAMETER_VALUE}: --name`);
+  }
+
+  /* execute action */
+  if (!isValidArn(params.stateMachineArn, 'state-machine')) {
     throw new Error(errors.startExecution.INVALID_ARN);
   }
-  const stateMachineObj = stateMachines.find(o => o.stateMachineArn === params.stateMachineArn);
-  if (!stateMachineObj) {
+  const match = stateMachines.find(o => o.stateMachineArn === params.stateMachineArn);
+  if (!match) {
     throw new Error(errors.startExecution.STATE_MACHINE_DOES_NOT_EXIST);
   }
-  let name;
-  // TODO check name:
-  //   A name must not contain:
-  // • whitespace
-  // • brackets < > { } [ ]
-  // • wildcard characters ? *
-  // • special characters " # % \ ^ | ~ ` $ & , ; : /
-  // • control characters (U+0000-001F, U+007F-009F)
-  if (typeof paramsName === 'string' && paramsName.length && paramsName.length <= 80) {
-    name = paramsName;
-  } else {
-    name = uuidv4();
+  if (!isValidName(paramsName)) {
+    throw new Error(errors.startExecution.INVALID_NAME);
   }
+  const name = paramsName || uuidv4();
   let input;
   if (typeof params.input === 'string') {
     try {
@@ -51,7 +59,7 @@ function startExecution(params, stateMachines, executions) {
   // • When the original execution has been closed within 90 days, the
   // ExecutionAlreadyExists message is returned regardless of input.
   const sameName = executions
-    .filter(e => e.stateMachineArn === stateMachineObj.stateMachineArn)
+    .filter(e => e.stateMachineArn === match.stateMachineArn)
     .filter(e => e.name === name);
   if (sameName.length) {
     const running = sameName.filter(e => Execution.isRunning(e.status));
@@ -75,19 +83,19 @@ function startExecution(params, stateMachines, executions) {
   }
 
   // Create execution
-  const accountId = stateMachineObj.stateMachineArn.split(':')[4];
+  const accountId = match.stateMachineArn.split(':')[4];
   const execution = {
     name,
     input,
     executionArn: `arn:aws:states:local:${accountId}:execution:${name}`,
     startDate: Date.now() / 1000,
-    stateMachineArn: stateMachineObj.stateMachineArn,
+    stateMachineArn: match.stateMachineArn,
     status: status.execution.RUNNING,
     events: [],
   };
 
   // Execute state machine
-  const stateMachine = new StateMachine(stateMachineObj.definition, execution);
+  const stateMachine = new StateMachine(match.definition, execution);
   process.nextTick(async () => {
     try {
       addHistoryEvent(execution, 'EXECUTION_STARTED', {

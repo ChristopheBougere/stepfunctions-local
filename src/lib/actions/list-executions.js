@@ -1,8 +1,36 @@
+const { isValidArn } = require('./tools/validate');
 const { errors, status } = require('../../constants');
 
 function listExecutions(params, stateMachines, executions) {
-  if (params.maxResults && (params.maxResults < 0 || params.maxResults > 1000)) {
-    throw new Error(errors.common.INVALID_PARAMETER_VALUE);
+  /* check request parameters */
+  if (typeof params.stateMachineArn !== 'string'
+    || params.stateMachineArn.length < 1
+    || params.stateMachineArn.length > 256
+  ) {
+    throw new Error(`${errors.common.INVALID_PARAMETER_VALUE}: --execution-arn`);
+  }
+  if (params.maxResults &&
+    (parseInt(params.maxResults, 10) !== params.maxResults
+    || params.maxResults < 0
+    || params.maxResults > 1000)
+  ) {
+    throw new Error(`${errors.common.INVALID_PARAMETER_VALUE}: --max-results`);
+  }
+  if (params.nextToken &&
+    (typeof params.nextToken !== 'string'
+    || params.nextToken.length < 1
+    || params.nextToken.length > 1024)
+  ) {
+    throw new Error(`${errors.common.INVALID_PARAMETER_VALUE}: --next-token`);
+  }
+  if (params.statusFilter && !Object.keys(status.execution).find(s =>
+    status.execution[s] === params.statusFilter)) {
+    throw new Error(`${errors.common.INVALID_PARAMETER_VALUE}: --status-filter`);
+  }
+
+  /* execution action */
+  if (!isValidArn(params.stateMachineArn, 'state-machine')) {
+    throw new Error(errors.listExecutions.INVALID_ARN);
   }
   const maxResults = params.maxResults || 100;
   let truncateAmount = 0;
@@ -17,16 +45,9 @@ function listExecutions(params, stateMachines, executions) {
     }
   }
 
-  if (typeof params.stateMachineArn !== 'string') {
-    throw new Error(errors.listExecutions.INVALID_ARN);
-  }
   const match = stateMachines.find(o => o.stateMachineArn === params.stateMachineArn);
   if (!match) {
     throw new Error(errors.listExecutions.STATE_MACHINE_DOES_NOT_EXIST);
-  }
-  if (params.statusFilter && !Object.keys(status.execution).find(s =>
-    status.execution[s] === params.statusFilter)) {
-    throw new Error(errors.common.INVALID_PARAMETER_VALUE);
   }
   const filteredExecutions = executions
     .filter(execution => execution.stateMachineArn === params.stateMachineArn)

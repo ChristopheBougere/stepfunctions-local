@@ -51,17 +51,6 @@ describe('Get execution history', () => {
     }
   });
 
-  it('should fail because missing required executionArn', () => {
-    try {
-      const params = {};
-      const res = getExecutionHistory(params, executions);
-      expect(res).not.toBeDefined();
-    } catch (e) {
-      expect(e.message)
-        .toEqual(expect.stringContaining(errors.common.MISSING_REQUIRED_PARAMETER));
-    }
-  });
-
   it('should fail because invalid reverseOrder parameter', () => {
     try {
       const execution = executions[0];

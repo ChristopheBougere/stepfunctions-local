@@ -1,32 +1,8 @@
 const listExecutions = require('../list-executions');
 const { errors } = require('../../../constants');
 
-const stateMachines = [
-  {
-    stateMachineArn: 'my-first-state-marchine-arn',
-  },
-  {
-    stateMachineArn: 'my-other-state-marchine-arn',
-  },
-];
-
-const executions = [
-  {
-    executionArn: 'my-first-execution-arn',
-    stateMachineArn: 'my-first-state-marchine-arn',
-    status: 'RUNNING',
-  },
-  {
-    executionArn: 'my-second-execution-arn',
-    stateMachineArn: 'my-first-state-marchine-arn',
-    status: 'SUCCEEDED',
-  },
-  {
-    executionArn: 'my-other-execution-arn',
-    stateMachineArn: 'my-other-state-marchine-arn',
-    status: 'RUNNING',
-  },
-];
+const stateMachines = require('./data/state-machines');
+const executions = require('./data/executions');
 
 describe('List executions', () => {
   it('should list the executions of the first state machine', () => {
@@ -73,18 +49,21 @@ describe('List executions', () => {
       };
       listExecutions(params, stateMachines, executions);
     } catch (e) {
-      expect(e.message).toEqual(errors.common.INVALID_PARAMETER_VALUE);
+      expect(e.message)
+        .toEqual(expect.stringContaining(errors.common.INVALID_PARAMETER_VALUE));
     }
   });
 
   it('should fail because invalid token', () => {
     try {
       const params = {
+        stateMachineArn: stateMachines[1].stateMachineArn,
         nextToken: 'my-invalid-token',
       };
       listExecutions(params, stateMachines, executions);
     } catch (e) {
-      expect(e.message).toEqual(errors.listExecutions.INVALID_TOKEN);
+      expect(e.message)
+        .toEqual(expect.stringContaining(errors.listExecutions.INVALID_TOKEN));
     }
   });
 
@@ -95,6 +74,18 @@ describe('List executions', () => {
       };
       listExecutions(params, stateMachines, executions);
     } catch (e) {
+      expect(e.message)
+        .toEqual(expect.stringContaining(errors.common.INVALID_PARAMETER_VALUE));
+    }
+  });
+
+  it('should fail because invalid arn', () => {
+    try {
+      const params = {
+        stateMachineArn: 'invalid-arn',
+      };
+      listExecutions(params, stateMachines, executions);
+    } catch (e) {
       expect(e.message).toEqual(errors.listExecutions.INVALID_ARN);
     }
   });
@@ -102,7 +93,7 @@ describe('List executions', () => {
   it('should fail because non-existing state machine', () => {
     try {
       const params = {
-        stateMachineArn: 'non-existing-state-machine',
+        stateMachineArn: 'arn:aws:states:local:0123456789:stateMachine:unknown-state-machine',
       };
       listExecutions(params, stateMachines, executions);
     } catch (e) {
@@ -118,7 +109,8 @@ describe('List executions', () => {
       };
       listExecutions(params, stateMachines, executions);
     } catch (e) {
-      expect(e.message).toEqual(errors.common.INVALID_PARAMETER_VALUE);
+      expect(e.message)
+        .toEqual(expect.stringContaining(errors.common.INVALID_PARAMETER_VALUE));
     }
   });
 });

@@ -44,7 +44,8 @@ describe('List state machines', () => {
       };
       listStateMachines(params, stateMachines);
     } catch (e) {
-      expect(e.message).toEqual(errors.common.INVALID_PARAMETER_VALUE);
+      expect(e.message)
+        .toEqual(expect.stringContaining(errors.common.INVALID_PARAMETER_VALUE));
     }
   });
 

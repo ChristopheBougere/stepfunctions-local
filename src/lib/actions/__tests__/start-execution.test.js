@@ -5,7 +5,7 @@ const { errors } = require('../../../constants');
 
 const stateMachines = [
   {
-    stateMachineArn: 'arn:aws:::1234:my-state-machine-arn',
+    stateMachineArn: 'arn:aws:states:local:0123456789:stateMachine:my-state-machine',
   },
 ];
 
@@ -50,6 +50,7 @@ describe('Start execution', () => {
     try {
       const params = {
         stateMachineArn: stateMachines[0].stateMachineArn,
+        name: uuid.v4(),
         input: '{ "comment": "This is my input"}',
       };
       const { execution, response } = startExecution(params, stateMachines, executions);
@@ -79,10 +80,11 @@ describe('Start execution', () => {
     }
   });
 
-  it('should fail because invalid arn', () => {
+  it('should fail because unknown state machine', () => {
     try {
       const params = {
-        stateMachineArn: 'non-existing',
+        name: uuid.v4(),
+        stateMachineArn: 'arn:aws:states:local:0123456789:stateMachine:unknown-state-machine',
       };
       startExecution(params, stateMachines, executions);
     } catch (e) {
@@ -93,7 +95,20 @@ describe('Start execution', () => {
   it('should fail because invalid arn', () => {
     try {
       const params = {
-        stateMachineArn: 123,
+        stateMachineArn: '123',
+      };
+      startExecution(params, stateMachines, executions);
+    } catch (e) {
+      expect(e.message)
+        .toEqual(expect.stringContaining(errors.common.INVALID_PARAMETER_VALUE));
+    }
+  });
+
+  it('should fail because invalid arn', () => {
+    try {
+      const params = {
+        stateMachineArn: 'invalid-arn',
+        name: uuid.v4(),
       };
       startExecution(params, stateMachines, executions);
     } catch (e) {
@@ -106,6 +121,7 @@ describe('Start execution', () => {
       const params = {
         stateMachineArn: stateMachines[0].stateMachineArn,
         input: '{ comment: This is my input"}',
+        name: uuid.v4(),
       };
       startExecution(params, stateMachines, executions);
     } catch (e) {

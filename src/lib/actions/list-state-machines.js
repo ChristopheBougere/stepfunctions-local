@@ -1,9 +1,16 @@
 const { errors } = require('../../constants');
 
 function listStateMachines(params, stateMachines) {
-  if (params.maxResults && (params.maxResults < 0 || params.maxResults > 1000)) {
-    throw new Error(errors.common.INVALID_PARAMETER_VALUE);
+  /* check request parameters */
+  if (params.maxResults &&
+    (parseInt(params.maxResults, 10) !== params.maxResults
+    || params.maxResults < 0
+    || params.maxResults > 1000)
+  ) {
+    throw new Error(`${errors.common.INVALID_PARAMETER_VALUE}: --max-results`);
   }
+
+  /* execution action */
   const maxResults = params.maxResults || 100;
   let truncateAmount = 0;
   if (params.nextToken) {
@@ -29,8 +36,8 @@ function listStateMachines(params, stateMachines) {
       stateMachines: stateMachines.slice(truncateAmount, truncateAmount + maxResults)
         .map(stateMachine => ({
           creationDate: stateMachine.creationDate,
-          stateMachineArn: stateMachine.stateMachineArn,
           name: stateMachine.name,
+          stateMachineArn: stateMachine.stateMachineArn,
         })),
       NextToken: nextToken,
     },

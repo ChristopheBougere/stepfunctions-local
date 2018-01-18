@@ -1,6 +1,6 @@
 [
   {
-    "executionArn": "arn:aws:states:local:0123456789:execution:my-execution-1",
+    "executionArn": "arn:aws:states:local:0123456789:execution:my-state-machine-1:my-execution-1",
     "stateMachineArn": "arn:aws:states:local:0123456789:stateMachine:my-state-machine-1",
     "name": "my-execution-1",
     "status": "SUCCEEDED",
@@ -30,7 +30,7 @@
     ]
   },
   {
-    "executionArn": "arn:aws:states:local:0123456789:execution:my-execution-2",
+    "executionArn": "arn:aws:states:local:0123456789:execution:my-state-machine-1:my-execution-2",
     "stateMachineArn": "arn:aws:states:local:0123456789:stateMachine:my-state-machine-1",
     "name": "my-execution-2",
     "status": "RUNNING",
@@ -38,7 +38,7 @@
     "events": []
   },
   {
-    "executionArn": "arn:aws:states:local:0123456789:execution:my-execution-3",
+    "executionArn": "arn:aws:states:local:0123456789:execution:my-state-machine-2:my-execution-3",
     "stateMachineArn": "arn:aws:states:local:0123456789:stateMachine:my-state-machine-2",
     "name": "my-execution-3",
     "status": "FAILED",
