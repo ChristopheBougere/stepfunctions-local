@@ -13,14 +13,8 @@ class Fail extends State {
 
     return {
       output: this.output,
-      nextState: this.nextState,
     };
   }
-
-  // TODO
-  // get nextState() {
-  //
-  // }
 }
 
 module.exports = Fail;
