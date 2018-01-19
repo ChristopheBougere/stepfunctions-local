@@ -1,4 +1,4 @@
-const { isValidArn } = require('./tools/validate');
+const { isValidArn } = require('../tools/validate');
 const { errors, status } = require('../../constants');
 
 function listExecutions(params, stateMachines, executions) {

@@ -1,6 +1,6 @@
 const aslValidator = require('asl-validator');
 
-const { isValidArn, isValidName } = require('./tools/validate');
+const { isValidArn, isValidName } = require('../tools/validate');
 const { errors, status } = require('../../constants');
 
 function createStateMachine(params, stateMachines) {

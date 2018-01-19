@@ -1,6 +1,6 @@
 const uuidv4 = require('uuid/v4');
 
-const { isValidArn, isValidName } = require('./tools/validate');
+const { isValidArn, isValidName } = require('../tools/validate');
 
 const store = require('../../store');
 const { errors, status, actions } = require('../../constants');

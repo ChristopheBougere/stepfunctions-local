@@ -1,6 +1,6 @@
 const aslValidator = require('asl-validator');
 
-const { isValidArn } = require('./tools/validate');
+const { isValidArn } = require('../tools/validate');
 const { errors } = require('../../constants');
 
 // TODO: throw STATE_MACHINE_DELETING if specified state machine is being deleted
