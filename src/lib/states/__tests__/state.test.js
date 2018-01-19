@@ -10,7 +10,6 @@ describe('State', () => {
   it('should execute a state with next state', async () => {
     try {
       const state = {
-        Result: 'this is my result !',
         Next: 'NextState',
       };
       const stateInstance = new State(state, execution, name);

@@ -15,9 +15,9 @@ describe('Wait', () => {
         Next: 'NextState',
       };
       const input = {};
-      const failInstance = new Wait(state, execution, 'WaitState');
+      const waitInstance = new Wait(state, execution, 'WaitState');
       const start = Date.now() / 1000;
-      const { output, nextState } = await failInstance.execute(input);
+      const { output, nextState } = await waitInstance.execute(input);
       const end = Date.now() / 1000;
       expect(output).toMatchObject(input);
       expect(nextState).toEqual(state.Next);
@@ -35,9 +35,9 @@ describe('Wait', () => {
         Next: 'NextState',
       };
       const input = {};
-      const failInstance = new Wait(state, execution, 'WaitState');
+      const waitInstance = new Wait(state, execution, 'WaitState');
       const start = Date.now() / 1000;
-      const { output, nextState } = await failInstance.execute(input);
+      const { output, nextState } = await waitInstance.execute(input);
       const end = Date.now() / 1000;
       expect(output).toMatchObject(input);
       expect(nextState).toEqual(state.Next);
@@ -57,9 +57,9 @@ describe('Wait', () => {
       const input = {
         secondsToWait,
       };
-      const failInstance = new Wait(state, execution, 'WaitState');
+      const waitInstance = new Wait(state, execution, 'WaitState');
       const start = Date.now() / 1000;
-      const { output, nextState } = await failInstance.execute(input);
+      const { output, nextState } = await waitInstance.execute(input);
       const end = Date.now() / 1000;
       expect(output).toMatchObject(input);
       expect(nextState).toEqual(state.Next);
@@ -79,9 +79,9 @@ describe('Wait', () => {
       const input = {
         waitUntil: new Date(Date.now() + (secondsToWait * 1000)),
       };
-      const failInstance = new Wait(state, execution, 'WaitState');
+      const waitInstance = new Wait(state, execution, 'WaitState');
       const start = Date.now() / 1000;
-      const { output, nextState } = await failInstance.execute(input);
+      const { output, nextState } = await waitInstance.execute(input);
       const end = Date.now() / 1000;
       expect(output).toMatchObject(input);
       expect(nextState).toEqual(state.Next);
