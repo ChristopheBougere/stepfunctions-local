@@ -64,6 +64,34 @@ describe('Update state machine', () => {
     }
   });
 
+  it('should fail because invalid role parameter', () => {
+    try {
+      const params = {
+        stateMachineArn: stateMachines[0].stateMachineArn,
+        roleArn: 123,
+      };
+      const res = updateStateMachine(params, stateMachines);
+      expect(res).not.toBeDefined();
+    } catch (e) {
+      expect(e.message)
+        .toEqual(expect.stringContaining(errors.common.INVALID_PARAMETER_VALUE));
+    }
+  });
+
+  it('should fail because invalid definition parameter', () => {
+    try {
+      const params = {
+        stateMachineArn: stateMachines[0].stateMachineArn,
+        definition: 123,
+      };
+      const res = updateStateMachine(params, stateMachines);
+      expect(res).not.toBeDefined();
+    } catch (e) {
+      expect(e.message)
+        .toEqual(expect.stringContaining(errors.common.INVALID_PARAMETER_VALUE));
+    }
+  });
+
   it('should fail because invalid state machine arn', () => {
     try {
       const params = {

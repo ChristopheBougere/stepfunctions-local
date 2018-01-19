@@ -92,7 +92,7 @@ class Task extends State {
     // lambda arn syntax: arn:partition:lambda:region:account:function:name
     const lambdaRegexp = /^arn:aws:lambda:.+:[0-9]+:function:.+$/;
     // activity arn syntax: arn:partition:states:region:account:activity:name
-    const activityRegexp = /^arn:aws:states:.+:[0-9]+:function:.+$/;
+    const activityRegexp = /^arn:aws:states:.+:[0-9]+:activity:.+$/;
     if (lambdaRegexp.exec(this.arn)) {
       return LAMBDA;
     } else if (activityRegexp.exec(this.arn)) {

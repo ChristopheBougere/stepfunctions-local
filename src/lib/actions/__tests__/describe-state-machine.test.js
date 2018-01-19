@@ -23,7 +23,8 @@ describe('Describe state machine', () => {
       const params = {
         stateMachineArn: 123,
       };
-      describeStateMachine(params, stateMachines);
+      const res = describeStateMachine(params, stateMachines);
+      expect(res).not.toBeDefined();
     } catch (e) {
       expect(e.message)
         .toEqual(expect.stringContaining(errors.common.INVALID_PARAMETER_VALUE));
@@ -35,7 +36,8 @@ describe('Describe state machine', () => {
       const params = {
         stateMachineArn: 'invalid-arn',
       };
-      describeStateMachine(params, stateMachines);
+      const res = describeStateMachine(params, stateMachines);
+      expect(res).not.toBeDefined();
     } catch (e) {
       expect(e.message).toEqual(errors.describeStateMachine.INVALID_ARN);
     }
@@ -46,7 +48,8 @@ describe('Describe state machine', () => {
       const params = {
         stateMachineArn: 'arn:aws:states:local:0123456789:stateMachine:unknown-state-machine',
       };
-      describeStateMachine(params, stateMachines);
+      const res = describeStateMachine(params, stateMachines);
+      expect(res).not.toBeDefined();
     } catch (e) {
       expect(e.message).toEqual(errors.describeStateMachine.STATE_MACHINE_DOES_NOT_EXIST);
     }

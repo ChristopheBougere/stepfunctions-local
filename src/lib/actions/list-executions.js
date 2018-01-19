@@ -64,6 +64,7 @@ function listExecutions(params, stateMachines, executions) {
   return {
     response: {
       executions: filteredExecutions
+        .slice(truncateAmount, truncateAmount + maxResults)
         .map(execution => ({
           executionArn: execution.executionArn,
           name: execution.name,

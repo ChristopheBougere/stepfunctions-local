@@ -25,7 +25,7 @@ function stopExecution(params, executions) {
   }
 
   const execution = executions[index];
-  const stopDate = Date.now() / 1000;
+  const stopDate = execution.stopDate || Date.now() / 1000;
 
   return {
     index,

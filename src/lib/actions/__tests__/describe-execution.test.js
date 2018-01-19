@@ -40,7 +40,8 @@ describe('Describe execution', () => {
       const params = {
         executionArn: 123,
       };
-      describeExecution(params, executions);
+      const res = describeExecution(params, executions);
+      expect(res).not.toBeDefined();
     } catch (e) {
       expect(e.message)
         .toEqual(expect.stringContaining(errors.common.INVALID_PARAMETER_VALUE));
@@ -52,7 +53,8 @@ describe('Describe execution', () => {
       const params = {
         executionArn: 'arn:aws:states:local:0123456789:execution:my-state-machine-1:non-existing',
       };
-      describeExecution(params, executions);
+      const res = describeExecution(params, executions);
+      expect(res).not.toBeDefined();
     } catch (e) {
       expect(e.message).toEqual(errors.describeExecution.EXECUTION_DOES_NOT_EXIST);
     }

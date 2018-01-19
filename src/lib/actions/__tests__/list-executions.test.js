@@ -30,24 +30,56 @@ describe('List executions', () => {
     }
   });
 
-  it('should list the executions of the second state machine', () => {
+  it('should fail because invalid max-results parameter (not integer)', () => {
     try {
       const params = {
-        stateMachineArn: stateMachines[1].stateMachineArn,
+        stateMachineArn: stateMachines[0].stateMachineArn,
+        maxResults: '50',
       };
-      const { response } = listExecutions(params, stateMachines, executions);
-      expect(response.executions).toHaveLength(1);
+      const res = listExecutions(params, stateMachines, executions);
+      expect(res).not.toBeDefined();
     } catch (e) {
-      expect(e).not.toBeDefined();
+      expect(e.message)
+        .toEqual(expect.stringContaining(errors.common.INVALID_PARAMETER_VALUE));
     }
   });
 
-  it('should fail because invalid parameter', () => {
+  it('should fail because invalid max-results parameter (too high)', () => {
     try {
       const params = {
+        stateMachineArn: stateMachines[0].stateMachineArn,
         maxResults: 2000,
       };
-      listExecutions(params, stateMachines, executions);
+      const res = listExecutions(params, stateMachines, executions);
+      expect(res).not.toBeDefined();
+    } catch (e) {
+      expect(e.message)
+        .toEqual(expect.stringContaining(errors.common.INVALID_PARAMETER_VALUE));
+    }
+  });
+
+  it('should fail because invalid max-results parameter (too low)', () => {
+    try {
+      const params = {
+        stateMachineArn: stateMachines[0].stateMachineArn,
+        maxResults: -1,
+      };
+      const res = listExecutions(params, stateMachines, executions);
+      expect(res).not.toBeDefined();
+    } catch (e) {
+      expect(e.message)
+        .toEqual(expect.stringContaining(errors.common.INVALID_PARAMETER_VALUE));
+    }
+  });
+
+  it('should fail because invalid max-results parameter (too high)', () => {
+    try {
+      const params = {
+        stateMachineArn: stateMachines[0].stateMachineArn,
+        nextToken: 123,
+      };
+      const res = listExecutions(params, stateMachines, executions);
+      expect(res).not.toBeDefined();
     } catch (e) {
       expect(e.message)
         .toEqual(expect.stringContaining(errors.common.INVALID_PARAMETER_VALUE));
@@ -60,7 +92,8 @@ describe('List executions', () => {
         stateMachineArn: stateMachines[1].stateMachineArn,
         nextToken: 'my-invalid-token',
       };
-      listExecutions(params, stateMachines, executions);
+      const res = listExecutions(params, stateMachines, executions);
+      expect(res).not.toBeDefined();
     } catch (e) {
       expect(e.message)
         .toEqual(expect.stringContaining(errors.listExecutions.INVALID_TOKEN));
@@ -72,7 +105,8 @@ describe('List executions', () => {
       const params = {
         stateMachineArn: 123,
       };
-      listExecutions(params, stateMachines, executions);
+      const res = listExecutions(params, stateMachines, executions);
+      expect(res).not.toBeDefined();
     } catch (e) {
       expect(e.message)
         .toEqual(expect.stringContaining(errors.common.INVALID_PARAMETER_VALUE));
@@ -84,7 +118,8 @@ describe('List executions', () => {
       const params = {
         stateMachineArn: 'invalid-arn',
       };
-      listExecutions(params, stateMachines, executions);
+      const res = listExecutions(params, stateMachines, executions);
+      expect(res).not.toBeDefined();
     } catch (e) {
       expect(e.message).toEqual(errors.listExecutions.INVALID_ARN);
     }
@@ -95,7 +130,8 @@ describe('List executions', () => {
       const params = {
         stateMachineArn: 'arn:aws:states:local:0123456789:stateMachine:unknown-state-machine',
       };
-      listExecutions(params, stateMachines, executions);
+      const res = listExecutions(params, stateMachines, executions);
+      expect(res).not.toBeDefined();
     } catch (e) {
       expect(e.message).toEqual(errors.listExecutions.STATE_MACHINE_DOES_NOT_EXIST);
     }
@@ -107,7 +143,8 @@ describe('List executions', () => {
         stateMachineArn: stateMachines[0].stateMachineArn,
         statusFilter: 'INVALID_STATUS_FILTER',
       };
-      listExecutions(params, stateMachines, executions);
+      const res = listExecutions(params, stateMachines, executions);
+      expect(res).not.toBeDefined();
     } catch (e) {
       expect(e.message)
         .toEqual(expect.stringContaining(errors.common.INVALID_PARAMETER_VALUE));

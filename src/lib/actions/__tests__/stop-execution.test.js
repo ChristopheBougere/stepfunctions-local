@@ -24,7 +24,8 @@ describe('Stop execution', () => {
       const params = {
         executionArn: 123,
       };
-      stopExecution(params, executions);
+      const res = stopExecution(params, executions);
+      expect(res).not.toBeDefined();
     } catch (e) {
       expect(e.message)
         .toEqual(expect.stringContaining(errors.common.INVALID_PARAMETER_VALUE));
@@ -36,7 +37,8 @@ describe('Stop execution', () => {
       const params = {
         executionArn: 'invalid-arn',
       };
-      stopExecution(params, executions);
+      const res = stopExecution(params, executions);
+      expect(res).not.toBeDefined();
     } catch (e) {
       expect(e.message).toEqual(errors.stopExecution.INVALID_ARN);
     }
@@ -47,7 +49,8 @@ describe('Stop execution', () => {
       const params = {
         executionArn: 'arn:aws:states:local:0123456789:execution:my-state-machine-1:unknown-execution',
       };
-      stopExecution(params, executions);
+      const res = stopExecution(params, executions);
+      expect(res).not.toBeDefined();
     } catch (e) {
       expect(e.message).toEqual(errors.stopExecution.EXECUTION_DOES_NOT_EXIST);
     }
@@ -59,7 +62,8 @@ describe('Stop execution', () => {
         executionArn: executions[1].executionArn,
         cause: 123,
       };
-      stopExecution(params, executions);
+      const res = stopExecution(params, executions);
+      expect(res).not.toBeDefined();
     } catch (e) {
       expect(e.message)
         .toEqual(expect.stringContaining(errors.common.INVALID_PARAMETER_VALUE));
@@ -72,7 +76,8 @@ describe('Stop execution', () => {
         executionArn: executions[1].executionArn,
         error: 123,
       };
-      stopExecution(params, executions);
+      const res = stopExecution(params, executions);
+      expect(res).not.toBeDefined();
     } catch (e) {
       expect(e.message)
         .toEqual(expect.stringContaining(errors.common.INVALID_PARAMETER_VALUE));

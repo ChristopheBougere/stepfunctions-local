@@ -21,6 +21,54 @@ describe('Create state machine', () => {
     }
   });
 
+  it('should fail because invalid definition', () => {
+    try {
+      const stateMachines = [];
+      const params = {
+        name: 'my-state-machine',
+        definition: 123,
+        roleArn: 'arn:aws:iam::0123:role/this-is-my-role',
+      };
+      const res = createStateMachine(params, stateMachines);
+      expect(res).not.toBeDefined();
+    } catch (e) {
+      expect(e.message)
+        .toEqual(expect.stringContaining(errors.common.INVALID_PARAMETER_VALUE));
+    }
+  });
+
+  it('should fail because invalid name', () => {
+    try {
+      const stateMachines = [];
+      const params = {
+        name: 123,
+        definition: '{"Comment": "An example that adds two numbers together.","StartAt": "Add","Version": "1.0","TimeoutSeconds": 10,"States":{"Add": {"Type": "Task","Resource": "arn:aws:lambda:us-east-1:123456789012:function:Add","End": true}}}',
+        roleArn: 'arn:aws:iam::0123:role/this-is-my-role',
+      };
+      const res = createStateMachine(params, stateMachines);
+      expect(res).not.toBeDefined();
+    } catch (e) {
+      expect(e.message)
+        .toEqual(expect.stringContaining(errors.common.INVALID_PARAMETER_VALUE));
+    }
+  });
+
+  it('should fail because invalid role arn', () => {
+    try {
+      const stateMachines = [];
+      const params = {
+        name: 'my-state-machine',
+        definition: '{"Comment": "An example that adds two numbers together.","StartAt": "Add","Version": "1.0","TimeoutSeconds": 10,"States":{"Add": {"Type": "Task","Resource": "arn:aws:lambda:us-east-1:123456789012:function:Add","End": true}}}',
+        roleArn: 123,
+      };
+      const res = createStateMachine(params, stateMachines);
+      expect(res).not.toBeDefined();
+    } catch (e) {
+      expect(e.message)
+        .toEqual(expect.stringContaining(errors.common.INVALID_PARAMETER_VALUE));
+    }
+  });
+
   it('should fail because state machine already exists', () => {
     try {
       const stateMachines = [
@@ -35,11 +83,13 @@ describe('Create state machine', () => {
         name: 'my-existing-state-machine',
         roleArn: 'arn:aws:iam::0123:role/this-is-my-role',
       };
-      createStateMachine(params, stateMachines);
+      const res = createStateMachine(params, stateMachines);
+      expect(res).not.toBeDefined();
     } catch (e) {
       expect(e.message).toEqual(errors.createStateMachine.STATE_MACHINE_ALREADY_EXISTS);
     }
   });
+
   it('should fail because invalid arn', () => {
     const arn = 'invalid-arn';
     try {
@@ -49,7 +99,8 @@ describe('Create state machine', () => {
         name: 'my-first-state-machine',
         roleArn: arn,
       };
-      createStateMachine(params, stateMachines);
+      const res = createStateMachine(params, stateMachines);
+      expect(res).not.toBeDefined();
     } catch (e) {
       expect(e.message).toEqual(`${errors.createStateMachine.INVALID_ARN}: ${arn}`);
     }
@@ -63,7 +114,8 @@ describe('Create state machine', () => {
         name: 'my-first-state-machine',
         roleArn: 'arn:aws:iam::0123:role/this-is-my-role',
       };
-      createStateMachine(params, stateMachines);
+      const res = createStateMachine(params, stateMachines);
+      expect(res).not.toBeDefined();
     } catch (e) {
       expect(e.message).toEqual(`${errors.createStateMachine.INVALID_DEFINITION}: INVALID_JSON_DESCRIPTION`);
     }
@@ -77,9 +129,26 @@ describe('Create state machine', () => {
         name: 'my-first-state-machine',
         roleArn: 'arn:aws:iam::0123:role/this-is-my-role',
       };
-      createStateMachine(params, stateMachines);
+      const res = createStateMachine(params, stateMachines);
+      expect(res).not.toBeDefined();
     } catch (e) {
       expect(e.message).toEqual(`${errors.createStateMachine.INVALID_DEFINITION}: SCHEMA_VALIDATION_FAILED`);
+    }
+  });
+
+  it('should fail because invalid role arn', () => {
+    try {
+      const stateMachines = [];
+      const params = {
+        name: '<invalid name>',
+        definition: '{"Comment": "An example that adds two numbers together.","StartAt": "Add","Version": "1.0","TimeoutSeconds": 10,"States":{"Add": {"Type": "Task","Resource": "arn:aws:lambda:us-east-1:123456789012:function:Add","End": true}}}',
+        roleArn: 'arn:aws:iam::0123:role/this-is-my-role',
+      };
+      const res = createStateMachine(params, stateMachines);
+      expect(res).not.toBeDefined();
+    } catch (e) {
+      expect(e.message)
+        .toEqual(expect.stringContaining(errors.createStateMachine.INVALID_NAME));
     }
   });
 });

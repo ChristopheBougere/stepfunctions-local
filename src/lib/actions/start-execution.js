@@ -1,6 +1,7 @@
 const uuidv4 = require('uuid/v4');
 
 const { isValidArn, isValidName } = require('./tools/validate');
+
 const store = require('../../store');
 const { errors, status, actions } = require('../../constants');
 const StateMachine = require('../states/state-machine');
@@ -20,10 +21,18 @@ function startExecution(params, stateMachines, executions) {
   ) {
     throw new Error(`${errors.common.INVALID_PARAMETER_VALUE}: --state-machine-arn`);
   }
-  if (params.input && (params.input.length < 0 || params.input.length > 32768)) {
+  if (params.input &&
+    (typeof params.input !== 'string'
+    || params.input.length < 0
+    || params.input.length > 32768)
+  ) {
     throw new Error(`${errors.common.INVALID_PARAMETER_VALUE}: --input`);
   }
-  if (typeof paramsName !== 'string' || paramsName.length < 1 || paramsName.length > 80) {
+  if (paramsName &&
+    (typeof paramsName !== 'string'
+    || paramsName.length < 1
+    || paramsName.length > 80)
+  ) {
     throw new Error(`${errors.common.INVALID_PARAMETER_VALUE}: --name`);
   }
 
@@ -35,7 +44,7 @@ function startExecution(params, stateMachines, executions) {
   if (!match) {
     throw new Error(errors.startExecution.STATE_MACHINE_DOES_NOT_EXIST);
   }
-  if (!isValidName(paramsName)) {
+  if (paramsName && !isValidName(paramsName)) {
     throw new Error(errors.startExecution.INVALID_NAME);
   }
   const name = paramsName || uuidv4();
@@ -59,8 +68,7 @@ function startExecution(params, stateMachines, executions) {
   // • When the original execution has been closed within 90 days, the
   // ExecutionAlreadyExists message is returned regardless of input.
   const sameName = executions
-    .filter(e => e.stateMachineArn === match.stateMachineArn)
-    .filter(e => e.name === name);
+    .filter(e => e.stateMachineArn === match.stateMachineArn && e.name === name);
   if (sameName.length) {
     const running = sameName.filter(e => Execution.isRunning(e.status));
     if (running.length) {
@@ -81,13 +89,13 @@ function startExecution(params, stateMachines, executions) {
       throw new Error(errors.startExecution.EXECUTION_ALREADY_EXISTS);
     }
   }
-
   // Create execution
   const accountId = match.stateMachineArn.split(':')[4];
+  const stateMachineName = match.name;
   const execution = {
     name,
     input,
-    executionArn: `arn:aws:states:local:${accountId}:execution:${name}`,
+    executionArn: `arn:aws:states:local:${accountId}:execution:${stateMachineName}:${name}`,
     startDate: Date.now() / 1000,
     stateMachineArn: match.stateMachineArn,
     status: status.execution.RUNNING,
