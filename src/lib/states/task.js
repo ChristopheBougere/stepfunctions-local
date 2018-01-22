@@ -73,12 +73,12 @@ class Task extends State {
             cause: e.name,
             error: e.message,
           });
-          // TODO: Implement ErrorEquals + ResultPath
+          // TODO: Implement ErrorEquals
           // https://docs.aws.amazon.com/step-functions/latest/dg/amazon-states-language-errors.html#amazon-states-language-fallback-states
           if (!this.state.Catch) {
             throw e;
           }
-          this.taskOutput = {};
+          this.taskOutput = applyResultPath(this.input, this.state.Catch.ResultPath, e);
           this.nextStateFromCatch = this.state.Catch.Next;
         }
         break;
