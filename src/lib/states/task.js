@@ -13,8 +13,6 @@ class Task extends State {
 
   async invokeLambda() {
     addHistoryEvent(this.execution, 'LAMBDA_FUNCTION_STARTED');
-
-    // TODO: retrieve Retry / Catch / TimeoutSeconds / ResultPath
     // TODO the config (regoin + lambda endpoint/port) should be in parameters
     AWS.config.region = 'us-east-1';
     const lambda = new AWS.Lambda();
@@ -44,9 +42,24 @@ class Task extends State {
             input: this.input,
             resource: this.resource,
           });
-          const res = await this.invokeLambda();
-          if (res.Payload) {
-            const payload = JSON.parse(res.Payload);
+          let result;
+          let retries = 0;
+          do {
+            try {
+              result = await this.invokeLambda();
+            } catch (e) {
+              retries += 1;
+              if (retries <= this.maxAttempts) {
+                const seconds = this.intervalSeconds * (this.backoffRate ** retries);
+                await new Promise(resolve => setTimeout(resolve, seconds * 1000));
+              } else {
+                throw e;
+              }
+            }
+          } while (!result);
+
+          if (result.Payload) {
+            const payload = JSON.parse(result.Payload);
             if (payload.errorMessage) {
               throw new Error(payload.errorMessage);
             }
@@ -60,7 +73,11 @@ class Task extends State {
             cause: e.name,
             error: e.message,
           });
-          throw e;
+          if (!this.state.Catch) {
+            throw e;
+          }
+          this.taskOutput = {};
+          this.nextStateFromCatch = this.state.Catch.Next;
         }
         break;
       case ACTIVITY:
@@ -81,6 +98,16 @@ class Task extends State {
     };
   }
 
+  /* Return in priority
+   * 1. the next state defined in Catch field if failed
+   * 2. the next state name if found
+   * 3. true if end has been reached
+   * 4. false otherwise
+   */
+  get nextState() {
+    return this.nextStateFromCatch || this.state.Next || this.state.End;
+  }
+
   get output() {
     const output = applyResultPath(this.input, this.state.ResultPath, this.taskOutput);
     return applyOutputPath(output, this.state.OutputPath);
@@ -88,6 +115,18 @@ class Task extends State {
 
   get arn() {
     return this.state.Resource;
+  }
+
+  get backoffRate() {
+    return this.state.Retry ? (this.state.Retry.BackoffRate || 2) : 0;
+  }
+
+  get intervalSeconds() {
+    return this.state.Retry ? (this.state.Retry.IntervalSeconds || 1) : 0;
+  }
+
+  get maxAttempts() {
+    return this.state.Retry ? (this.state.Retry.MaxAttempts || 3) : 0;
   }
 
   get type() {

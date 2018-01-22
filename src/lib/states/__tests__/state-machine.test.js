@@ -36,6 +36,9 @@ describe('State machine', () => {
         States: {
           FirstState: {
             Type: 'Pass',
+            Result: {
+              type: 'private',
+            },
             Next: 'ChoicesState',
           },
           ChoicesState: {
@@ -102,9 +105,7 @@ describe('State machine', () => {
         executionArn: 'my-execution-arn',
         events: [],
       };
-      const input = {
-        type: 'private',
-      };
+      const input = {};
       const stateMachineInstance = new StateMachine(stateMachineDefinition, execution);
       const { output } = await stateMachineInstance.execute(input);
       expect(output).toBeTruthy();
