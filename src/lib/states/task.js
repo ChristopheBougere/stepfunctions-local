@@ -82,7 +82,8 @@ class Task extends State {
   }
 
   get output() {
-    return applyOutputPath(this.taskOutput, this.state.OutputPath);
+    const output = applyResultPath(this.input, this.state.ResultPath, this.taskOutput);
+    return applyOutputPath(output, this.state.OutputPath);
   }
 
   get arn() {
