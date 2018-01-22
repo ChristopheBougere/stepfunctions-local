@@ -21,8 +21,8 @@ describe('State machine', () => {
       };
       const input = {};
       const stateMachineInstance = new StateMachine(stateMachineDefinition, execution);
-      const { output } = await stateMachineInstance.execute(input);
-      expect(output).toBeTruthy();
+      const result = await stateMachineInstance.execute(input);
+      expect(result).toEqual({});
     } catch (e) {
       expect(e).not.toBeDefined();
     }

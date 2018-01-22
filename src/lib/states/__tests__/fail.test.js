@@ -12,8 +12,8 @@ describe('Fail', () => {
       };
       const input = {};
       const failInstance = new Fail(state, execution, 'FailState');
-      const { output } = await failInstance.execute(input);
-      expect(output).toMatchObject(input);
+      const result = await failInstance.execute(input);
+      expect(result).toEqual({});
     } catch (e) {
       expect(e).not.toBeDefined();
     }
