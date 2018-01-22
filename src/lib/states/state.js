@@ -1,3 +1,5 @@
+const { applyOutputPath } = require('../tools/path');
+
 class State {
   constructor(state, execution, name) {
     this.state = state;
@@ -16,11 +18,11 @@ class State {
     };
   }
 
-  /* Default behaviour: return input
+  /* Default behaviour: return input filtered by OutputPath
    */
-  get output() {
-    return this.input;
-  }
+   get output() {
+     return applyOutputPath(this.input, this.state.OutputPath);
+   }
 
   /* Default behaviour: return in priority
    * 1. the next state name if found

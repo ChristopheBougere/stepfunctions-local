@@ -1,12 +1,12 @@
 const jp = require('jsonpath');
 
 const State = require('./state');
-
 const addHistoryEvent = require('../actions/add-history-event');
+const { applyInputPath, applyResultPath, applyOutputPath } = require('../tools/path');
 
 class Choices extends State {
   async execute(input) {
-    this.input = input;
+    this.input = applyInputPath(input, this.state.InputPath);
 
     addHistoryEvent(this.execution, 'CHOICE_STATE_ENTERED', {
       input: this.input,
@@ -142,7 +142,7 @@ class Choices extends State {
         return nextState;
       }
     }
-    return this.state.Default;
+    return this.state.Default || this.state.End;
   }
 }
 
