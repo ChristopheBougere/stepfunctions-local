@@ -7,7 +7,8 @@ describe('Add history event', () => {
       const execution = {
         executionArn: 'my-arn',
       };
-      createHistoryEvent({ type: 'EXECUTION_STARTED' }, execution);
+      const res = createHistoryEvent({ type: 'EXECUTION_STARTED' }, execution);
+      expect(res).not.toBeDefined();
     } catch (e) {
       expect(e.name).toEqual('TypeError');
     }
@@ -20,9 +21,10 @@ describe('Add history event', () => {
         executionArn: 'my-arn',
         events: [],
       };
-      createHistoryEvent(Object.assign({ type: 'INVALID_EVENT_VALUE' }, {
+      const res = createHistoryEvent(Object.assign({ type: 'INVALID_EVENT_VALUE' }, {
         roleArn: 'this-is-my-role',
       }), execution);
+      expect(res).not.toBeDefined();
     } catch (e) {
       expect(e.message)
         .toEqual(expect.stringContaining(errors.common.INVALID_PARAMETER_VALUE));

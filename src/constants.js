@@ -72,6 +72,7 @@ module.exports = {
     },
     deleteStateMachine: {
       INVALID_ARN: 'InvalidArn',
+      STATE_MACHINE_DOES_NOT_EXIST: 'StateMachineDoesNotExist',
     },
     describeStateMachine: {
       INVALID_ARN: 'InvalidArn',

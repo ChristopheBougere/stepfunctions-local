@@ -42,9 +42,11 @@ describe('List state machines', () => {
       const params = {
         maxResults: 2000,
       };
-      listStateMachines(params, stateMachines);
+      const res = listStateMachines(params, stateMachines);
+      expect(res).not.toBeDefined();
     } catch (e) {
-      expect(e.message).toEqual(errors.common.INVALID_PARAMETER_VALUE);
+      expect(e.message)
+        .toEqual(expect.stringContaining(errors.common.INVALID_PARAMETER_VALUE));
     }
   });
 
@@ -53,7 +55,8 @@ describe('List state machines', () => {
       const params = {
         nextToken: 'my-invalid-token',
       };
-      listStateMachines(params, stateMachines);
+      const res = listStateMachines(params, stateMachines);
+      expect(res).not.toBeDefined();
     } catch (e) {
       expect(e.message).toEqual(errors.listStateMachines.INVALID_TOKEN);
     }

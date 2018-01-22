@@ -1,16 +1,7 @@
 const describeStateMachine = require('../describe-state-machine');
 const { errors } = require('../../../constants');
 
-const stateMachines = [
-  {
-    stateMachineArn: 'my-first-state-machine-arn',
-    creationDate: Date.now() / 1000,
-    name: 'my-machine-name',
-    roleArn: 'this-is-my-role',
-    status: 'MY_STATUS',
-    definition: {},
-  },
-];
+const stateMachines = require('./data/state-machines');
 
 describe('Describe state machine', () => {
   it('should return the state machine description', () => {
@@ -32,7 +23,21 @@ describe('Describe state machine', () => {
       const params = {
         stateMachineArn: 123,
       };
-      describeStateMachine(params, stateMachines);
+      const res = describeStateMachine(params, stateMachines);
+      expect(res).not.toBeDefined();
+    } catch (e) {
+      expect(e.message)
+        .toEqual(expect.stringContaining(errors.common.INVALID_PARAMETER_VALUE));
+    }
+  });
+
+  it('should fail because invalid arn', () => {
+    try {
+      const params = {
+        stateMachineArn: 'invalid-arn',
+      };
+      const res = describeStateMachine(params, stateMachines);
+      expect(res).not.toBeDefined();
     } catch (e) {
       expect(e.message).toEqual(errors.describeStateMachine.INVALID_ARN);
     }
@@ -41,9 +46,10 @@ describe('Describe state machine', () => {
   it('should fail because non-existing state machine', () => {
     try {
       const params = {
-        stateMachineArn: 'non-existing-arm',
+        stateMachineArn: 'arn:aws:states:local:0123456789:stateMachine:unknown-state-machine',
       };
-      describeStateMachine(params, stateMachines);
+      const res = describeStateMachine(params, stateMachines);
+      expect(res).not.toBeDefined();
     } catch (e) {
       expect(e.message).toEqual(errors.describeStateMachine.STATE_MACHINE_DOES_NOT_EXIST);
     }

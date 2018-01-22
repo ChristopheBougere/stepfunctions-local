@@ -1,24 +1,7 @@
 const describeExecution = require('../describe-execution');
 const { errors } = require('../../../constants');
 
-const executions = [
-  {
-    executionArn: 'my-first-execution-arn',
-    stateMachineArn: 'my-state-marchine-arn',
-    name: 'my-execution-name',
-    input: {
-      comment: 'This is my input',
-    },
-  },
-  {
-    executionArn: 'my-second-execution-arn',
-    stateMachineArn: 'my-state-marchine-arn',
-    name: 'my-second-execution-name',
-    input: {
-      comment: 'This is my second input',
-    },
-  },
-];
+const executions = require('./data/executions');
 
 describe('Describe execution', () => {
   it('should return the execution description', () => {
@@ -28,8 +11,14 @@ describe('Describe execution', () => {
         executionArn: execution.executionArn,
       };
       const { response } = describeExecution(params, executions);
-      expect(Object.keys(response)).toHaveLength(8);
-      expect(response).toMatchObject(execution);
+      expect(response.executionArn).toEqual(execution.executionArn);
+      expect(response.input).toEqual(execution.input);
+      expect(response.name).toEqual(execution.name);
+      expect(response.output).toEqual(execution.output);
+      expect(response.startDate).toEqual(execution.startDate);
+      expect(response.stateMachineArn).toEqual(execution.stateMachineArn);
+      expect(response.status).toEqual(execution.status);
+      expect(response.stopDate).toEqual(execution.stopDate);
     } catch (e) {
       expect(e).not.toBeDefined();
     }
@@ -38,7 +27,7 @@ describe('Describe execution', () => {
   it('should fail because invalid arn', () => {
     try {
       const params = {
-        executionArn: 123,
+        executionArn: 'invalid-arn',
       };
       describeExecution(params, executions);
     } catch (e) {
@@ -46,12 +35,26 @@ describe('Describe execution', () => {
     }
   });
 
+  it('should fail because invalid arn', () => {
+    try {
+      const params = {
+        executionArn: 123,
+      };
+      const res = describeExecution(params, executions);
+      expect(res).not.toBeDefined();
+    } catch (e) {
+      expect(e.message)
+        .toEqual(expect.stringContaining(errors.common.INVALID_PARAMETER_VALUE));
+    }
+  });
+
   it('should fail because non-existing execution arn', () => {
     try {
       const params = {
-        executionArn: 'non-existing-execution',
+        executionArn: 'arn:aws:states:local:0123456789:execution:my-state-machine-1:non-existing',
       };
-      describeExecution(params, executions);
+      const res = describeExecution(params, executions);
+      expect(res).not.toBeDefined();
     } catch (e) {
       expect(e.message).toEqual(errors.describeExecution.EXECUTION_DOES_NOT_EXIST);
     }

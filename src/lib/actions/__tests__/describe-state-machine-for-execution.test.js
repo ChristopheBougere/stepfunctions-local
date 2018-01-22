@@ -43,20 +43,23 @@ describe('Describe state machine for execution', () => {
     }
   });
 
-  it('should fail because missing required parameter execution arn', () => {
+  it('should fail because invalid execution arn', () => {
     try {
-      const params = {};
+      const params = {
+        executionArn: 123,
+      };
       const res = describeStateMachineForExecution(params, stateMachines, executions);
       expect(res).not.toBeDefined();
     } catch (e) {
-      expect(e.message).toEqual(errors.common.MISSING_REQUIRED_PARAMETER);
+      expect(e.message)
+        .toEqual(expect.stringContaining(errors.common.INVALID_PARAMETER_VALUE));
     }
   });
 
   it('should fail because invalid execution arn', () => {
     try {
       const params = {
-        executionArn: 123,
+        executionArn: 'invalid-arn',
       };
       const res = describeStateMachineForExecution(params, stateMachines, executions);
       expect(res).not.toBeDefined();
@@ -68,7 +71,7 @@ describe('Describe state machine for execution', () => {
   it('should fail because execution does not exist', () => {
     try {
       const params = {
-        executionArn: 'fake-execution-arn',
+        executionArn: 'arn:aws:states:local:0123456789:execution:my-state-machine-1:non-existing',
       };
       const res = describeStateMachineForExecution(params, stateMachines, executions);
       expect(res).not.toBeDefined();

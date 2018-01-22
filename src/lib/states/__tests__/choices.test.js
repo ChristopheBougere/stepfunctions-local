@@ -38,8 +38,6 @@ describe('Choices > string values', () => {
     Default: 'DefaultState',
   };
 
-  // TODO
-  // - validate output
   it('should return "StringEquals" choice', async () => {
     const input = {
       type: 'Echo',
@@ -349,6 +347,52 @@ describe('Choices > other operators', () => {
     ],
     Default: 'DefaultState',
   };
+
+  it('should filter with InputPath (with match)', async () => {
+    const updatedState = Object.assign({}, state, {
+      InputPath: '$.filter',
+    });
+    const input = {
+      filter: {
+        value: 25,
+      },
+    };
+    const stateInstance = new Choices(updatedState, execution, 'ChoiceState');
+    const { output, nextState } = await stateInstance.execute(input);
+    expect(output).toEqual(input.filter);
+    expect(nextState).toEqual('ValueInTwenties');
+  });
+
+  it('should filter with InputPath (no match)', async () => {
+    const updatedState = Object.assign({}, state, {
+      InputPath: '$.noMatch',
+    });
+    const input = {
+      filter: {
+        value: 25,
+      },
+    };
+    const stateInstance = new Choices(updatedState, execution, 'ChoiceState');
+    const { output, nextState } = await stateInstance.execute(input);
+    expect(output).toEqual({});
+    expect(nextState).toEqual('Public');
+  });
+
+  it('should filter with InputPath and OutputPath', async () => {
+    const updatedState = Object.assign({}, state, {
+      InputPath: '$.filter',
+      OutputPath: '$.noMatch',
+    });
+    const input = {
+      filter: {
+        value: 25,
+      },
+    };
+    const stateInstance = new Choices(updatedState, execution, 'ChoiceState');
+    const { output, nextState } = await stateInstance.execute(input);
+    expect(output).toEqual({});
+    expect(nextState).toEqual('ValueInTwenties');
+  });
 
   it('should return "ValueInTwenties"', async () => {
     const input = {

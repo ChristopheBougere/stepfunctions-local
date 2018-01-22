@@ -1,10 +1,25 @@
 const aslValidator = require('asl-validator');
 
+const { isValidArn, isValidName } = require('../tools/validate');
 const { errors, status } = require('../../constants');
 
 function createStateMachine(params, stateMachines) {
-  const regexp = /^arn:aws:iam::[0-9]+:role\/.+$/;
-  if (!regexp.exec(params.roleArn)) {
+  /* check request parameters */
+  if (typeof params.definition !== 'string' || params.definition.length > 1048576) {
+    throw new Error(`${errors.common.INVALID_PARAMETER_VALUE}: --definition`);
+  }
+  if (typeof params.name !== 'string' || params.name.length < 1 || params.name.length > 80) {
+    throw new Error(`${errors.common.INVALID_PARAMETER_VALUE}: --name`);
+  }
+  if (typeof params.roleArn !== 'string' || params.roleArn.length > 256) {
+    throw new Error(`${errors.common.INVALID_PARAMETER_VALUE}: --role-arn`);
+  }
+
+  /* execute action */
+  if (!isValidName(params.name)) {
+    throw new Error(`${errors.createStateMachine.INVALID_NAME}: ${params.name}`);
+  }
+  if (!isValidArn(params.roleArn, 'role')) {
     throw new Error(`${errors.createStateMachine.INVALID_ARN}: ${params.roleArn}`);
   }
   if (stateMachines.find(stateMachine => stateMachine.name === params.name)) {
@@ -29,6 +44,7 @@ function createStateMachine(params, stateMachines) {
     name: params.name,
     status: status.stateMachine.ACTIVE,
   };
+
   return {
     stateMachine,
     response: {

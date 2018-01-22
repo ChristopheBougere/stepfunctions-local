@@ -5,7 +5,7 @@ const initialState = {
   executions: [],
 };
 
-function reducer(state = initialState, action) {
+function reducer(state = initialState, action = null) {
   const { type, result } = action;
   switch (type) {
     // custom actions

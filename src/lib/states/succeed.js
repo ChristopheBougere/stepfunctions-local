@@ -16,6 +16,7 @@ class Succeed extends State {
 
     return {
       output: this.output,
+      nextState: null,
     };
   }
 }

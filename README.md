@@ -46,4 +46,4 @@ aws stepfunctions --endpoint http://localhost:4599 create-state-machine --name n
 - Check headers and HTTP errors to be 100% AWS compliant
 - Unit tests
 - Validate JSON path
-- Other actions
+- Actions related to activities

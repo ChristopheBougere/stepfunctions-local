@@ -51,23 +51,27 @@ describe('Get execution history', () => {
     }
   });
 
-  it('should fail because missing required executionArn', () => {
-    try {
-      const params = {};
-      const res = getExecutionHistory(params, executions);
-      expect(res).not.toBeDefined();
-    } catch (e) {
-      expect(e.message)
-        .toEqual(expect.stringContaining(errors.common.MISSING_REQUIRED_PARAMETER));
-    }
-  });
-
   it('should fail because invalid reverseOrder parameter', () => {
     try {
       const execution = executions[0];
       const params = {
         executionArn: execution.executionArn,
         reverseOrder: 'true',
+      };
+      const res = getExecutionHistory(params, executions);
+      expect(res).not.toBeDefined();
+    } catch (e) {
+      expect(e.message)
+        .toEqual(expect.stringContaining(errors.common.INVALID_PARAMETER_VALUE));
+    }
+  });
+
+  it('should fail because invalid token parameter', () => {
+    try {
+      const execution = executions[0];
+      const params = {
+        executionArn: execution.executionArn,
+        nextToken: 123,
       };
       const res = getExecutionHistory(params, executions);
       expect(res).not.toBeDefined();
@@ -122,7 +126,7 @@ describe('Get execution history', () => {
     }
   });
 
-  it('should fail because invalid executionArn', () => {
+  it('should fail because invalid execution arn parameter', () => {
     try {
       const params = {
         executionArn: 123,
@@ -149,15 +153,27 @@ describe('Get execution history', () => {
     }
   });
 
-  it('should fail because non-existing executionArn', () => {
+  it('should fail because invalid execution arn', () => {
     try {
       const params = {
-        executionArn: 'non-existing',
+        executionArn: 'invalid-arn',
       };
       const res = getExecutionHistory(params, executions);
       expect(res).not.toBeDefined();
     } catch (e) {
       expect(e.message).toEqual(errors.getExecutionHistory.INVALID_ARN);
+    }
+  });
+
+  it('should fail because unknown execution', () => {
+    try {
+      const params = {
+        executionArn: 'arn:aws:states:local:0123456789:execution:my-state-machine-1:unknown-execution',
+      };
+      const res = getExecutionHistory(params, executions);
+      expect(res).not.toBeDefined();
+    } catch (e) {
+      expect(e.message).toEqual(errors.getExecutionHistory.EXECUTION_DOES_NOT_EXIST);
     }
   });
 });

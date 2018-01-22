@@ -5,13 +5,13 @@ const { errors } = require('../../../constants');
 
 const stateMachines = [
   {
-    stateMachineArn: 'arn:aws:::1234:my-state-machine-arn',
+    stateMachineArn: 'arn:aws:states:local:0123456789:stateMachine:my-state-machine',
   },
 ];
 
 const executions = [
   {
-    stateMachineArn: 'arn:aws:::1234:my-state-machine-arn',
+    stateMachineArn: 'arn:aws:states:local:0123456789:stateMachine:my-state-machine',
     executionArn: 'my-first-execution-arn',
     name: uuid.v4(),
     startDate: (Date.now() / 1000) - 10,
@@ -19,7 +19,7 @@ const executions = [
     status: 'SUCCEEDED',
   },
   {
-    stateMachineArn: 'arn:aws:::1234:my-state-machine-arn',
+    stateMachineArn: 'arn:aws:states:local:0123456789:stateMachine:my-state-machine',
     executionArn: 'my-second-execution-arn',
     name: 'my-chosen-name',
     startDate: (Date.now() - (91 * 24 * 60 * 60) - 10) / 1000,
@@ -27,7 +27,7 @@ const executions = [
     status: 'SUCCEEDED',
   },
   {
-    stateMachineArn: 'arn:aws:::1234:my-state-machine-arn',
+    stateMachineArn: 'arn:aws:states:local:0123456789:stateMachine:my-state-machine',
     executionArn: 'my-third-execution-arn',
     name: 'my-second-chosen-name',
     startDate: (Date.now() / 1000) - 10,
@@ -35,7 +35,7 @@ const executions = [
     input: '{ "comment": "This is my input"}',
   },
   {
-    stateMachineArn: 'arn:aws:::1234:my-state-machine-arn',
+    stateMachineArn: 'arn:aws:states:local:0123456789:stateMachine:my-state-machine',
     executionArn: 'my-fourth-execution-arn',
     name: 'my-third-chosen-name',
     startDate: (Date.now() / 1000) - 10,
@@ -50,6 +50,7 @@ describe('Start execution', () => {
     try {
       const params = {
         stateMachineArn: stateMachines[0].stateMachineArn,
+        name: uuid.v4(),
         input: '{ "comment": "This is my input"}',
       };
       const { execution, response } = startExecution(params, stateMachines, executions);
@@ -79,23 +80,81 @@ describe('Start execution', () => {
     }
   });
 
-  it('should fail because invalid arn', () => {
+  it('should fail because unknown state machine', () => {
     try {
       const params = {
-        stateMachineArn: 'non-existing',
+        name: uuid.v4(),
+        stateMachineArn: 'arn:aws:states:local:0123456789:stateMachine:unknown-state-machine',
       };
-      startExecution(params, stateMachines, executions);
+      const res = startExecution(params, stateMachines, executions);
+      expect(res).not.toBeDefined();
     } catch (e) {
       expect(e.message).toEqual(errors.startExecution.STATE_MACHINE_DOES_NOT_EXIST);
+    }
+  });
+
+  it('should fail because invalid arn parameter', () => {
+    try {
+      const params = {
+        stateMachineArn: 123,
+      };
+      const res = startExecution(params, stateMachines, executions);
+      expect(res).not.toBeDefined();
+    } catch (e) {
+      expect(e.message)
+        .toEqual(expect.stringContaining(errors.common.INVALID_PARAMETER_VALUE));
+    }
+  });
+
+  it('should fail because invalid name parameter', () => {
+    try {
+      const params = {
+        stateMachineArn: stateMachines[0].stateMachineArn,
+        name: 123,
+      };
+      const res = startExecution(params, stateMachines, executions);
+      expect(res).not.toBeDefined();
+    } catch (e) {
+      expect(e.message)
+        .toEqual(expect.stringContaining(errors.common.INVALID_PARAMETER_VALUE));
+    }
+  });
+
+  it('should fail because invalid name parameter', () => {
+    try {
+      const params = {
+        stateMachineArn: stateMachines[0].stateMachineArn,
+        name: '<invalid name>',
+      };
+      const res = startExecution(params, stateMachines, executions);
+      expect(res).not.toBeDefined();
+    } catch (e) {
+      expect(e.message).toEqual(errors.startExecution.INVALID_NAME);
+    }
+  });
+
+  it('should fail because invalid input parameter', () => {
+    try {
+      const params = {
+        stateMachineArn: stateMachines[0].stateMachineArn,
+        input: 123,
+      };
+      const res = startExecution(params, stateMachines, executions);
+      expect(res).not.toBeDefined();
+    } catch (e) {
+      expect(e.message)
+        .toEqual(expect.stringContaining(errors.common.INVALID_PARAMETER_VALUE));
     }
   });
 
   it('should fail because invalid arn', () => {
     try {
       const params = {
-        stateMachineArn: 123,
+        stateMachineArn: 'invalid-arn',
+        name: uuid.v4(),
       };
-      startExecution(params, stateMachines, executions);
+      const res = startExecution(params, stateMachines, executions);
+      expect(res).not.toBeDefined();
     } catch (e) {
       expect(e.message).toEqual(errors.startExecution.INVALID_ARN);
     }
@@ -106,8 +165,10 @@ describe('Start execution', () => {
       const params = {
         stateMachineArn: stateMachines[0].stateMachineArn,
         input: '{ comment: This is my input"}',
+        name: uuid.v4(),
       };
-      startExecution(params, stateMachines, executions);
+      const res = startExecution(params, stateMachines, executions);
+      expect(res).not.toBeDefined();
     } catch (e) {
       expect(e.message).toEqual(errors.startExecution.INVALID_EXECUTION_INPUT);
     }
@@ -120,7 +181,8 @@ describe('Start execution', () => {
         name: 'my-second-chosen-name',
         input: '{ "comment": "This is my input"}',
       };
-      startExecution(params, stateMachines, executions);
+      const res = startExecution(params, stateMachines, executions);
+      expect(res).not.toBeDefined();
     } catch (e) {
       expect(e.message).toEqual(errors.startExecution.EXECUTION_ALREADY_EXISTS);
     }
@@ -132,7 +194,8 @@ describe('Start execution', () => {
         stateMachineArn: stateMachines[0].stateMachineArn,
         name: 'my-third-chosen-name',
       };
-      startExecution(params, stateMachines, executions);
+      const res = startExecution(params, stateMachines, executions);
+      expect(res).not.toBeDefined();
     } catch (e) {
       expect(e.message).toEqual(errors.startExecution.EXECUTION_ALREADY_EXISTS);
     }

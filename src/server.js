@@ -104,7 +104,7 @@ function start(config) {
       logger.log('-> %s: %O', action, req.body);
       const result = callAction(store.getState(), action, req.body);
       if (result.err) {
-        return res.status(400).send(result.err);
+        return res.status(400).send(result.err.message);
       }
       store.dispatch({
         type: action,

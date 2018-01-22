@@ -36,18 +36,6 @@ describe('Update state machine', () => {
     }
   });
 
-  it('should fail because missing required state machine arn parameter', () => {
-    try {
-      const params = {
-        definition: '{"StartAt":"UpdatedState","States":{"UpdatedState":{"Type":"Task","Resource":"arn:aws:lambda:us-east-1:000000000000:function:NewLambda","End":true}}}',
-      };
-      const res = updateStateMachine(params, stateMachines);
-      expect(res).not.toBeDefined();
-    } catch (e) {
-      expect(e.message).toEqual(expect.stringContaining(errors.common.MISSING_REQUIRED_PARAMETER));
-    }
-  });
-
   it('should fail because missing required role arn or definition parameter', () => {
     try {
       const stateMachineToUpdate = stateMachines[0];
@@ -66,7 +54,49 @@ describe('Update state machine', () => {
     try {
       const params = {
         stateMachineArn: 123,
-        roleArn: 'arn:aws:iam::0123456789:role/service-role/UpdatedRole-us-east-1',
+        roleArn: 'my-role',
+      };
+      const res = updateStateMachine(params, stateMachines);
+      expect(res).not.toBeDefined();
+    } catch (e) {
+      expect(e.message)
+        .toEqual(expect.stringContaining(errors.common.INVALID_PARAMETER_VALUE));
+    }
+  });
+
+  it('should fail because invalid role parameter', () => {
+    try {
+      const params = {
+        stateMachineArn: stateMachines[0].stateMachineArn,
+        roleArn: 123,
+      };
+      const res = updateStateMachine(params, stateMachines);
+      expect(res).not.toBeDefined();
+    } catch (e) {
+      expect(e.message)
+        .toEqual(expect.stringContaining(errors.common.INVALID_PARAMETER_VALUE));
+    }
+  });
+
+  it('should fail because invalid definition parameter', () => {
+    try {
+      const params = {
+        stateMachineArn: stateMachines[0].stateMachineArn,
+        definition: 123,
+      };
+      const res = updateStateMachine(params, stateMachines);
+      expect(res).not.toBeDefined();
+    } catch (e) {
+      expect(e.message)
+        .toEqual(expect.stringContaining(errors.common.INVALID_PARAMETER_VALUE));
+    }
+  });
+
+  it('should fail because invalid state machine arn', () => {
+    try {
+      const params = {
+        stateMachineArn: 'invalid-arn',
+        roleArn: 'my-role',
       };
       const res = updateStateMachine(params, stateMachines);
       expect(res).not.toBeDefined();
@@ -79,7 +109,7 @@ describe('Update state machine', () => {
   it('should fail because state machine does not exist', () => {
     try {
       const params = {
-        stateMachineArn: 'unknown-state-machine',
+        stateMachineArn: 'arn:aws:states:local:0123456789:stateMachine:unknown-state-machine',
         roleArn: 'arn:aws:iam::0123456789:role/service-role/UpdatedRole-us-east-1',
       };
       const res = updateStateMachine(params, stateMachines);

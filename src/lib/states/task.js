@@ -3,6 +3,7 @@ const AWS = require('aws-sdk');
 const State = require('./state');
 
 const addHistoryEvent = require('../actions/add-history-event');
+const { applyInputPath, applyResultPath, applyOutputPath } = require('../tools/path');
 
 const LAMBDA = 'lambda';
 const ACTIVITY = 'activity';
@@ -12,8 +13,6 @@ class Task extends State {
 
   async invokeLambda() {
     addHistoryEvent(this.execution, 'LAMBDA_FUNCTION_STARTED');
-
-    // TODO: retrieve Retry / Catch / TimeoutSeconds / ResultPath
     // TODO the config (regoin + lambda endpoint/port) should be in parameters
     AWS.config.region = 'us-east-1';
     const lambda = new AWS.Lambda();
@@ -29,7 +28,7 @@ class Task extends State {
   }
 
   async execute(input) {
-    this.input = input;
+    this.input = applyInputPath(input, this.state.InputPath);
 
     addHistoryEvent(this.execution, 'TASK_STATE_ENTERED', {
       input: this.input,
@@ -43,9 +42,24 @@ class Task extends State {
             input: this.input,
             resource: this.resource,
           });
-          const res = await this.invokeLambda();
-          if (res.Payload) {
-            const payload = JSON.parse(res.Payload);
+          let result;
+          let retries = 0;
+          do {
+            try {
+              result = await this.invokeLambda();
+            } catch (e) {
+              retries += 1;
+              if (retries <= this.maxAttempts) {
+                const seconds = this.intervalSeconds * (this.backoffRate ** retries);
+                await new Promise(resolve => setTimeout(resolve, seconds * 1000));
+              } else {
+                throw e;
+              }
+            }
+          } while (!result);
+
+          if (result.Payload) {
+            const payload = JSON.parse(result.Payload);
             if (payload.errorMessage) {
               throw new Error(payload.errorMessage);
             }
@@ -59,7 +73,13 @@ class Task extends State {
             cause: e.name,
             error: e.message,
           });
-          throw e;
+          // TODO: Implement ErrorEquals
+          // https://docs.aws.amazon.com/step-functions/latest/dg/amazon-states-language-errors.html#amazon-states-language-fallback-states
+          if (!this.state.Catch) {
+            throw e;
+          }
+          this.taskOutput = applyResultPath(this.input, this.state.Catch.ResultPath, e);
+          this.nextStateFromCatch = this.state.Catch.Next;
         }
         break;
       case ACTIVITY:
@@ -80,19 +100,42 @@ class Task extends State {
     };
   }
 
+  /* Return in priority
+   * 1. the next state defined in Catch field if failed
+   * 2. the next state name if found
+   * 3. true if end has been reached
+   * 4. false otherwise
+   */
+  get nextState() {
+    return this.nextStateFromCatch || this.state.Next || this.state.End;
+  }
+
   get output() {
-    return this.taskOutput;
+    const output = applyResultPath(this.input, this.state.ResultPath, this.taskOutput);
+    return applyOutputPath(output, this.state.OutputPath);
   }
 
   get arn() {
     return this.state.Resource;
   }
 
+  get backoffRate() {
+    return this.state.Retry ? (this.state.Retry.BackoffRate || 2) : 0;
+  }
+
+  get intervalSeconds() {
+    return this.state.Retry ? (this.state.Retry.IntervalSeconds || 1) : 0;
+  }
+
+  get maxAttempts() {
+    return this.state.Retry ? (this.state.Retry.MaxAttempts || 3) : 0;
+  }
+
   get type() {
     // lambda arn syntax: arn:partition:lambda:region:account:function:name
     const lambdaRegexp = /^arn:aws:lambda:.+:[0-9]+:function:.+$/;
     // activity arn syntax: arn:partition:states:region:account:activity:name
-    const activityRegexp = /^arn:aws:states:.+:[0-9]+:function:.+$/;
+    const activityRegexp = /^arn:aws:states:.+:[0-9]+:activity:.+$/;
     if (lambdaRegexp.exec(this.arn)) {
       return LAMBDA;
     } else if (activityRegexp.exec(this.arn)) {

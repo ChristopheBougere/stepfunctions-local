@@ -56,7 +56,7 @@ class StateMachine {
     } while (typeof nextStateName === 'string');
 
     return {
-      output: this.output,
+      output: lastIO,
     };
   }
 }
