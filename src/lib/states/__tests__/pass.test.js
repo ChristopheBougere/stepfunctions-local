@@ -97,18 +97,21 @@ describe('Pass', () => {
     }
   });
 
-  it('should execute a Pass state with a InputPath, ResultPath and OutputPath', async () => {
+  it('should execute a Pass state with a InputPath, Result, ResultPath and OutputPath', async () => {
     try {
       const state = {
         Type: 'Pass',
         InputPath: '$.object',
+        Result: {
+          result: 'this is my result !',
+        },
         ResultPath: '$.result',
-        OutputPath: '$.output',
+        OutputPath: '$.result',
         Next: 'NextState',
       };
       const passInstance = new Pass(state, execution, name);
       const { output, nextState } = await passInstance.execute(input);
-      expect(output.output.result).toEqual(input.object);
+      expect(output).toEqual(state.Result);
       expect(nextState).toEqual(state.Next);
     } catch (e) {
       expect(e).not.toBeDefined();

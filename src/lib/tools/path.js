@@ -1,3 +1,5 @@
+const jp = require('jsonpath');
+
 function createNestedObject(object, keys, defaultValue) {
   const nestedObject = object;
   if (keys.length === 1) {
@@ -9,11 +11,26 @@ function createNestedObject(object, keys, defaultValue) {
   return nestedObject;
 }
 
-function applyReferencePath(object, path, value) {
+function applyJsonPath(object, path = '$') {
+  return jp.value(object, path) || {};
+}
+
+function applyInputPath(object, path) {
+  return applyJsonPath(object, path);
+}
+
+function applyOutputPath(object, path) {
+  return applyJsonPath(object, path);
+}
+
+// TODO: use a lib to implement reference paths
+function applyResultPath(object, path = '$', value) {
   const regex = /[^$.[\]]+/g; // regexp to split the reference paths
-  return path === '$' ? value : createNestedObject({}, path.match(regex), value);
+  return path === '$' ? value : Object.assign({}, object, createNestedObject({}, path.match(regex), value));
 }
 
 module.exports = {
-  applyReferencePath,
+  applyInputPath,
+  applyOutputPath,
+  applyResultPath,
 };
