@@ -90,4 +90,46 @@ describe('Wait', () => {
       expect(e).not.toBeDefined();
     }
   });
+
+  it('should execute a wait state with InputPath', async () => {
+    try {
+      const state = {
+        Type: 'Wait',
+        Seconds: secondsToWait,
+        InputPath: '$.filter',
+        Next: 'NextState',
+      };
+      const input = {
+        filter: {
+          foo: 'bar',
+        },
+      };
+      const waitInstance = new Wait(state, execution, 'WaitState');
+      const { output } = await waitInstance.execute(input);
+      expect(output).toMatchObject(input.filter);
+    } catch (e) {
+      expect(e).not.toBeDefined();
+    }
+  });
+
+  it('should execute a wait state with OutputPath', async () => {
+    try {
+      const state = {
+        Type: 'Wait',
+        Seconds: secondsToWait,
+        OutputPath: '$.filter',
+        Next: 'NextState',
+      };
+      const input = {
+        filter: {
+          foo: 'bar',
+        },
+      };
+      const waitInstance = new Wait(state, execution, 'WaitState');
+      const { output } = await waitInstance.execute(input);
+      expect(output).toMatchObject(input.filter);
+    } catch (e) {
+      expect(e).not.toBeDefined();
+    }
+  });
 });
