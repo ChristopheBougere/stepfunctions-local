@@ -20,9 +20,9 @@ class State {
 
   /* Default behaviour: return input filtered by OutputPath
    */
-   get output() {
-     return applyOutputPath(this.input, this.state.OutputPath);
-   }
+  get output() {
+    return applyOutputPath(this.input, this.state.OutputPath);
+  }
 
   /* Default behaviour: return in priority
    * 1. the next state name if found

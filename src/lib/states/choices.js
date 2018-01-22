@@ -2,7 +2,7 @@ const jp = require('jsonpath');
 
 const State = require('./state');
 const addHistoryEvent = require('../actions/add-history-event');
-const { applyInputPath, applyResultPath, applyOutputPath } = require('../tools/path');
+const { applyInputPath } = require('../tools/path');
 
 class Choices extends State {
   async execute(input) {

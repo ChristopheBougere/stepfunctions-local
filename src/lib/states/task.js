@@ -3,6 +3,7 @@ const AWS = require('aws-sdk');
 const State = require('./state');
 
 const addHistoryEvent = require('../actions/add-history-event');
+const { applyInputPath, applyOutputPath } = require('../tools/path');
 
 const LAMBDA = 'lambda';
 const ACTIVITY = 'activity';
@@ -29,7 +30,7 @@ class Task extends State {
   }
 
   async execute(input) {
-    this.input = input;
+    this.input = applyInputPath(input, this.state.InputPath);
 
     addHistoryEvent(this.execution, 'TASK_STATE_ENTERED', {
       input: this.input,
@@ -81,7 +82,7 @@ class Task extends State {
   }
 
   get output() {
-    return this.taskOutput;
+    return applyOutputPath(this.taskOutput, this.state.OutputPath);
   }
 
   get arn() {
