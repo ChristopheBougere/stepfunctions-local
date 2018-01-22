@@ -3,7 +3,7 @@ const AWS = require('aws-sdk');
 const State = require('./state');
 
 const addHistoryEvent = require('../actions/add-history-event');
-const { applyInputPath, applyOutputPath } = require('../tools/path');
+const { applyInputPath, applyResultPath, applyOutputPath } = require('../tools/path');
 
 const LAMBDA = 'lambda';
 const ACTIVITY = 'activity';
