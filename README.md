@@ -1,13 +1,13 @@
-# stepfunctions-local
+# **stepfunctions-local**
 
 [![license](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://github.com/airware/stepfunctions-local/blob/master/LICENSE)
 [![CircleCI](https://circleci.com/gh/airware/stepfunctions-local/tree/master.svg?style=shield&circle-token=75641357fe0d5c8f643d714aa37009fa65037f40)](https://circleci.com/gh/airware/stepfunctions-local/tree/master)
 [![codecov](https://codecov.io/gh/airware/stepfunctions-local/branch/master/graph/badge.svg)](https://codecov.io/gh/airware/stepfunctions-local)
 [![Dependency Status](https://www.versioneye.com/user/projects/5a571bfa0fb24f1a8fb2861d/badge.svg?style=flat)](https://www.versioneye.com/user/projects/5a571bfa0fb24f1a8fb2861d)
 
-### :warning: **Important**: This package is a work in progress. It is not ready to be used yet. Any contribution is warm welcome
+#### :warning: **Important** : This package is a work in progress. It is not ready to be used yet. Any contribution is warm welcome
 
-**Important:** this package is a work in progress. It is not ready to be used yet. Any contribution is warm welcome!
+Stepfunctions-local provides a local AWS Step Functions server.
 
 ## Prerequisites
 
@@ -17,16 +17,22 @@
 ## Install
 
 ```bash
-npm install --save stepfunctions-local
+# Use it via command lines
+npm install -g stepfunctions-local
+
+# Use it in your code
+npm install stepfunctions-local
 ```
 
-## Start local server
+## How to use it ?
+
+### Use it via command lines
+
+Start local server
 
 ```bash
 npm run start
 ```
-
-## Play with it
 
 List state machines
 ```bash
@@ -68,6 +74,14 @@ Get execution history
 aws stepfunctions --endpoint http://localhost:4599 get-execution-history --execution-arn arn:aws:states:local:0123456789:execution:my-state-machine:my-execution
 ```
 
+### Use it in your code
+
+TODO
+
+## Recommandations
+
+We recommand to use [Localstack](https://github.com/localstack/localstack) to run you lambdas.
+
 ## Compatibility with AWS CLI
 
 ### Actions compatibility
@@ -104,6 +118,20 @@ aws stepfunctions --endpoint http://localhost:4599 get-execution-history --execu
 | ***Succeed*** | * |
 | ***Fail*** | * |
 | ***Parallel*** | *ErrorEquals* parameter from *Catch* field not implemented yet. |
+
+## Want to contribute ?
+
+Wow, that's great !  
+Feedback, bug reports and pull requests are more than welcome !
+
+```bash
+$> npm run lint
+$> npm run test
+```
+
+## See also
+- [AWS Step Functions Documentation](https://docs.aws.amazon.com/step-functions/latest/dg/welcome.html)
+- [AWS Step Functions SDK](https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/StepFunctions.html)
 
 ## TODO
 
