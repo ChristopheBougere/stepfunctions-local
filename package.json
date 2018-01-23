@@ -30,7 +30,6 @@
   "dependencies": {
     "asl-validator": "^1.0.6",
     "aws-sdk": "^2.176.0",
-    "aws-sdk-mock": "^1.7.0",
     "body-parser": "^1.18.2",
     "debug": "^3.1.0",
     "express": "^4.16.2",
