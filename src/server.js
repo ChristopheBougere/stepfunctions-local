@@ -18,7 +18,7 @@ const listExecutions = require('./lib/actions/list-executions');
 const describeExecution = require('./lib/actions/describe-execution');
 const getExecutionHistory = require('./lib/actions/get-execution-history');
 
-function callAction(state, action, params) {
+function callAction(state, action, params, config) {
   try {
     switch (action) {
       // actions related to state machine
@@ -36,7 +36,7 @@ function callAction(state, action, params) {
         return deleteStateMachine(params, state.stateMachines);
       // actions related to executions
       case actions.START_EXECUTION:
-        return startExecution(params, state.stateMachines, state.executions);
+        return startExecution(params, state.stateMachines, state.executions, config);
       case actions.STOP_EXECUTION:
         return stopExecution(params, state.executions);
       case actions.LIST_EXECUTIONS:
@@ -102,7 +102,7 @@ function start(config) {
         return res.status(400).send({ error: 'Unknown action' });
       }
       logger.log('-> %s: %O', action, req.body);
-      const result = callAction(store.getState(), action, req.body);
+      const result = callAction(store.getState(), action, req.body, config);
       if (result.err) {
         return res.status(400).send(result.err.message);
       }

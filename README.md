@@ -7,7 +7,7 @@
 
 A local AWS Step Functions server
 
-**Important:** this package is a work in progress. It is not ready to be used yet. Any contribution is warm welcomed!
+**Important:** this package is a work in progress. It is not ready to be used yet. Any contribution is warm welcome!
 
 ## Prerequisites
 

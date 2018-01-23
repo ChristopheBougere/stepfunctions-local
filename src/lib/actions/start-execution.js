@@ -11,7 +11,7 @@ const addHistoryEvent = require('./add-history-event');
 
 const SAME_NAME_MAX_DAYS = 90;
 
-function startExecution(params, stateMachines, executions) {
+function startExecution(params, stateMachines, executions, config) {
   const { name: paramsName } = params;
 
   /* check request parameters */
@@ -103,7 +103,7 @@ function startExecution(params, stateMachines, executions) {
   };
 
   // Execute state machine
-  const stateMachine = new StateMachine(match.definition, execution);
+  const stateMachine = new StateMachine(match.definition, execution, config);
   process.nextTick(async () => {
     try {
       addHistoryEvent(execution, 'EXECUTION_STARTED', {
