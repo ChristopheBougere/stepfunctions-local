@@ -75,9 +75,9 @@ $> aws stepfunctions --endpoint http://localhost:4599 describe-state-machine-for
 $> aws stepfunctions --endpoint http://localhost:4599 get-execution-history --execution-arn arn:aws:states:local:0123456789:execution:my-state-machine:my-execution
 ```
 
-## Recommandations
+## Recommendations
 
-We recommand to use [Localstack](https://github.com/localstack/localstack) to run you lambdas.
+We recommend to use [Localstack](https://github.com/localstack/localstack) to run you lambdas.
 
 ## Compatibility with AWS CLI
 
