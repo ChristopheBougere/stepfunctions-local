@@ -5,44 +5,108 @@
 [![codecov](https://codecov.io/gh/airware/stepfunctions-local/branch/master/graph/badge.svg)](https://codecov.io/gh/airware/stepfunctions-local)
 [![Dependency Status](https://www.versioneye.com/user/projects/5a571bfa0fb24f1a8fb2861d/badge.svg?style=flat)](https://www.versioneye.com/user/projects/5a571bfa0fb24f1a8fb2861d)
 
-A local AWS Step Functions server
+### :warning: **Important**: This package is a work in progress. It is not ready to be used yet. Any contribution is warm welcome
 
 **Important:** this package is a work in progress. It is not ready to be used yet. Any contribution is warm welcome!
 
 ## Prerequisites
 
-* Node 8 or greater
+* [AWS Command Line Interface (CLI)](https://aws.amazon.com/cli/)
+* [Node 8 or greater](https://nodejs.org/)
 
 ## Install
+
 ```bash
-npm install
+npm install --save stepfunctions-local
 ```
 
 ## Start local server
+
 ```bash
 npm run start
 ```
 
-## Test
-```bash
-npm run test
-```
-
-## Lint
-```bash
-npm run lint
-```
-
 ## Play with it
-```bash
-# List state machines
-aws stepfunctions --endpoint http://localhost:4599 list-state-machines --cli-input-json '{"maxResults": 200}'
 
-# Create a new state machine
-aws stepfunctions --endpoint http://localhost:4599 create-state-machine --name name --definition '{"Comment":"A Hello World example of the Amazon States Language using a Pass state","StartAt":"HelloWorld","States":{"HelloWorld":{"Type":"Pass","Result":"Hello World!","End":true}}}' --role-arn arn:aws:iam::0123456789:role/service-role/StatesExecutionRole-us-east-1
+List state machines
+```bash
+aws stepfunctions --endpoint http://localhost:4599 list-state-machines
 ```
+
+Create a new state machine
+```bash
+aws stepfunctions --endpoint http://localhost:4599 create-state-machine --name my-state-machine --definition '{"Comment":"A Hello World example of the Amazon States Language using a Pass state","StartAt":"HelloWorld","States":{"HelloWorld":{"Type":"Pass","End":true}}}' --role-arn arn:aws:iam::0123456789:role/service-role/MyRole
+```
+
+Describe state machine
+```bash
+aws stepfunctions --endpoint http://localhost:4599 describe-state-machine --state-machine-arn arn:aws:states:local:0123456789:stateMachine:my-state-machine
+```
+
+Start state machine execution
+```bash
+aws stepfunctions --endpoint http://localhost:4599 start-execution --state-machine-arn arn:aws:states:local:0123456789:stateMachine:my-state-machine --name my-execution --input '{"comment":"I am a great input !"}'
+```
+
+List state machine executions
+```bash
+aws stepfunctions --endpoint http://localhost:4599 list-executions --state-machine-arn arn:aws:states:local:0123456789:stateMachine:my-state-machine
+```
+
+Describe execution
+```bash
+aws stepfunctions --endpoint http://localhost:4599 describe-execution --execution-arn arn:aws:states:local:0123456789:execution:my-state-machine:my-execution
+```
+
+Describe state machine related to execution
+```bash
+aws stepfunctions --endpoint http://localhost:4599 describe-state-machine-for-execution --execution-arn arn:aws:states:local:0123456789:execution:my-state-machine:my-execution
+```
+
+Get execution history
+```bash
+aws stepfunctions --endpoint http://localhost:4599 get-execution-history --execution-arn arn:aws:states:local:0123456789:execution:my-state-machine:my-execution
+```
+
+## Compatibility with AWS CLI
+
+### Actions compatibility
+
+| Actions | Support |
+| ------ | ------ |
+| ***CreateActivity*** | At this moment, stepfunctions-local *does not support* activities |
+| ***CreateStateMachine***  | Following errors are not thrown: *StateMachineDeleting*, *StateMachineLimitExceeded* |
+| ***DeleteActivity*** | At this moment, stepfunctions-local *does not support* activities |
+| ***DeleteStateMachine*** | * |
+| ***DescribeActivity*** | At this moment, stepfunctions-local *does not support* activities |
+| ***DescribeStateMachine*** | * |
+| ***DescribeStateMachineForExecution*** | * |
+| ***GetActivityTask*** | At this moment, stepfunctions-local *does not support* activities |
+| ***GetExecutionHistory*** | * |
+| ***ListActivities*** | At this moment, stepfunctions-local *does not support* activities |
+| ***ListExecutions*** | * |
+| ***ListStateMachines*** | * |
+| ***SendTaskFailure*** | At this moment, stepfunctions-local *does not support* activities |
+| ***SendTaskHeartbeat*** | At this moment, stepfunctions-local *does not support* activities |
+| ***SendTaskSuccess*** | At this moment, stepfunctions-local *does not support* activities |
+| ***StartExecution*** | Following errors are not thrown: *ExecutionLimitExceeded* |
+| ***StopExecution*** | * |
+| ***UpdateStateMachine*** | Following errors are not thrown: *StateMachineDeleting* |
+
+### States compatibility
+
+| States | Support |
+| ------ | ------ |
+| ***Pass*** | * |
+| ***Task*** | At this moment, stepfunctions-local *does not support* following fields *TimeoutSeconds*, *HeartbeatSeconds*. *ErrorEquals* parameter from *Catch* field not implemented yet. |
+| ***Choice*** | * |
+| ***Wait*** | * |
+| ***Succeed*** | * |
+| ***Fail*** | * |
+| ***Parallel*** | *ErrorEquals* parameter from *Catch* field not implemented yet. |
 
 ## TODO
+
 - Check headers and HTTP errors to be 100% AWS compliant
 - Unit tests
 - Validate JSON path
