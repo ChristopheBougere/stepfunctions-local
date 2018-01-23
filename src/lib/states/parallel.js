@@ -19,7 +19,7 @@ class Parallel extends State {
             // NOTE: this require here because of circular depencies
             // between StateMachine and Parallel
             const StateMachine = require('./state-machine'); // eslint-disable-line global-require
-            const branch = new StateMachine(branchObj, this.execution);
+            const branch = new StateMachine(branchObj, this.execution, this.config);
 
             const result = await branch.execute(this.input);
             const output = applyResultPath(this.input, this.state.ResultPath, result.output);

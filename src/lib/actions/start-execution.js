@@ -103,7 +103,7 @@ function startExecution(params, stateMachines, executions, config) {
   };
 
   // Execute state machine
-  const stateMachine = new StateMachine(stateMachineObj.definition, execution, config);
+  const stateMachine = new StateMachine(match.definition, execution, config);
   process.nextTick(async () => {
     try {
       addHistoryEvent(execution, 'EXECUTION_STARTED', {

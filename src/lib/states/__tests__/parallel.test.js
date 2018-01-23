@@ -38,7 +38,7 @@ describe('Parallel', () => {
       }],
     };
     const input = {};
-    const parallelInstance = new Parallel(state, execution, 'ParallelState');
+    const parallelInstance = new Parallel(state, execution, 'ParallelState', {});
     const { output, nextState } = await parallelInstance.execute(input);
     expect(output).toHaveLength(2);
     expect(nextState).toEqual('Final State');
@@ -83,7 +83,7 @@ describe('Parallel', () => {
         foo: 'bar',
       },
     };
-    const parallelInstance = new Parallel(state, execution, 'ParallelState');
+    const parallelInstance = new Parallel(state, execution, 'ParallelState', {});
     const { output, nextState } = await parallelInstance.execute(input);
     expect(output[0]).toEqual(state.Branches[0].States.Pass.Result);
     expect(output[1]).toEqual(state.Branches[1].States.Pass.Result);
@@ -131,8 +131,13 @@ describe('Parallel', () => {
           IntervalSeconds: 1,
         },
       };
+      const config = {
+        lambdaEndpoint: 'my-endpoint',
+        lambdaPort: 1234,
+        lambdaRegion: 'my-region',
+      };
       const input = {};
-      const parallelInstance = new Parallel(state, execution, 'ParallelState');
+      const parallelInstance = new Parallel(state, execution, 'ParallelState', config);
       const res = await parallelInstance.execute(input);
       expect(res).not.toBeDefined();
       AWS.restore();
@@ -184,7 +189,12 @@ describe('Parallel', () => {
         },
       };
       const input = {};
-      const parallelInstance = new Parallel(state, execution, 'ParallelState');
+      const config = {
+        lambdaEndpoint: 'my-endpoint',
+        lambdaPort: 1234,
+        lambdaRegion: 'my-region',
+      };
+      const parallelInstance = new Parallel(state, execution, 'ParallelState', config);
       const { output, nextState } = await parallelInstance.execute(input);
       expect(output.myError.message).toEqual('I am a failing Lambda...');
       expect(nextState).toEqual('CatchState');

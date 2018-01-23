@@ -1,10 +1,11 @@
 const { applyOutputPath } = require('../tools/path');
 
 class State {
-  constructor(state, execution, name) {
+  constructor(state, execution, name, config) {
     this.state = state;
     this.execution = execution;
     this.name = name;
+    this.config = config;
   }
 
   /* Default behaviour: do nothing

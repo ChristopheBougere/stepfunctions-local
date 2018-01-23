@@ -11,11 +11,6 @@ const ACTIVITY = 'activity';
 class Task extends State {
   // TODO: Add TASK_STATE_ABORTED event to execution's history when aborted
 
-  constructor(state, execution, name, config) {
-    super(state, execution, name);
-    this.config = config;
-  }
-
   async invokeLambda() {
     addHistoryEvent(this.execution, 'LAMBDA_FUNCTION_STARTED');
     // TODO: retrieve Retry / Catch / TimeoutSeconds / ResultPath

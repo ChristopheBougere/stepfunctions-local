@@ -21,10 +21,12 @@ class StateMachine {
     switch (state.Type) {
       case 'Choice': return new Choices(state, execution, name);
       case 'Fail': return new Fail(state, execution, name);
-      case 'Parallel': return new Parallel(state, execution, name);
+      case 'Parallel': return new Parallel(state, execution, name, config);
       case 'Pass': return new Pass(state, execution, name);
       case 'Succeed': return new Succeed(state, execution, name);
-      case 'Task': return new Task(state, execution, name, config);
+      case 'Task': {
+        return new Task(state, execution, name, config)
+      };
       case 'Wait': return new Wait(state, execution, name);
       default: throw new Error(`Invalid state type: ${state.Type}`);
     }
@@ -47,6 +49,7 @@ class StateMachine {
           this.findStateByName(currentStateName),
           this.execution,
           currentStateName,
+          this.config,
         );
         const res = await nextState.execute(lastIO);
         lastIO = res.output;
