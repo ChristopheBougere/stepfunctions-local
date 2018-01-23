@@ -132,8 +132,7 @@ describe('Parallel', () => {
         },
       };
       const config = {
-        lambdaEndpoint: 'my-endpoint',
-        lambdaPort: 1234,
+        lambdaEndpoint: 'http://my-endpoint:9999',
         lambdaRegion: 'my-region',
       };
       const input = {};
@@ -190,8 +189,7 @@ describe('Parallel', () => {
       };
       const input = {};
       const config = {
-        lambdaEndpoint: 'my-endpoint',
-        lambdaPort: 9999,
+        lambdaEndpoint: 'http://my-endpoint:9999',
         lambdaRegion: 'my-region',
       };
       const parallelInstance = new Parallel(state, execution, 'ParallelState', config);

@@ -16,8 +16,7 @@ describe('Test mocked lambda task', () => {
   };
   const name = 'MyTask';
   const config = {
-    lambdaEndpoint: 'my-endpoint',
-    lambdaPort: 9999,
+    lambdaEndpoint: 'http://my-endpoint:9999',
     lambdaRegion: 'my-region',
   };
   const task = new Task(state, execution, name, config);
@@ -90,8 +89,8 @@ describe.skip('Test lambda task', () => {
   };
   const name = 'MyTask';
   const config = {
-    lambdaEndpoint: 'http://localhost',
-    lambdaPort: 4574,
+    lambdaEndpoint: 'http://localhost:4574',
+    lambdaRegion: 'us-east-1',
   };
 
   it('should execute a simple lambda', async () => {

@@ -15,8 +15,8 @@ class Task extends State {
   async invokeLambda() {
     addHistoryEvent(this.execution, 'LAMBDA_FUNCTION_STARTED');
     const lambdaConfig = {};
-    if (this.config.lambdaEndpoint && this.config.lambdaPort) {
-      lambdaConfig.endpoint = `${this.config.lambdaEndpoint}:${this.config.lambdaPort}`;
+    if (this.config.lambdaEndpoint) {
+      lambdaConfig.endpoint = this.config.lambdaEndpoint;
     }
     if (this.config.lambdaRegion) {
       lambdaConfig.region = this.config.lambdaRegion;
