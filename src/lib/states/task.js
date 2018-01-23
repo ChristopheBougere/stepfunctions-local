@@ -10,15 +10,18 @@ const ACTIVITY = 'activity';
 
 class Task extends State {
   // TODO: Add TASK_STATE_ABORTED event to execution's history when aborted
+  // TODO: Implement TimeoutSeconds
 
   async invokeLambda() {
     addHistoryEvent(this.execution, 'LAMBDA_FUNCTION_STARTED');
-    // TODO: retrieve Retry / Catch / TimeoutSeconds / ResultPath
-    // TODO: region should be in the config
-    AWS.config.region = 'us-east-1';
-    const lambda = new AWS.Lambda({
-      endpoint: `${this.config.lambdaEndpoint}:${this.config.lambdaPort}`,
-    });
+    const lambdaConfig = {};
+    if (this.config.lambdaEndpoint && this.config.lambdaPort) {
+      lambdaConfig.endpoint = `${this.config.lambdaEndpoint}:${this.config.lambdaPort}`;
+    }
+    if (this.config.lambdaRegion) {
+      lambdaConfig.region = this.config.lambdaRegion;
+    }
+    const lambda = new AWS.Lambda(lambdaConfig);
     const params = {
       FunctionName: this.arn,
       Payload: JSON.stringify(this.input),

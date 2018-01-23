@@ -18,6 +18,7 @@ describe('Test mocked lambda task', () => {
   const config = {
     lambdaEndpoint: 'my-endpoint',
     lambdaPort: 9999,
+    lambdaRegion: 'my-region',
   };
   const task = new Task(state, execution, name, config);
 
@@ -69,11 +70,7 @@ describe('Test task of unknown type', () => {
     events: [],
   };
   const name = 'MyTask';
-  const config = {
-    lambdaEndpoint: 'my-endpoint',
-    lambdaPort: 9999,
-  };
-  const task = new Task(state, execution, name, config);
+  const task = new Task(state, execution, name, {});
 
   it('should mock the failure of the execution of the lambda', async () => {
     try {
@@ -131,6 +128,31 @@ describe.skip('Test lambda task', () => {
         type: 'Public',
         output: 'Public',
       });
+      expect(res.nextState).toEqual('NextState');
+    } catch (e) {
+      expect(e).not.toBeDefined();
+    }
+  });
+});
+
+describe('Test activity task', () => {
+  const state = {
+    Type: 'Task',
+    Resource: 'arn:aws:states:us-east-1:000000000000:activity:MyActivity',
+    Next: 'NextState',
+  };
+  const execution = {
+    executionArn: 'my-execution-arn',
+    events: [],
+  };
+  const name = 'MyTask';
+  const task = new Task(state, execution, name, {});
+
+  it('should successfully execute the activity', async () => {
+    try {
+      const input = { comment: 'input' };
+      const res = await task.execute(input);
+      expect(res.output).toMatchObject(input);
       expect(res.nextState).toEqual('NextState');
     } catch (e) {
       expect(e).not.toBeDefined();
