@@ -1,4 +1,4 @@
-#!/usr/bin/env node
+#!/usr/bin/env DEBUG=stepfunctions-local:* node
 
 const program = require('commander');
 const packageJson = require('./../package.json');
