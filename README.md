@@ -9,6 +9,10 @@
 
 Stepfunctions-local provides a local AWS Step Functions server.
 
+This package only aims at replacing AWS Step Functions in a local context.
+
+Its API is totally compliant with AWS service, thus you can use it for your tests.
+
 ## Prerequisites
 
 * [AWS Command Line Interface (CLI)](https://aws.amazon.com/cli/)
@@ -27,9 +31,7 @@ $> npm install --save stepfunctions-local
 
 ## How to use it ?
 
-### Use it via command lines
-
-#### Start a server
+### Start a server
 
 Using command line
 ```bash
@@ -43,11 +45,11 @@ const stepfunctionsLocal = require('stepfunctions-local');
 stepFunctionsLocal.start({
   port: 4599,
   lambdaEndpoint: 'http://localhost:4574',
-  lambdaRegion: 'us-east-1',
+  lambdaRegion: 'localhost',
 });
 ```
 
-#### Play with it
+### Play with it
 
 ```bash
 # List state machines
@@ -74,10 +76,6 @@ $> aws stepfunctions --endpoint http://localhost:4599 describe-state-machine-for
 # Get execution history
 $> aws stepfunctions --endpoint http://localhost:4599 get-execution-history --execution-arn arn:aws:states:local:0123456789:execution:my-state-machine:my-execution
 ```
-
-## Recommendations
-
-We recommend to use [Localstack](https://github.com/localstack/localstack) to run you lambdas.
 
 ## Compatibility with AWS CLI
 
@@ -116,11 +114,18 @@ We recommend to use [Localstack](https://github.com/localstack/localstack) to ru
 | ***Fail*** | * |
 | ***Parallel*** | *ErrorEquals* parameter from *Catch* field not implemented yet. |
 
+## Recommendations
+
+We recommend to use [Localstack](https://github.com/localstack/localstack) to run you lambdas.
+
+Localstack provides an easy-to-use framework for developing Cloud applications. It locally runs several AWS services (including AWS Lambda).
+
 ## Want to contribute ?
 
 Wow, that's great !  
 Feedback, bug reports and pull requests are more than welcome !
 
+You can test your code with :
 ```bash
 $> npm run lint
 $> npm run test
@@ -132,7 +137,6 @@ $> npm run test
 
 ## TODO
 
-- Check headers and HTTP errors to be 100% AWS compliant
-- Unit tests
 - Validate JSON path
-- Actions related to activities
+- Implement Actions related to activities
+- Add execution abortion related history events
