@@ -2,7 +2,7 @@
   "name": "stepfunctions-local",
   "version": "1.0.0",
   "description": "A local AWS Step Functions server",
-  "main": "src/index.js",
+  "main": "./src/server.js",
   "bin": {
     "stepfunctions-local": "./bin/index.js"
   },
