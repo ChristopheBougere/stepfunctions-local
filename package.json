@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "A local AWS Step Functions server",
   "main": "src/index.js",
+  "bin": {
+    "stepfunctions-local": "./bin/index.js"
+  },
   "scripts": {
     "start": "DEBUG=stepfunctions-local:* node src/index.js",
     "lint": "./node_modules/eslint/bin/eslint.js src --max-warnings 0",
@@ -31,6 +34,7 @@
     "asl-validator": "^1.0.6",
     "aws-sdk": "^2.176.0",
     "body-parser": "^1.18.2",
+    "commander": "^2.13.0",
     "debug": "^3.1.0",
     "express": "^4.16.2",
     "jsonpath": "^1.0.0",
