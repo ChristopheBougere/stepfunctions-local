@@ -3,7 +3,6 @@
 const program = require('commander');
 const packageJson = require('./../package.json');
 const server = require('./../src/server');
-const params = require('./../src/params');
 
 program
   .version(packageJson.version)
@@ -15,11 +14,20 @@ program
 
 const command = program.args[0];
 switch (command) {
+  case undefined:
+    console.error('Error: Please enter a command.');
+    process.exit(1);
+    break;
   case 'start': {
-    const config = {
-      port: program.port || params.DEFAULT_PORT,
-      lambdaEndpoint: program.lambdaEndpoint || params.DEFAULT_LAMBDA_ENDPOINT,
-      lambdaRegion: program.lambdaRegion || params.DEFAULT_LAMBDA_REGION,
+    const config = {};
+    if (undefined !== program.port) {
+      config.port = program.port;
+    }
+    if (undefined !== program.lambdaEndpoint) {
+      config.lambdaEndpoint = program.lambdaEndpoint;
+    }
+    if (undefined !== program.lambdaRegion) {
+      config.lambdaRegion = program.lambdaRegion;
     };
     console.log('Starting server...');
     server.start(config);
@@ -27,4 +35,5 @@ switch (command) {
   }
   default:
     console.log(`Error: Unknown command "${command}".`);
+    process.exit(1);
 }

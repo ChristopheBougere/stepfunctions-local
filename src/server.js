@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 const logger = require('./lib/logger')('stepfunctions-local');
 const { actions, errors } = require('./constants');
 const store = require('./store');
+const params = require('./params');
 
 const listStateMachines = require('./lib/actions/list-state-machines');
 const createStateMachine = require('./lib/actions/create-state-machine');
@@ -18,33 +19,34 @@ const listExecutions = require('./lib/actions/list-executions');
 const describeExecution = require('./lib/actions/describe-execution');
 const getExecutionHistory = require('./lib/actions/get-execution-history');
 
-function callAction(state, action, params, config) {
+function callAction(state, action, actionParams, config) {
   try {
+    const { stateMachines, executions } = state;
     switch (action) {
       // actions related to state machine
       case actions.CREATE_STATE_MACHINE:
-        return createStateMachine(params, state.stateMachines);
+        return createStateMachine(actionParams, stateMachines);
       case actions.LIST_STATE_MACHINES:
-        return listStateMachines(params, state.stateMachines);
+        return listStateMachines(actionParams, stateMachines);
       case actions.DESCRIBE_STATE_MACHINE:
-        return describeStateMachine(params, state.stateMachines);
+        return describeStateMachine(actionParams, stateMachines);
       case actions.DESCRIBE_STATE_MACHINE_FOR_EXECUTION:
-        return describeStateMachineForExecution(params, state.stateMachines, state.executions);
+        return describeStateMachineForExecution(actionParams, stateMachines, executions);
       case actions.UPDATE_STATE_MACHINE:
-        return updateStateMachine(params, state.stateMachines);
+        return updateStateMachine(actionParams, stateMachines);
       case actions.DELETE_STATE_MACHINE:
-        return deleteStateMachine(params, state.stateMachines);
+        return deleteStateMachine(actionParams, stateMachines);
       // actions related to executions
       case actions.START_EXECUTION:
-        return startExecution(params, state.stateMachines, state.executions, config);
+        return startExecution(actionParams, stateMachines, executions, config);
       case actions.STOP_EXECUTION:
-        return stopExecution(params, state.executions);
+        return stopExecution(actionParams, executions);
       case actions.LIST_EXECUTIONS:
-        return listExecutions(params, state.stateMachines, state.executions);
+        return listExecutions(actionParams, stateMachines, executions);
       case actions.DESCRIBE_EXECUTION:
-        return describeExecution(params, state.executions);
+        return describeExecution(actionParams, executions);
       case actions.GET_EXECUTION_HISTORY:
-        return getExecutionHistory(params, state.executions);
+        return getExecutionHistory(actionParams, executions);
       // actions related to activities
       case actions.CREATE_ACTIVITY:
         // TODO
@@ -79,7 +81,13 @@ function callAction(state, action, params, config) {
   }
 }
 
-function start(config) {
+function start(config = {}) {
+  const fullConfig = Object.assign({
+    port: params.DEFAULT_PORT,
+    lambdaEndpoint: params.DEFAULT_LAMBDA_ENDPOINT,
+    lambdaRegion: params.DEFAULT_LAMBDA_REGION,
+  }, config);
+
   // Server creation
   const app = express();
   app.use(bodyParser.json({
@@ -102,7 +110,7 @@ function start(config) {
         return res.status(400).send({ error: 'Unknown action' });
       }
       logger.log('-> %s: %O', action, req.body);
-      const result = callAction(store.getState(), action, req.body, config);
+      const result = callAction(store.getState(), action, req.body, fullConfig);
       if (result.err) {
         return res.status(400).send(result.err.message);
       }
@@ -117,8 +125,8 @@ function start(config) {
     }
   });
 
-  app.listen(config.port, () => {
-    logger.log('stepfunctions-local started, listening on port %s', config.port);
+  app.listen(fullConfig.port, () => {
+    logger.log('stepfunctions-local started, listening on port %s', fullConfig.port);
   });
 }
 
