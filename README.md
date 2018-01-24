@@ -13,13 +13,42 @@ This package only aims at replacing AWS Step Functions in a local context.
 
 Its API is totally compliant with AWS service, thus you can use it for your tests.
 
-## Prerequisites
+## Why **stepfunctions-local**?
+- Ease development and tests. You don't have to upload all your resources on AWS to run a state machine.
+- 100% compliant with AWS API. You can query it using the AWS cli by changing the endpoint. Errors and responses follow the same format.
+- Works well with [localstack](https://github.com/localstack/localstack).
 
+## Use cases
+### I want to run a local state machine with activities
+:warning: Activities are not available yet in this package, but they will be soon.
+You only need to configure your activity worker to use this `stepfunctions` instance. In javascript:
+```js
+AWS.config.stepfunctions = {
+  region: 'localhost',
+  endpoint: 'http://localhost:4599',
+}
+```
+Then, start `stepfunctions-local` server and you will be able to execute requests to StepFunctions API (`GetActivityTask`, `SendTaskSuccess`, ...).
+
+### I want to run a local state machine with distant lambdas
+Simply configure your lambda endpoint and region when starting the server:
+```bash
+$> stepfunctions-local start --lambda-endpoint http://hostname.com:1337 --lambda-region my-region
+```
+`stepfunctions-local` will directly query lambda using this configuration.
+
+### I want to run a local state machine with local lambdas
+`stepfunctions-local` does not aim to emulate lambda. To do this you need a local lambda server that is compliant to AWS API. We recommand to use [localstack](https://github.com/localstack/localstack) for that. Start a local lambda server using `localstack`, then configure your lambda endpoint and region when starting the server:
+```bash
+$> stepfunctions-local start --lambda-endpoint http://localhost:4574 --lambda-region us-east-1
+```
+`stepfunctions-local` will directly query lambda using this configuration.
+
+## Prerequisites
 * [AWS Command Line Interface (CLI)](https://aws.amazon.com/cli/)
 * [Node 8 or greater](https://nodejs.org/)
 
 ## Install
-
 ```bash
 # Use it using command lines
 $> npm install -g stepfunctions-local
@@ -30,9 +59,7 @@ $> npm install --save stepfunctions-local
 ```
 
 ## How to use it ?
-
 ### Start a server
-
 Using command line
 ```bash
 $> stepfunctions-local start
@@ -50,7 +77,6 @@ stepFunctionsLocal.start({
 ```
 
 ### Play with it
-
 ```bash
 # List state machines
 $> aws stepfunctions --endpoint http://localhost:4599 list-state-machines
@@ -78,9 +104,7 @@ $> aws stepfunctions --endpoint http://localhost:4599 get-execution-history --ex
 ```
 
 ## Compatibility with AWS CLI
-
 ### Actions compatibility
-
 | Actions | Support |
 | ------ | ------ |
 | ***CreateActivity*** | At this moment, stepfunctions-local *does not support* activities |
@@ -103,7 +127,6 @@ $> aws stepfunctions --endpoint http://localhost:4599 get-execution-history --ex
 | ***UpdateStateMachine*** | Following errors are not thrown: *StateMachineDeleting* |
 
 ### States compatibility
-
 | States | Support |
 | ------ | ------ |
 | ***Pass*** | * |
@@ -114,14 +137,7 @@ $> aws stepfunctions --endpoint http://localhost:4599 get-execution-history --ex
 | ***Fail*** | * |
 | ***Parallel*** | *ErrorEquals* parameter from *Catch* field not implemented yet. |
 
-## Recommendations
-
-We recommend to use [Localstack](https://github.com/localstack/localstack) to run you lambdas.
-
-Localstack provides an easy-to-use framework for developing Cloud applications. It locally runs several AWS services (including AWS Lambda).
-
 ## Want to contribute ?
-
 Wow, that's great !  
 Feedback, bug reports and pull requests are more than welcome !
 
@@ -136,7 +152,6 @@ $> npm run test
 - [AWS Step Functions SDK](https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/StepFunctions.html)
 
 ## TODO
-
 - Validate JSON path
 - Implement Actions related to activities
 - Add execution abortion related history events
