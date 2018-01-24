@@ -59,10 +59,20 @@ $> npm install --save stepfunctions-local
 ```
 
 ## How to use it ?
+
 ### Start a server
 Using command line
 ```bash
 $> stepfunctions-local start
+
+Options:
+
+  -V, --version                        output the version number
+  --port <port>                        the port the server should run on
+  --lambda-endpoint <lambda-endpoint>  the endpoint for lambda
+  --lambda-region <lambda-region>      the region for lambda
+  --silent                             whether you want to run the server in silent mode or not
+  -h, --help                           output usage information
 ```
 
 From your code
