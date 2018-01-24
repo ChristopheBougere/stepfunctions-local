@@ -23,6 +23,5 @@ if (undefined !== program.lambdaRegion) {
 if (undefined !== program.silent) {
   config.silent = true;
 }
-console.log(config);
 console.log('Starting server...');
 server.start(config);
