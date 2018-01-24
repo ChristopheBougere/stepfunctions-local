@@ -162,6 +162,5 @@ $> npm run test
 - [AWS Step Functions SDK](https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/StepFunctions.html)
 
 ## TODO
-- Validate JSON path
 - Implement Actions related to activities
 - Add execution abortion related history events
