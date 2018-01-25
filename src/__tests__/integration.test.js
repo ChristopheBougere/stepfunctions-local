@@ -1,0 +1,181 @@
+const shell = require('shelljs');
+const server = require('../server');
+
+const PORT = 9999;
+
+const data = {
+  stateMachines: [
+    {
+      name: 'first-state-machine',
+      definition: '\'{"Comment": "This is a simple state machine","StartAt": "MyState","States": {"MyState": {"Type": "Pass", "End": true}}}\'',
+      roleArn: 'arn:aws:iam::0123456789:role/service-role/MyRole',
+    },
+  ],
+  executions: [
+    {
+      name: 'first-execution',
+    },
+  ],
+};
+
+const commands = {
+  listStateMachines: 'list-state-machines',
+  createStateMachine: 'create-state-machine --name {{name}} --role {{role}} --definition {{definition}}',
+  describeStateMachine: 'describe-state-machine --state-machine-arn {{arn}}',
+  listExecutions: 'list-executions --state-machine-arn {{arn}}',
+  startExecution: 'start-execution --state-machine-arn {{arn}} --name {{name}} --input {{input}}',
+  describeExecution: 'describe-execution --execution-arn {{arn}}',
+  getExecutionHistory: 'get-execution-history --execution-arn {{arn}}',
+  deleteStateMachine: 'delete-state-machine --state-machine-arn {{arn}}',
+};
+
+function exec(command, options = { silent: true }) {
+  const commandPrefix = `aws stepfunctions --endpoint http://localhost:${PORT}`;
+  return new Promise((res, rej) => {
+    shell.exec(`${commandPrefix} ${command}`, options, (code, out, err) => {
+      if (err) {
+        rej(err);
+      }
+      res(out ? JSON.parse(out.trim()) : null);
+    });
+  });
+}
+
+describe('Integration tests', () => {
+  beforeAll(() => {
+    server.start({
+      port: PORT,
+    });
+  });
+
+  it('should create a new state machine', async () => {
+    try {
+      const command = commands.createStateMachine
+        .replace('{{name}}', data.stateMachines[0].name)
+        .replace('{{role}}', data.stateMachines[0].roleArn)
+        .replace('{{definition}}', data.stateMachines[0].definition);
+      const res = await exec(command);
+      Object.assign(data.stateMachines[0], res);
+    } catch (e) {
+      expect(e).not.toBeDefined();
+    }
+  });
+
+  it('should describe the state machines', async () => {
+    try {
+      const stateMachine = data.stateMachines[0];
+      const command = commands.describeStateMachine
+        .replace('{{arn}}', stateMachine.stateMachineArn);
+      const res = await exec(command);
+      expect(res).toMatchObject({
+        stateMachineArn: stateMachine.stateMachineArn,
+        name: stateMachine.name,
+        status: 'ACTIVE',
+        definition: expect.any(Object),
+        roleArn: stateMachine.roleArn,
+        creationDate: expect.any(Number),
+      });
+    } catch (e) {
+      expect(e).not.toBeDefined();
+    }
+  });
+
+  it('should list state machines', async () => {
+    try {
+      const { stateMachines } = await exec(commands.listStateMachines);
+      expect(stateMachines).toHaveLength(1);
+      expect(stateMachines[0]).toMatchObject({
+        name: data.stateMachines[0].name,
+        creationDate: data.stateMachines[0].creationDate,
+        stateMachineArn: data.stateMachines[0].stateMachineArn,
+      });
+    } catch (e) {
+      expect(e).not.toBeDefined();
+    }
+  });
+
+  it('should start an execution', async () => {
+    try {
+      const executionName = data.executions[0].name;
+      const { name, stateMachineArn } = data.stateMachines[0];
+      const command = commands.startExecution
+        .replace('{{arn}}', stateMachineArn)
+        .replace('{{name}}', executionName)
+        .replace('{{input}}', '\'{"comment":"this is an input"}\'');
+      const res = await exec(command);
+      expect(res.executionArn).toEqual(`arn:aws:states:local:0123456789:execution:${name}:${executionName}`);
+    } catch (e) {
+      expect(e).not.toBeDefined();
+    }
+  });
+
+  it('should list the state machine executions', async () => {
+    try {
+      const command = commands.listExecutions.replace('{{arn}}', data.stateMachines[0].stateMachineArn);
+      const { executions } = await exec(command);
+      Object.assign(data.executions[0], executions[0]);
+      expect(executions).toHaveLength(1);
+      expect(executions[0].stateMachineArn).toEqual(data.stateMachines[0].stateMachineArn);
+    } catch (e) {
+      expect(e).not.toBeDefined();
+    }
+  });
+
+  it('should describe an execution', async () => {
+    try {
+      const command = commands.describeExecution.replace('{{arn}}', data.executions[0].executionArn);
+      const res = await exec(command);
+      expect(res).toMatchObject({
+        executionArn: data.executions[0].executionArn,
+        stateMachineArn: data.stateMachines[0].stateMachineArn,
+        name: data.executions[0].name,
+        status: 'SUCCEEDED',
+        startDate: expect.any(Number),
+        stopDate: expect.any(Number),
+        input: { comment: 'this is an input' },
+        output: { comment: 'this is an input' },
+      });
+    } catch (e) {
+      expect(e).not.toBeDefined();
+    }
+  });
+
+
+  it('should get execution history', async () => {
+    try {
+      const command = commands.getExecutionHistory
+        .replace('{{arn}}', data.executions[0].executionArn);
+      const { events } = await exec(command);
+      // execution started
+      // state entered
+      // state excited
+      // execution succeeded
+      expect(events).toHaveLength(4);
+    } catch (e) {
+      expect(e).not.toBeDefined();
+    }
+  });
+
+  it('should delete the state machine', async () => {
+    try {
+      const command = commands.deleteStateMachine
+        .replace('{{arn}}', data.stateMachines[0].stateMachineArn);
+      await exec(command);
+    } catch (e) {
+      expect(e).not.toBeDefined();
+    }
+  });
+
+  it('should list state machines with empty result', async () => {
+    try {
+      const { stateMachines } = await exec(commands.listStateMachines);
+      expect(stateMachines).toHaveLength(0);
+    } catch (e) {
+      expect(e).not.toBeDefined();
+    }
+  });
+
+  afterAll(() => {
+    server.stop();
+  });
+});

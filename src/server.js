@@ -19,6 +19,8 @@ const listExecutions = require('./lib/actions/list-executions');
 const describeExecution = require('./lib/actions/describe-execution');
 const getExecutionHistory = require('./lib/actions/get-execution-history');
 
+let server;
+
 function callAction(state, action, actionParams, config) {
   try {
     const { stateMachines, executions } = state;
@@ -125,11 +127,16 @@ function start(config = {}) {
     }
   });
 
-  app.listen(fullConfig.port, () => {
+  server = app.listen(fullConfig.port, () => {
     logger.log('stepfunctions-local started, listening on port %s', fullConfig.port);
   });
 }
 
+function stop() {
+  server.close();
+}
+
 module.exports = {
   start,
+  stop,
 };

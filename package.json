@@ -38,6 +38,7 @@
     "express": "^4.16.2",
     "jsonpath": "^1.0.0",
     "redux": "^3.7.2",
+    "shelljs": "^0.8.1",
     "uuid": "^3.1.0"
   },
   "devDependencies": {
