@@ -134,7 +134,7 @@ describe.skip('Test lambda task', () => {
   });
 });
 
-describe('Test activity task', () => {
+describe.skip('Test activity task', () => {
   const state = {
     Type: 'Task',
     Resource: 'arn:aws:states:us-east-1:000000000000:activity:MyActivity',

@@ -1,5 +1,5 @@
 const reducer = require('../reducer');
-const { actions } = require('../constants');
+const { actions, status } = require('../constants');
 
 const initialState = {
   stateMachines: [],
@@ -239,9 +239,36 @@ describe('Reducer actions related to activities', () => {
     try {
       const action = {
         type: actions.SEND_TASK_SUCCESS,
+        result: {
+          activityArn: 'my-first-activity-arn',
+          taskToken: 'my-task-token',
+          output: {
+            activityOutput: 'this is a great output',
+          },
+        },
       };
-      const newState = reducer(initialState, action);
-      expect(newState).toMatchObject(initialState);
+      const state = {
+        ...initialState,
+        activities: [
+          {
+            name: 'first-activity',
+            activityArn: 'my-first-activity-arn',
+            creationDate: Date.now() / 1000,
+            tasks: [
+              {
+                taskToken: 'my-task-token',
+              },
+            ],
+          },
+        ],
+      };
+      const { activities } = reducer(state, action);
+      const activity = activities.find(a => a.activityArn === action.result.activityArn);
+      expect(activity.tasks[0]).toMatchObject({
+        taskToken: action.result.taskToken,
+        status: status.activity.SUCCEEDED,
+        output: action.result.output,
+      });
     } catch (e) {
       expect(e).not.toBeDefined();
     }

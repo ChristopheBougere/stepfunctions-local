@@ -24,6 +24,7 @@ const deleteActivity = require('./lib/actions/delete-activity');
 const describeActivity = require('./lib/actions/describe-activity');
 const getActivityTask = require('./lib/actions/get-activity-task');
 const listActivities = require('./lib/actions/list-activities');
+const sendTaskSuccess = require('./lib/actions/send-task-success');
 
 function callAction(state, action, actionParams, config) {
   try {
@@ -69,8 +70,7 @@ function callAction(state, action, actionParams, config) {
         // TODO
         return {};
       case actions.SEND_TASK_SUCCESS:
-        // TODO
-        return {};
+        return sendTaskSuccess(actionParams, activities);
       case actions.DELETE_ACTIVITY:
         return deleteActivity(actionParams, activities);
       // default action

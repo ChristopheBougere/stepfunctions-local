@@ -1,4 +1,4 @@
-const { actions } = require('./constants');
+const { actions, status } = require('./constants');
 
 const initialState = {
   stateMachines: [],
@@ -24,6 +24,19 @@ function reducer(state = initialState, action = null) {
       Object.keys(result.updateFields).forEach((field) => {
         execution[field] = result.updateFields[field];
       });
+      return stateCopy;
+    }
+    case actions.ADD_ACTIVITY_TASK: {
+      const stateCopy = Object.assign({}, state);
+      const activity = stateCopy.activities.find(a => a.activityArn === result.activityArn);
+      activity.tasks.push(result.task);
+      return stateCopy;
+    }
+    case actions.REMOVE_ACTIVITY_TASK: {
+      const stateCopy = Object.assign({}, state);
+      const activity = stateCopy.activities.find(a => a.activityArn === result.activityArn);
+      const taskIndex = activity.tasks.findIndex(t => t.taskToken === result.taskToken);
+      activity.tasks.splice(taskIndex, 1);
       return stateCopy;
     }
     // AWS Step Functions actions
@@ -77,9 +90,16 @@ function reducer(state = initialState, action = null) {
     case actions.SEND_TASK_HEARTBEAT:
       // TODO activities to be implemented
       return Object.assign({}, state);
-    case actions.SEND_TASK_SUCCESS:
-      // TODO activities to be implemented
-      return Object.assign({}, state);
+    case actions.SEND_TASK_SUCCESS: {
+      const stateCopy = Object.assign({}, state);
+      const activity = stateCopy.activities.find(a => a.activityArn === result.activityArn);
+      const task = activity.tasks.find(t => t.taskToken === result.taskToken);
+      Object.assign(task, {
+        output: result.output,
+        status: status.activity.SUCCEEDED,
+      });
+      return stateCopy;
+    }
     // Actions related to executions
     case actions.START_EXECUTION:
       return Object.assign({}, state, {

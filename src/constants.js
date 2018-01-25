@@ -1,9 +1,10 @@
 module.exports = {
   actions: {
     // Custom
-    REMOVE_RESPONSE: 'RemoveResponse',
     ADD_HISTORY_EVENT: 'AddHistoryEvent',
     UPDATE_EXECUTION: 'UpdateExecution',
+    ADD_ACTIVITY_TASK: 'AddActivityTask',
+    REMOVE_ACTIVITY_TASK: 'RemoveActivityTask',
     // Step functions
     CREATE_ACTIVITY: 'CreateActivity',
     CREATE_STATE_MACHINE: 'CreateStateMachine',
@@ -32,6 +33,13 @@ module.exports = {
     },
     execution: {
       RUNNING: 'RUNNING',
+      SUCCEEDED: 'SUCCEEDED',
+      FAILED: 'FAILED',
+      TIMED_OUT: 'TIMED_OUT',
+      ABORTED: 'ABORTED',
+    },
+    activity: {
+      SCHEDULED: 'SCHEDULED',
       SUCCEEDED: 'SUCCEEDED',
       FAILED: 'FAILED',
       TIMED_OUT: 'TIMED_OUT',
@@ -169,7 +177,7 @@ module.exports = {
     ACTIVITY_SCHEDULED: {
       type: 'ActivityScheduled',
       detailsName: 'activityScheduledEventDetails',
-      detailsFields: ['heartBeatInSeconds', 'input', 'resource', 'timeoutInSeconds'],
+      detailsFields: ['heartbeatInSeconds', 'input', 'resource', 'timeoutInSeconds'],
     },
     ACTIVITY_STARTED: {
       type: 'ActivityStarted',
