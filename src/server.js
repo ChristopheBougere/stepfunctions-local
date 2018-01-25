@@ -23,6 +23,7 @@ const createActivity = require('./lib/actions/create-activity');
 const deleteActivity = require('./lib/actions/delete-activity');
 const describeActivity = require('./lib/actions/describe-activity');
 const getActivityTask = require('./lib/actions/get-activity-task');
+const listActivities = require('./lib/actions/list-activities');
 
 function callAction(state, action, actionParams, config) {
   try {
@@ -60,8 +61,7 @@ function callAction(state, action, actionParams, config) {
       case actions.GET_ACTIVITY_TASK:
         return getActivityTask(actionParams, activities);
       case actions.LIST_ACTIVITIES:
-        // TODO
-        return {};
+        return listActivities(actionParams, activities);
       case actions.SEND_TASK_FAILURE:
         // TODO
         return {};

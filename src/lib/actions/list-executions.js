@@ -73,7 +73,7 @@ function listExecutions(params, stateMachines, executions) {
           status: execution.status,
           stopDate: execution.stopDate,
         })),
-      NextToken: nextToken,
+      nextToken,
     },
   };
 }

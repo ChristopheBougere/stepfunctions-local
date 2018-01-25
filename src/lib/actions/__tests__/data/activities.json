@@ -8,13 +8,13 @@
         "input": {
           "comment": "This is my input"
         },
-        "taskToken": "myFirstTaskToken"
+        "taskToken": "my-first-unique-task-token"
       },
       {
         "input": {
           "comment": "This another input"
         },
-        "taskToken": "mySecondTaskToken"
+        "taskToken": "my-second-unique-task-token"
       }
     ]
   },

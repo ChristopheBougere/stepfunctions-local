@@ -1,6 +1,6 @@
 const { errors } = require('../../constants');
 
-function listStateMachines(params, stateMachines) {
+function listActivities(params, activities) {
   /* check request parameters */
   if (params.maxResults &&
     (parseInt(params.maxResults, 10) !== params.maxResults
@@ -27,11 +27,11 @@ function listStateMachines(params, stateMachines) {
         throw new Error('nextToken.boto_truncate_amount should be a number');
       }
     } catch (e) {
-      throw new Error(errors.listStateMachines.INVALID_TOKEN);
+      throw new Error(errors.listActivities.INVALID_TOKEN);
     }
   }
   let nextToken = null;
-  if (truncateAmount + maxResults < stateMachines.length) {
+  if (truncateAmount + maxResults < activities.length) {
     nextToken = Buffer.from(JSON.stringify({
       nextToken: null,
       boto_truncate_amount: truncateAmount + maxResults,
@@ -40,15 +40,15 @@ function listStateMachines(params, stateMachines) {
 
   return {
     response: {
-      stateMachines: stateMachines.slice(truncateAmount, truncateAmount + maxResults)
-        .map(stateMachine => ({
-          creationDate: stateMachine.creationDate,
-          name: stateMachine.name,
-          stateMachineArn: stateMachine.stateMachineArn,
+      activities: activities.slice(truncateAmount, truncateAmount + maxResults)
+        .map(activity => ({
+          activityArn: activity.activityArn,
+          creationDate: activity.creationDate,
+          name: activity.name,
         })),
       nextToken,
     },
   };
 }
 
-module.exports = listStateMachines;
+module.exports = listActivities;

@@ -18,7 +18,7 @@ describe('List state machines', () => {
     try {
       const { response } = listStateMachines({}, stateMachines);
       expect(response.stateMachines).toHaveLength(3);
-      expect(response.NextToken).toBeNull();
+      expect(response.nextToken).toBeNull();
     } catch (e) {
       expect(e).not.toBeDefined();
     }
@@ -31,7 +31,7 @@ describe('List state machines', () => {
       };
       const { response } = listStateMachines(params, stateMachines);
       expect(response.stateMachines).toHaveLength(params.maxResults);
-      expect(response.NextToken).toBeDefined();
+      expect(response.nextToken).toBeDefined();
     } catch (e) {
       expect(e).not.toBeDefined();
     }
