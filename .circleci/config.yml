@@ -17,7 +17,7 @@ jobs:
           name: Install AWS CLI
           working_directory: /
           command: |
-            apt install python-pip python-dev jq
+            sudo apt install python-pip python-dev jq
             pip install awscli
 
       - run:
