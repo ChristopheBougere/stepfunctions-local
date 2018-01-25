@@ -19,9 +19,11 @@ const listExecutions = require('./lib/actions/list-executions');
 const describeExecution = require('./lib/actions/describe-execution');
 const getExecutionHistory = require('./lib/actions/get-execution-history');
 
+const createActivity = require('./lib/actions/create-activity');
+
 function callAction(state, action, actionParams, config) {
   try {
-    const { stateMachines, executions } = state;
+    const { stateMachines, executions, activities } = state;
     switch (action) {
       // actions related to state machine
       case actions.CREATE_STATE_MACHINE:
@@ -49,8 +51,7 @@ function callAction(state, action, actionParams, config) {
         return getExecutionHistory(actionParams, executions);
       // actions related to activities
       case actions.CREATE_ACTIVITY:
-        // TODO
-        return {};
+        return createActivity(actionParams, activities);
       case actions.GET_ACTIVITY_TASK:
         // TODO
         return {};

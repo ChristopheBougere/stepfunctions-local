@@ -4,6 +4,7 @@ const { actions } = require('../constants');
 const initialState = {
   stateMachines: [],
   executions: [],
+  activities: [],
 };
 
 describe('Reducer actions related to state machines', () => {
@@ -128,9 +129,16 @@ describe('Reducer actions related to activities', () => {
     try {
       const action = {
         type: actions.CREATE_ACTIVITY,
+        result: {
+          activity: {
+            name: 'my-activity',
+            activityArn: 'my-activity-arn',
+            creationDate: Date.now() / 1000,
+          },
+        }
       };
-      const newState = reducer(initialState, action);
-      expect(newState).toMatchObject(initialState);
+      const { activities } = reducer(initialState, action);
+      expect(activities).toHaveLength(1);
     } catch (e) {
       expect(e).not.toBeDefined();
     }

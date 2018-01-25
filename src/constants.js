@@ -119,6 +119,7 @@ module.exports = {
     createActivity: {
       ACTIVITY_LIMIT_EXCEEDED: 'ActivityLimitExceeded',
       INVALID_NAME: 'InvalidName',
+      ACTIVITY_ALREADY_EXISTS: 'ActivityAlreadyExists',
     },
     listActivities: {
       INVALID_TOKEN: 'InvalidToken',

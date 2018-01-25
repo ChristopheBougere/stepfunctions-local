@@ -3,6 +3,7 @@ const { actions } = require('./constants');
 const initialState = {
   stateMachines: [],
   executions: [],
+  activities: [],
 };
 
 function reducer(state = initialState, action = null) {
@@ -53,8 +54,12 @@ function reducer(state = initialState, action = null) {
     }
     // Actions related to activities
     case actions.CREATE_ACTIVITY:
-      // TODO activities to be implemented
-      return Object.assign({}, state);
+      return Object.assign({}, state, {
+        activities: [
+          ...state.activities,
+          result.activity,
+        ],
+      });
     case actions.LIST_ACTIVITIES:
       // TODO activities to be implemented
       return Object.assign({}, state);
