@@ -18,7 +18,7 @@ jobs:
           working_directory: /
           command: |
             sudo apt install python-pip python-dev jq
-            pip install --user awscli
+            sudo pip install awscli
 
       - run:
           name: "npm install"
