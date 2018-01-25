@@ -21,6 +21,7 @@ const getExecutionHistory = require('./lib/actions/get-execution-history');
 
 const createActivity = require('./lib/actions/create-activity');
 const deleteActivity = require('./lib/actions/delete-activity');
+const describeActivity = require('./lib/actions/describe-activity');
 
 function callAction(state, action, actionParams, config) {
   try {
@@ -53,6 +54,8 @@ function callAction(state, action, actionParams, config) {
       // actions related to activities
       case actions.CREATE_ACTIVITY:
         return createActivity(actionParams, activities);
+      case actions.DESCRIBE_ACTIVITY:
+        return describeActivity(actionParams, activities);
       case actions.GET_ACTIVITY_TASK:
         // TODO
         return {};
