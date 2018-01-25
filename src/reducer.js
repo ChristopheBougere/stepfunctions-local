@@ -71,7 +71,6 @@ function reducer(state = initialState, action = null) {
     case actions.DESCRIBE_ACTIVITY:
       return Object.assign({}, state);
     case actions.GET_ACTIVITY_TASK:
-      // TODO activities to be implemented
       return Object.assign({}, state);
     case actions.SEND_TASK_FAILURE:
       // TODO activities to be implemented

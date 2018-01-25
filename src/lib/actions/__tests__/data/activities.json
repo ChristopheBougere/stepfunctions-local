@@ -2,6 +2,26 @@
   {
     "name": "first-activity",
     "activityArn": "arn:aws:states:local:0123456789:activity:first-activity",
-    "creationDate": 1516884870.947
+    "creationDate": 1516884870.947,
+    "tasks": [
+      {
+        "input": {
+          "comment": "This is my input"
+        },
+        "taskToken": "myFirstTaskToken"
+      },
+      {
+        "input": {
+          "comment": "This another input"
+        },
+        "taskToken": "mySecondTaskToken"
+      }
+    ]
+  },
+  {
+    "name": "second-activity",
+    "activityArn": "arn:aws:states:local:0123456789:activity:second-activity",
+    "creationDate": 1516885870.947,
+    "tasks": []
   }
 ]

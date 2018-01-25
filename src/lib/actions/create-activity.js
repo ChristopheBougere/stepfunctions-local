@@ -25,6 +25,7 @@ function createActivity(params, activities) {
     activity: {
       ...activity,
       name: params.name,
+      tasks: [],
     },
     response: activity,
   };
