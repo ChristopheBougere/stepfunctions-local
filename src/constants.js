@@ -126,6 +126,7 @@ module.exports = {
     },
     deleteActivity: {
       INVALID_ARN: 'InvalidArn',
+      ACTIVITY_DOES_NOT_EXIST: 'ActivityDoesNotExist',
     },
     describeActivity: {
       ACTIVITY_DOES_NOT_EXIST: 'ActivityDoesNotExist',

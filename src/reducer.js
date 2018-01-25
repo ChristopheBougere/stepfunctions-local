@@ -63,9 +63,11 @@ function reducer(state = initialState, action = null) {
     case actions.LIST_ACTIVITIES:
       // TODO activities to be implemented
       return Object.assign({}, state);
-    case actions.DELETE_ACTIVITY:
-      // TODO activities to be implemented
-      return Object.assign({}, state);
+    case actions.DELETE_ACTIVITY: {
+      const stateCopy = Object.assign({}, state);
+      stateCopy.activities.splice(result.index, 1);
+      return stateCopy;
+    }
     case actions.DESCRIBE_ACTIVITY:
       // TODO activities to be implemented
       return Object.assign({}, state);

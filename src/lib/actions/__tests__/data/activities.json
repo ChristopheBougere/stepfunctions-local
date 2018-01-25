@@ -1,0 +1,7 @@
+[
+  {
+    "name": "first-activity",
+    "activityArn": "arn:aws:states:local:0123456789:activity:first-activity",
+    "creationDate": 1516884870.947
+  }
+]

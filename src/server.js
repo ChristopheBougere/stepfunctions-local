@@ -20,6 +20,7 @@ const describeExecution = require('./lib/actions/describe-execution');
 const getExecutionHistory = require('./lib/actions/get-execution-history');
 
 const createActivity = require('./lib/actions/create-activity');
+const deleteActivity = require('./lib/actions/delete-activity');
 
 function callAction(state, action, actionParams, config) {
   try {
@@ -68,8 +69,7 @@ function callAction(state, action, actionParams, config) {
         // TODO
         return {};
       case actions.DELETE_ACTIVITY:
-        // TODO
-        return {};
+        return deleteActivity(actionParams, activities);
       // default action
       default:
         return {};

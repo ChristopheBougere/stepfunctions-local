@@ -135,7 +135,7 @@ describe('Reducer actions related to activities', () => {
             activityArn: 'my-activity-arn',
             creationDate: Date.now() / 1000,
           },
-        }
+        },
       };
       const { activities } = reducer(initialState, action);
       expect(activities).toHaveLength(1);
@@ -160,9 +160,28 @@ describe('Reducer actions related to activities', () => {
     try {
       const action = {
         type: actions.DELETE_ACTIVITY,
+        result: {
+          index: 1,
+        },
       };
-      const newState = reducer(initialState, action);
-      expect(newState).toMatchObject(initialState);
+      const state = {
+        ...initialState,
+        activities: [
+          {
+            name: 'first-activity',
+            activityArn: 'my-first-activity-arn',
+            creationDate: Date.now() / 1000,
+          },
+          {
+            name: 'second-activity',
+            activityArn: 'my-second-activity-arn',
+            creationDate: Date.now() / 1000,
+          },
+        ],
+      };
+      const activitiesNb = state.activities.length;
+      const { activities } = reducer(state, action);
+      expect(activities).toHaveLength(activitiesNb - 1);
     } catch (e) {
       expect(e).not.toBeDefined();
     }
