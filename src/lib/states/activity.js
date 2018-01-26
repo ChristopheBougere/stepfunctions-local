@@ -1,18 +1,30 @@
 const store = require('../../store');
 
 class Activity {
-  static getTaskStatus(activityArn, taskToken) {
+  static getTaskParameter(param, activityArn, taskToken) {
     const { activities } = store.getState();
     const activity = activities.find(a => a.activityArn === activityArn);
     const task = activity.tasks.find(t => t.taskToken === taskToken);
-    return task ? task.status : null;
+    return task ? task[param] : undefined;
   }
 
   static getTaskOutput(activityArn, taskToken) {
-    const { activities } = store.getState();
-    const activity = activities.find(a => a.activityArn === activityArn);
-    const task = activity.tasks.find(t => t.taskToken === taskToken);
-    return task ? task.output : null;
+    return Activity.getTaskParameter('output', activityArn, taskToken);
+  }
+
+  static getTaskStatus(activityArn, taskToken) {
+    return Activity.getTaskParameter('status', activityArn, taskToken);
+  }
+
+  static getTaskFailureError(activityArn, taskToken) {
+    return {
+      cause: Activity.getTaskParameter('cause', activityArn, taskToken),
+      error: Activity.getTaskParameter('error', activityArn, taskToken),
+    };
+  }
+
+  static getTaskLastHeartbeat(activityArn, taskToken) {
+    return parseFloat(Activity.getTaskParameter('heartbeat', activityArn, taskToken));
   }
 }
 

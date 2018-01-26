@@ -11,7 +11,10 @@ describe('Get activity task', () => {
         activityArn: activity.activityArn,
       };
       const { response } = getActivityTask(params, activities);
-      expect(response).toMatchObject(activity.tasks[0]);
+      expect(response).toMatchObject({
+        input: activity.tasks[0].input,
+        taskToken: activity.tasks[0].taskToken,
+      });
     } catch (e) {
       expect(e).not.toBeDefined();
     }

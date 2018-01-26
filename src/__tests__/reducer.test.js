@@ -215,9 +215,36 @@ describe('Reducer actions related to activities', () => {
     try {
       const action = {
         type: actions.SEND_TASK_FAILURE,
+        result: {
+          activityArn: 'my-first-activity-arn',
+          taskToken: 'my-task-token',
+          cause: 'This is a cause',
+          error: 'TaskError',
+        },
       };
-      const newState = reducer(initialState, action);
-      expect(newState).toMatchObject(initialState);
+      const state = {
+        ...initialState,
+        activities: [
+          {
+            name: 'first-activity',
+            activityArn: 'my-first-activity-arn',
+            creationDate: Date.now() / 1000,
+            tasks: [
+              {
+                taskToken: 'my-task-token',
+              },
+            ],
+          },
+        ],
+      };
+      const { activities } = reducer(state, action);
+      const activity = activities.find(a => a.activityArn === action.result.activityArn);
+      expect(activity.tasks[0]).toMatchObject({
+        taskToken: action.result.taskToken,
+        status: status.activity.FAILED,
+        cause: action.result.cause,
+        error: action.result.error,
+      });
     } catch (e) {
       expect(e).not.toBeDefined();
     }
@@ -227,9 +254,34 @@ describe('Reducer actions related to activities', () => {
     try {
       const action = {
         type: actions.SEND_TASK_HEARTBEAT,
+        result: {
+          activityArn: 'my-first-activity-arn',
+          taskToken: 'my-task-token',
+          heartbeat: Date.now() / 1000,
+        },
       };
-      const newState = reducer(initialState, action);
-      expect(newState).toMatchObject(initialState);
+      const state = {
+        ...initialState,
+        activities: [
+          {
+            name: 'first-activity',
+            activityArn: 'my-first-activity-arn',
+            creationDate: Date.now() / 1000,
+            tasks: [
+              {
+                taskToken: 'my-task-token',
+              },
+            ],
+          },
+        ],
+      };
+      const { activities } = reducer(state, action);
+      const activity = activities.find(a => a.activityArn === action.result.activityArn);
+      expect(activity.tasks[0]).toMatchObject({
+        taskToken: action.result.taskToken,
+        heartbeat: action.result.heartbeat,
+        status: status.activity.IN_PROGRESS,
+      });
     } catch (e) {
       expect(e).not.toBeDefined();
     }

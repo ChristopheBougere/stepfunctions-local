@@ -1,5 +1,5 @@
 const { isValidArn } = require('../tools/validate');
-const { errors } = require('../../constants');
+const { errors, status } = require('../../constants');
 
 function getActivityTask(params, activities) {
   /* check request parameters */
@@ -25,9 +25,10 @@ function getActivityTask(params, activities) {
     throw new Error(errors.getActivityTask.ACTIVITY_DOES_NOT_EXIST);
   }
 
-  const response = match.tasks.length ? {
-    input: match.tasks[0].input,
-    taskToken: match.tasks[0].taskToken,
+  const scheduledTask = match.tasks.find(t => t.status === status.activity.SCHEDULED);
+  const response = scheduledTask ? {
+    input: scheduledTask.input,
+    taskToken: scheduledTask.taskToken,
   } : null;
 
   return {

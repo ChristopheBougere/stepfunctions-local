@@ -8,13 +8,15 @@
         "input": {
           "comment": "This is my input"
         },
-        "taskToken": "my-first-unique-task-token"
+        "taskToken": "my-first-unique-task-token",
+        "status": "SCHEDULED"
       },
       {
         "input": {
           "comment": "This another input"
         },
-        "taskToken": "my-second-unique-task-token"
+        "taskToken": "my-second-unique-task-token",
+        "status": "SCHEDULED"
       }
     ]
   },
@@ -22,6 +24,27 @@
     "name": "second-activity",
     "activityArn": "arn:aws:states:local:0123456789:activity:second-activity",
     "creationDate": 1516885870.947,
+    "tasks": []
+  },
+  {
+    "name": "third-activity",
+    "activityArn": "arn:aws:states:local:0123456789:activity:third-activity",
+    "creationDate": 1516886870.947,
+    "creationDate": 1516884870.947,
+    "tasks": [
+      {
+        "input": {
+          "comment": "This is my input"
+        },
+        "taskToken": "my-third-unique-task-token",
+        "status": "TIMED_OUT"
+      }
+    ]
+  },
+  {
+    "name": "second-activity",
+    "activityArn": "arn:aws:states:local:0123456789:activity:second-activity",
+    "creationDate": 1516886870.947,
     "tasks": []
   }
 ]

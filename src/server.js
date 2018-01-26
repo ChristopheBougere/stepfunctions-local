@@ -25,6 +25,8 @@ const describeActivity = require('./lib/actions/describe-activity');
 const getActivityTask = require('./lib/actions/get-activity-task');
 const listActivities = require('./lib/actions/list-activities');
 const sendTaskSuccess = require('./lib/actions/send-task-success');
+const sendTaskFailure = require('./lib/actions/send-task-failure');
+const sendTaskHeartbeat = require('./lib/actions/send-task-heartbeat');
 
 function callAction(state, action, actionParams, config) {
   try {
@@ -64,11 +66,9 @@ function callAction(state, action, actionParams, config) {
       case actions.LIST_ACTIVITIES:
         return listActivities(actionParams, activities);
       case actions.SEND_TASK_FAILURE:
-        // TODO
-        return {};
+        return sendTaskFailure(actionParams, activities);
       case actions.SEND_TASK_HEARTBEAT:
-        // TODO
-        return {};
+        return sendTaskHeartbeat(actionParams, activities);
       case actions.SEND_TASK_SUCCESS:
         return sendTaskSuccess(actionParams, activities);
       case actions.DELETE_ACTIVITY:

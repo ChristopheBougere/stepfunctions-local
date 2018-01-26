@@ -5,6 +5,7 @@ module.exports = {
     UPDATE_EXECUTION: 'UpdateExecution',
     ADD_ACTIVITY_TASK: 'AddActivityTask',
     REMOVE_ACTIVITY_TASK: 'RemoveActivityTask',
+    UPDATE_ACTIVITY_TASK: 'UpdateActivityTask',
     // Step functions
     CREATE_ACTIVITY: 'CreateActivity',
     CREATE_STATE_MACHINE: 'CreateStateMachine',
@@ -40,10 +41,10 @@ module.exports = {
     },
     activity: {
       SCHEDULED: 'SCHEDULED',
+      IN_PROGRESS: 'IN_PROGRESS',
       SUCCEEDED: 'SUCCEEDED',
       FAILED: 'FAILED',
       TIMED_OUT: 'TIMED_OUT',
-      ABORTED: 'ABORTED',
     },
   },
   errors: { // HTTP 400 except when specified

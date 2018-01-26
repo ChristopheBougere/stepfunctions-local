@@ -14,7 +14,6 @@ describe('Add history event', () => {
     }
   });
 
-  // TODO: this should rather be in event.test.js
   it('should fail because invalid parameter', () => {
     try {
       const execution = {
