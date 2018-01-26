@@ -494,7 +494,7 @@ describe('Other reducer actions', () => {
           activityArn: 'my-activity-arn',
           task: {
             taskToken: 'my-new-task-token',
-          }
+          },
         },
       };
       const state = {
@@ -503,7 +503,7 @@ describe('Other reducer actions', () => {
           {
             activityArn: 'my-activity-arn',
             tasks: [],
-          }
+          },
         ],
       };
       const { activities } = reducer(state, action);
@@ -532,9 +532,9 @@ describe('Other reducer actions', () => {
             tasks: [
               {
                 taskToken: 'my-task-token',
-              }
+              },
             ],
-          }
+          },
         ],
       };
       const { activities } = reducer(state, action);
@@ -554,7 +554,7 @@ describe('Other reducer actions', () => {
           taskToken: 'my-task-token',
           updateFields: {
             status: 'UPDATED_STATUS',
-          }
+          },
         },
       };
       const state = {
@@ -565,9 +565,9 @@ describe('Other reducer actions', () => {
             tasks: [
               {
                 taskToken: 'my-task-token',
-              }
+              },
             ],
-          }
+          },
         ],
       };
       const { activities } = reducer(state, action);

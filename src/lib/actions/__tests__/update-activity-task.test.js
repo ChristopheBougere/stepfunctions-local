@@ -6,16 +6,15 @@ const { actions } = require('../../../constants');
 const Activity = require('../../states/activity');
 
 describe('Update activity task', () => {
-
   beforeAll(() => {
     store.dispatch({
       type: actions.CREATE_ACTIVITY,
       result: {
         activity: {
           activityArn: 'my-activity-arn',
-            creationDate: Date.now() / 1000,
-            name: 'my-activity-name',
-            tasks: [],
+          creationDate: Date.now() / 1000,
+          name: 'my-activity-name',
+          tasks: [],
         },
       },
     });
