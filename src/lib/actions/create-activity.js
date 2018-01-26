@@ -18,7 +18,7 @@ function createActivity(params, activities) {
         activityArn: match.activityArn,
         creationDate: match.creationDate,
       },
-    }
+    };
   }
 
   const activity = {
