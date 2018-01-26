@@ -59,8 +59,7 @@ describe('Send task failure', () => {
       const res = sendTaskFailure(params, activities);
       expect(res).not.toBeDefined();
     } catch (e) {
-      expect(e.message)
-        .toEqual(expect.stringContaining(errors.common.INVALID_PARAMETER_VALUE));
+      expect(e.message).toEqual(errors.sendTaskFailure.INVALID_TOKEN);
     }
   });
 

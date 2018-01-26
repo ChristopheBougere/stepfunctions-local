@@ -9,13 +9,18 @@ function createActivity(params, activities) {
   if (!isValidName(params.name)) {
     throw new Error(errors.createActivity.INVALID_NAME);
   }
-  const match = activities.find(a => a.name === params.name);
-  if (match) {
-    // NOTE: No error specified for this case
-    throw new Error(errors.createActivity.ACTIVITY_ALREADY_EXISTS);
-  }
 
   /* execute action */
+  const match = activities.find(a => a.name === params.name);
+  if (match) {
+    return {
+      response: {
+        activityArn: match.activityArn,
+        creationDate: match.creationDate,
+      },
+    }
+  }
+
   const activity = {
     activityArn: `arn:aws:states:local:0123456789:activity:${params.name}`,
     creationDate: Date.now() / 1000,

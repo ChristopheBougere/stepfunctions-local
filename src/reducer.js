@@ -75,13 +75,18 @@ function reducer(state = initialState, action = null) {
       return stateCopy;
     }
     // Actions related to activities
-    case actions.CREATE_ACTIVITY:
-      return Object.assign({}, state, {
-        activities: [
-          ...state.activities,
-          result.activity,
-        ],
-      });
+    case actions.CREATE_ACTIVITY: {
+      const stateCopy = Object.assign({}, state);
+      if (result.activity) {
+        return Object.assign(stateCopy, {
+          activities: [
+            ...state.activities,
+            result.activity,
+          ],
+        });
+      }
+      return stateCopy;
+    }
     case actions.LIST_ACTIVITIES:
       return Object.assign({}, state);
     case actions.DELETE_ACTIVITY: {

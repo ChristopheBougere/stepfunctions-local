@@ -18,8 +18,7 @@ function sendTaskFailure(params, activities) {
     || params.taskToken.length < 1
     || params.taskToken.length > 1024
   ) {
-    // NOTE: Could also be INVALID_TOKEN
-    throw new Error(`${errors.common.INVALID_PARAMETER_VALUE}: --task-token`);
+    throw new Error(errors.sendTaskFailure.INVALID_TOKEN);
   }
 
   /* execute action */

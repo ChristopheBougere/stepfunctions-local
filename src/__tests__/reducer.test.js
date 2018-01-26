@@ -144,6 +144,29 @@ describe('Reducer actions related to activities', () => {
     }
   });
 
+  it('should call reducer with action CREATE_ACTIVITY with existing activity', () => {
+    try {
+      const action = {
+        type: actions.CREATE_ACTIVITY,
+        result: {},
+      };
+      const state = {
+        ...initialState,
+        activities: [
+          {
+            name: 'first-activity',
+            activityArn: 'my-first-activity-arn',
+            creationDate: Date.now() / 1000,
+          },
+        ],
+      };
+      const newState = reducer(state, action);
+      expect(newState).toMatchObject(state);
+    } catch (e) {
+      expect(e).not.toBeDefined();
+    }
+  });
+
   it('should call reducer with action LIST_ACTIVITIES', () => {
     try {
       const action = {

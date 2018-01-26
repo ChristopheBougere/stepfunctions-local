@@ -17,7 +17,7 @@ describe('Create actiity', () => {
     }
   });
 
-  it('should fail because activity already exists', () => {
+  it('should return an existing activity', () => {
     try {
       const activities = [
         {
@@ -29,10 +29,14 @@ describe('Create actiity', () => {
       const params = {
         name: 'my-activity',
       };
-      const res = createActivity(params, activities);
-      expect(res).not.toBeDefined();
+      const { activity, response } = createActivity(params, activities);
+      expect(activity).toBeUndefined();
+      expect(response).toMatchObject({
+        activityArn: activities[0].activityArn,
+        creationDate: activities[0].creationDate,
+      });
     } catch (e) {
-      expect(e.message).toEqual(errors.createActivity.ACTIVITY_ALREADY_EXISTS);
+      expect(e).not.toBeDefined();
     }
   });
 
