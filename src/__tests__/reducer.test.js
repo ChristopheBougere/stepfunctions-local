@@ -485,4 +485,100 @@ describe('Other reducer actions', () => {
       expect(e).not.toBeDefined();
     }
   });
+
+  it('should call reducer with action ADD_ACTIVITY_TASK', () => {
+    try {
+      const action = {
+        type: actions.ADD_ACTIVITY_TASK,
+        result: {
+          activityArn: 'my-activity-arn',
+          task: {
+            taskToken: 'my-new-task-token',
+          }
+        },
+      };
+      const state = {
+        ...initialState,
+        activities: [
+          {
+            activityArn: 'my-activity-arn',
+            tasks: [],
+          }
+        ],
+      };
+      const { activities } = reducer(state, action);
+      const activity = activities.find(a => a.activityArn === action.result.activityArn);
+      expect(activity.tasks).toHaveLength(1);
+      expect(activity.tasks[0]).toMatchObject(action.result.task);
+    } catch (e) {
+      expect(e).not.toBeDefined();
+    }
+  });
+
+  it('should call reducer with action REMOVE_ACTIVITY_TASK', () => {
+    try {
+      const action = {
+        type: actions.REMOVE_ACTIVITY_TASK,
+        result: {
+          activityArn: 'my-activity-arn',
+          taskToken: 'my-task-token',
+        },
+      };
+      const state = {
+        ...initialState,
+        activities: [
+          {
+            activityArn: 'my-activity-arn',
+            tasks: [
+              {
+                taskToken: 'my-task-token',
+              }
+            ],
+          }
+        ],
+      };
+      const { activities } = reducer(state, action);
+      const activity = activities.find(a => a.activityArn === action.result.activityArn);
+      expect(activity.tasks).toHaveLength(0);
+    } catch (e) {
+      expect(e).not.toBeDefined();
+    }
+  });
+
+  it('should call reducer with action UPDATE_ACTIVITY_TASK', () => {
+    try {
+      const action = {
+        type: actions.UPDATE_ACTIVITY_TASK,
+        result: {
+          activityArn: 'my-activity-arn',
+          taskToken: 'my-task-token',
+          updateFields: {
+            status: 'UPDATED_STATUS',
+          }
+        },
+      };
+      const state = {
+        ...initialState,
+        activities: [
+          {
+            activityArn: 'my-activity-arn',
+            tasks: [
+              {
+                taskToken: 'my-task-token',
+              }
+            ],
+          }
+        ],
+      };
+      const { activities } = reducer(state, action);
+      const activity = activities.find(a => a.activityArn === action.result.activityArn);
+      expect(activity.tasks).toHaveLength(1);
+      expect(activity.tasks[0]).toMatchObject({
+        ...state.activities[0].tasks[0],
+        ...action.result.task,
+      });
+    } catch (e) {
+      expect(e).not.toBeDefined();
+    }
+  });
 });
