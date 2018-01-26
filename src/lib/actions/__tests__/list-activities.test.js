@@ -43,6 +43,19 @@ describe('List activities', () => {
   it('should fail because invalid token', () => {
     try {
       const params = {
+        nextToken: 123,
+      };
+      const res = listActivities(params, activities);
+      expect(res).not.toBeDefined();
+    } catch (e) {
+      expect(e.message)
+        .toEqual(expect.stringContaining(errors.common.INVALID_PARAMETER_VALUE));
+    }
+  });
+
+  it('should fail because invalid token', () => {
+    try {
+      const params = {
         nextToken: 'my-invalid-token',
       };
       const res = listActivities(params, activities);

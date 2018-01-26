@@ -53,6 +53,19 @@ describe('List state machines', () => {
   it('should fail because invalid token', () => {
     try {
       const params = {
+        nextToken: 123,
+      };
+      const res = listStateMachines(params, stateMachines);
+      expect(res).not.toBeDefined();
+    } catch (e) {
+      expect(e.message)
+        .toEqual(expect.stringContaining(errors.common.INVALID_PARAMETER_VALUE));
+    }
+  });
+
+  it('should fail because invalid token', () => {
+    try {
+      const params = {
         nextToken: 'my-invalid-token',
       };
       const res = listStateMachines(params, stateMachines);
