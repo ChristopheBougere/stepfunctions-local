@@ -225,7 +225,7 @@ class Task extends State {
   }
 
   get heartbeatInSeconds() {
-    return this.state.HeartbeatSeconds || 30;
+    return this.state.HeartbeatSeconds || 99999999;
   }
 
   get timeoutInSeconds() {
