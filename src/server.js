@@ -12,13 +12,11 @@ const deleteStateMachine = require('./lib/actions/delete-state-machine');
 const describeStateMachine = require('./lib/actions/describe-state-machine');
 const describeStateMachineForExecution = require('./lib/actions/describe-state-machine-for-execution');
 const updateStateMachine = require('./lib/actions/update-state-machine');
-
 const startExecution = require('./lib/actions/start-execution');
 const stopExecution = require('./lib/actions/stop-execution');
 const listExecutions = require('./lib/actions/list-executions');
 const describeExecution = require('./lib/actions/describe-execution');
 const getExecutionHistory = require('./lib/actions/get-execution-history');
-
 const createActivity = require('./lib/actions/create-activity');
 const deleteActivity = require('./lib/actions/delete-activity');
 const describeActivity = require('./lib/actions/describe-activity');
@@ -27,6 +25,8 @@ const listActivities = require('./lib/actions/list-activities');
 const sendTaskSuccess = require('./lib/actions/send-task-success');
 const sendTaskFailure = require('./lib/actions/send-task-failure');
 const sendTaskHeartbeat = require('./lib/actions/send-task-heartbeat');
+
+let server;
 
 function callAction(state, action, actionParams, config) {
   try {
@@ -129,11 +129,16 @@ function start(config = {}) {
     }
   });
 
-  app.listen(fullConfig.port, () => {
+  server = app.listen(fullConfig.port, () => {
     logger.log('stepfunctions-local started, listening on port %s', fullConfig.port);
   });
 }
 
+function stop() {
+  server.close();
+}
+
 module.exports = {
   start,
+  stop,
 };

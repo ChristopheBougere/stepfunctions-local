@@ -5,6 +5,8 @@
 [![codecov](https://codecov.io/gh/airware/stepfunctions-local/branch/master/graph/badge.svg)](https://codecov.io/gh/airware/stepfunctions-local)
 [![Dependency Status](https://www.versioneye.com/user/projects/5a571bfa0fb24f1a8fb2861d/badge.svg?style=flat)](https://www.versioneye.com/user/projects/5a571bfa0fb24f1a8fb2861d)
 
+[![NPM](https://nodei.co/npm/stepfunctions-local.png?stars=true)](https://www.npmjs.com/package/stepfunctions-local)
+
 #### :warning: **Important** : This package is a work in progress. It is not ready to be used yet. Any contribution is warm welcome
 
 Stepfunctions-local provides a local AWS Step Functions server.

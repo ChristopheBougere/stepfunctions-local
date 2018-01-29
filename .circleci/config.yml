@@ -14,6 +14,13 @@ jobs:
           - dependency-cache
 
       - run:
+          name: Install AWS CLI
+          working_directory: /
+          command: |
+            sudo apt install python-pip python-dev jq
+            sudo pip install awscli
+
+      - run:
           name: "npm install"
           command: npm install --update-binary
 
