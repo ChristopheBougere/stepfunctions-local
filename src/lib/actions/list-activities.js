@@ -1,18 +1,18 @@
-const { errors } = require('../../constants');
+const { errors, parameters } = require('../../constants');
 
 function listActivities(params, activities) {
   /* check request parameters */
   if (params.maxResults &&
     (parseInt(params.maxResults, 10) !== params.maxResults
-    || params.maxResults < 0
-    || params.maxResults > 1000)
+    || params.maxResults < parameters.results.min
+    || params.maxResults > parameters.results.max)
   ) {
     throw new Error(`${errors.common.INVALID_PARAMETER_VALUE}: --max-results`);
   }
   if (params.nextToken &&
     (typeof params.nextToken !== 'string'
-    || params.nextToken.length < 1
-    || params.nextToken.length > 1024)
+    || params.nextToken.length < parameters.token.min
+    || params.nextToken.length > parameters.token.max)
   ) {
     throw new Error(`${errors.common.INVALID_PARAMETER_VALUE}: --next-token`);
   }

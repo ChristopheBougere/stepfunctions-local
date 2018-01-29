@@ -1,25 +1,25 @@
 const { isValidArn } = require('../tools/validate');
-const { errors } = require('../../constants');
+const { errors, parameters } = require('../../constants');
 
 function getExecutionHistory(params, executions) {
   /* check request parameters */
   if (typeof params.executionArn !== 'string'
-    || params.executionArn.length < 1
-    || params.executionArn.length > 256
+    || params.executionArn.length < parameters.arn.min
+    || params.executionArn.length > parameters.arn.max
   ) {
     throw new Error(`${errors.common.INVALID_PARAMETER_VALUE}: --execution-arn`);
   }
   if (params.maxResults &&
     (parseInt(params.maxResults, 10) !== params.maxResults
-    || params.maxResults < 0
-    || params.maxResults > 1000)
+    || params.maxResults < parameters.results.min
+    || params.maxResults > parameters.results.max)
   ) {
     throw new Error(`${errors.common.INVALID_PARAMETER_VALUE}: --max-results`);
   }
   if (params.nextToken &&
     (typeof params.nextToken !== 'string'
-    || params.nextToken.length < 1
-    || params.nextToken.length > 1024)
+    || params.nextToken.length < parameters.token.min
+    || params.nextToken.length > parameters.token.max)
   ) {
     throw new Error(`${errors.common.INVALID_PARAMETER_VALUE}: --next-token`);
   }

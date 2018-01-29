@@ -1,9 +1,12 @@
 const { isValidName } = require('../tools/validate');
-const { errors } = require('../../constants');
+const { errors, parameters } = require('../../constants');
 
 function createActivity(params, activities) {
   /* check request parameters */
-  if (typeof params.name !== 'string' || params.name.length < 1 || params.name.length > 80) {
+  if (typeof params.name !== 'string'
+    || params.name.length < parameters.name.min
+    || params.name.length > parameters.name.max
+  ) {
     throw new Error(`${errors.common.INVALID_PARAMETER_VALUE}: --name`);
   }
   if (!isValidName(params.name)) {

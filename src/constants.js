@@ -337,4 +337,38 @@ module.exports = {
       detailsFields: ['name', 'output'],
     },
   },
+  parameters: {
+    arn: {
+      min: 1,
+      max: 256,
+    },
+    cause: {
+      max: 32768,
+    },
+    definition: {
+      max: 1048576,
+    },
+    error: {
+      max: 256,
+    },
+    input: {
+      min: 0,
+      max: 32768,
+    },
+    results: {
+      min: 0,
+      max: 1000,
+    },
+    name: {
+      min: 1,
+      max: 80,
+    },
+    output: {
+      max: 32768,
+    },
+    token: {
+      min: 1,
+      max: 1024,
+    },
+  },
 };

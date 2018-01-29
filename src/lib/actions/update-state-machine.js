@@ -1,7 +1,7 @@
 const aslValidator = require('asl-validator');
 
 const { isValidArn } = require('../tools/validate');
-const { errors } = require('../../constants');
+const { errors, parameters } = require('../../constants');
 
 // TODO: throw STATE_MACHINE_DELETING if specified state machine is being deleted
 
@@ -11,22 +11,22 @@ function updateStateMachine(params, stateMachines) {
     throw new Error(`${errors.common.MISSING_REQUIRED_PARAMETER}: --role-arn or --definition`);
   }
   if (typeof params.stateMachineArn !== 'string'
-    || params.stateMachineArn.length < 1
-    || params.stateMachineArn.length > 256
+    || params.stateMachineArn.length < parameters.arn.min
+    || params.stateMachineArn.length > parameters.arn.max
   ) {
     throw new Error(`${errors.common.INVALID_PARAMETER_VALUE}: --state-machine-arn`);
   }
   if (params.roleArn &&
     (typeof params.roleArn !== 'string'
-    || params.roleArn.length < 1
-    || params.roleArn.length > 256)
+    || params.roleArn.length < parameters.arn.min
+    || params.roleArn.length > parameters.arn.max)
   ) {
     throw new Error(`${errors.common.INVALID_PARAMETER_VALUE}: --role-arn`);
   }
   if (params.definition &&
     (typeof params.definition !== 'string'
-    || params.definition.length < 1
-    || params.definition.length > 1048576)
+    || params.definition.length < parameters.definition.min
+    || params.definition.length > parameters.definition.max)
   ) {
     throw new Error(`${errors.common.INVALID_PARAMETER_VALUE}: --definition`);
   }

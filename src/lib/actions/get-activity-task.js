@@ -1,17 +1,17 @@
 const { isValidArn } = require('../tools/validate');
-const { errors, status } = require('../../constants');
+const { errors, status, parameters } = require('../../constants');
 
 function getActivityTask(params, activities) {
   /* check request parameters */
   if (typeof params.activityArn !== 'string'
-    || params.activityArn.length < 1
-    || params.activityArn.length > 256
+    || params.activityArn.length < parameters.arn.min
+    || params.activityArn.length > parameters.arn.max
   ) {
     throw new Error(`${errors.common.INVALID_PARAMETER_VALUE}: --activity-arn`);
   }
   if (params.workerName && (typeof params.workerName !== 'string'
-    || params.workerName.length < 1
-    || params.workerName.length > 80)
+    || params.workerName.length < parameters.name.min
+    || params.workerName.length > parameters.name.max)
   ) {
     throw new Error(`${errors.common.INVALID_PARAMETER_VALUE}: --worker-name`);
   }

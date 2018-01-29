@@ -1,11 +1,11 @@
 const { isValidArn } = require('../tools/validate');
-const { errors, status } = require('../../constants');
+const { errors, status, parameters } = require('../../constants');
 
 function stopExecution(params, executions) {
   /* check request parameters */
   if (typeof params.executionArn !== 'string'
-    || params.executionArn.length < 1
-    || params.executionArn.length > 256
+    || params.executionArn.length < parameters.arn.min
+    || params.executionArn.length > parameters.arn.max
   ) {
     throw new Error(`${errors.common.INVALID_PARAMETER_VALUE}: --execution-arn`);
   }

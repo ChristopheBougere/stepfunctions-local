@@ -3,7 +3,12 @@ const uuidv4 = require('uuid/v4');
 const { isValidArn, isValidName } = require('../tools/validate');
 
 const store = require('../../store');
-const { errors, status, actions } = require('../../constants');
+const {
+  errors,
+  status,
+  actions,
+  parameters,
+} = require('../../constants');
 const StateMachine = require('../states/state-machine');
 const Execution = require('../states/execution');
 
@@ -16,22 +21,22 @@ function startExecution(params, stateMachines, executions, config) {
 
   /* check request parameters */
   if (typeof params.stateMachineArn !== 'string'
-    || params.stateMachineArn.length < 1
-    || params.stateMachineArn.length > 256
+    || params.stateMachineArn.length < parameters.arn.min
+    || params.stateMachineArn.length > parameters.arn.max
   ) {
     throw new Error(`${errors.common.INVALID_PARAMETER_VALUE}: --state-machine-arn`);
   }
   if (params.input &&
     (typeof params.input !== 'string'
-    || params.input.length < 0
-    || params.input.length > 32768)
+    || params.input.length < parameters.input.min
+    || params.input.length > parameters.input.max)
   ) {
     throw new Error(`${errors.common.INVALID_PARAMETER_VALUE}: --input`);
   }
   if (paramsName &&
     (typeof paramsName !== 'string'
-    || paramsName.length < 1
-    || paramsName.length > 80)
+    || paramsName.length < parameters.name.min
+    || paramsName.length > parameters.name.max)
   ) {
     throw new Error(`${errors.common.INVALID_PARAMETER_VALUE}: --name`);
   }

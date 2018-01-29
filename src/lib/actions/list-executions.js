@@ -1,25 +1,25 @@
 const { isValidArn } = require('../tools/validate');
-const { errors, status } = require('../../constants');
+const { errors, status, parameters } = require('../../constants');
 
 function listExecutions(params, stateMachines, executions) {
   /* check request parameters */
   if (typeof params.stateMachineArn !== 'string'
-    || params.stateMachineArn.length < 1
-    || params.stateMachineArn.length > 256
+    || params.stateMachineArn.length < parameters.arn.min
+    || params.stateMachineArn.length > parameters.arn.max
   ) {
     throw new Error(`${errors.common.INVALID_PARAMETER_VALUE}: --execution-arn`);
   }
   if (params.maxResults &&
     (parseInt(params.maxResults, 10) !== params.maxResults
-    || params.maxResults < 0
-    || params.maxResults > 1000)
+    || params.maxResults < parameters.results.min
+    || params.maxResults > parameters.results.max)
   ) {
     throw new Error(`${errors.common.INVALID_PARAMETER_VALUE}: --max-results`);
   }
   if (params.nextToken &&
     (typeof params.nextToken !== 'string'
-    || params.nextToken.length < 1
-    || params.nextToken.length > 1024)
+    || params.nextToken.length < parameters.token.min
+    || params.nextToken.length > parameters.token.max)
   ) {
     throw new Error(`${errors.common.INVALID_PARAMETER_VALUE}: --next-token`);
   }

@@ -1,17 +1,22 @@
 const aslValidator = require('asl-validator');
 
 const { isValidArn, isValidName } = require('../tools/validate');
-const { errors, status } = require('../../constants');
+const { errors, status, parameters } = require('../../constants');
 
 function createStateMachine(params, stateMachines) {
   /* check request parameters */
-  if (typeof params.definition !== 'string' || params.definition.length > 1048576) {
+  if (typeof params.definition !== 'string'
+    || params.definition.length > parameters.definition.max
+  ) {
     throw new Error(`${errors.common.INVALID_PARAMETER_VALUE}: --definition`);
   }
-  if (typeof params.name !== 'string' || params.name.length < 1 || params.name.length > 80) {
+  if (typeof params.name !== 'string'
+    || params.name.length < parameters.name.min
+    || params.name.length > parameters.name.max
+  ) {
     throw new Error(`${errors.common.INVALID_PARAMETER_VALUE}: --name`);
   }
-  if (typeof params.roleArn !== 'string' || params.roleArn.length > 256) {
+  if (typeof params.roleArn !== 'string' || params.roleArn.length > parameters.arn.max) {
     throw new Error(`${errors.common.INVALID_PARAMETER_VALUE}: --role-arn`);
   }
 

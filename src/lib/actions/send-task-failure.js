@@ -1,22 +1,22 @@
-const { errors, status } = require('../../constants');
+const { errors, status, parameters } = require('../../constants');
 
 function sendTaskFailure(params, activities) {
   /* check request parameters */
   if (params.cause &&
     (typeof params.cause !== 'string'
-    || params.cause.length > 32768)
+    || params.cause.length > parameters.cause.max)
   ) {
     throw new Error(`${errors.common.INVALID_PARAMETER_VALUE}: --cause`);
   }
   if (params.error &&
     (typeof params.error !== 'string'
-    || params.error.length > 256)
+    || params.error.length > parameters.error.max)
   ) {
     throw new Error(`${errors.common.INVALID_PARAMETER_VALUE}: --error`);
   }
   if (typeof params.taskToken !== 'string'
-    || params.taskToken.length < 1
-    || params.taskToken.length > 1024
+    || params.taskToken.length < parameters.token.min
+    || params.taskToken.length > parameters.token.max
   ) {
     throw new Error(errors.sendTaskFailure.INVALID_TOKEN);
   }

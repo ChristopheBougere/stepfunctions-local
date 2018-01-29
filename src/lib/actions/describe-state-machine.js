@@ -1,11 +1,11 @@
 const { isValidArn } = require('../tools/validate');
-const { errors } = require('../../constants');
+const { errors, parameters } = require('../../constants');
 
 function describeStateMachine(params, stateMachines) {
   /* check request parameters */
   if (typeof params.stateMachineArn !== 'string'
-    || params.stateMachineArn.length < 1
-    || params.stateMachineArn.length > 256
+    || params.stateMachineArn.length < parameters.arn.min
+    || params.stateMachineArn.length > parameters.arn.max
   ) {
     throw new Error(`${errors.common.INVALID_PARAMETER_VALUE}: --state-machine-arn`);
   }

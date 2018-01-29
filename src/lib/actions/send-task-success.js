@@ -1,15 +1,14 @@
-const { errors, status } = require('../../constants');
+const { errors, status, parameters } = require('../../constants');
 
 function sendTaskSuccess(params, activities) {
   /* check request parameters */
-  if (typeof params.output !== 'string' || params.output.length > 32768) {
+  if (typeof params.output !== 'string' || params.output.length > parameters.output.max) {
     throw new Error(`${errors.common.INVALID_PARAMETER_VALUE}: --task-output`);
   }
   if (typeof params.taskToken !== 'string'
-    || params.taskToken.length < 1
-    || params.taskToken.length > 1024
+    || params.taskToken.length < parameters.token.min
+    || params.taskToken.length > parameters.token.max
   ) {
-    // NOTE: Could also be INVALID_TOKEN
     throw new Error(`${errors.common.INVALID_PARAMETER_VALUE}: --task-token`);
   }
 

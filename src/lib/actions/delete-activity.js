@@ -1,11 +1,11 @@
 const { isValidArn } = require('../tools/validate');
-const { errors } = require('../../constants');
+const { errors, parameters } = require('../../constants');
 
 function deleteActivity(params, activities) {
   /* check request parameters */
   if (typeof params.activityArn !== 'string'
-    || params.activityArn.length < 1
-    || params.activityArn.length > 256
+    || params.activityArn.length < parameters.arn.min
+    || params.activityArn.length > parameters.arn.max
   ) {
     throw new Error(`${errors.common.INVALID_PARAMETER_VALUE}: --activity-arn`);
   }
