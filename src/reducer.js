@@ -96,8 +96,17 @@ function reducer(state = initialState, action = null) {
     }
     case actions.DESCRIBE_ACTIVITY:
       return Object.assign({}, state);
-    case actions.GET_ACTIVITY_TASK:
-      return Object.assign({}, state);
+    case actions.GET_ACTIVITY_TASK: {
+      const stateCopy = Object.assign({}, state);
+      const activity = stateCopy.activities.find(a => a.activityArn === result.activityArn);
+      const task = activity.tasks.find(t => t.taskToken === result.taskToken);
+      Object.assign(task, {
+        workerName: result.workerName,
+        heartbeat: result.heartbeat,
+        status: status.activity.IN_PROGRESS,
+      });
+      return stateCopy;
+    }
     case actions.SEND_TASK_FAILURE: {
       const stateCopy = Object.assign({}, state);
       const activity = stateCopy.activities.find(a => a.activityArn === result.activityArn);
@@ -115,7 +124,6 @@ function reducer(state = initialState, action = null) {
       const task = activity.tasks.find(t => t.taskToken === result.taskToken);
       Object.assign(task, {
         heartbeat: result.heartbeat,
-        status: status.activity.IN_PROGRESS,
       });
       return stateCopy;
     }

@@ -30,8 +30,11 @@ function getActivityTask(params, activities) {
     input: scheduledTask.input,
     taskToken: scheduledTask.taskToken,
   } : null;
-
   return {
+    activityArn: params.activityArn,
+    workerName: params.workerName,
+    taskToken: scheduledTask ? scheduledTask.taskToken : null,
+    heartbeat: Date.now() / 1000,
     response,
   };
 }

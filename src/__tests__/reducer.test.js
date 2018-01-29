@@ -226,9 +226,36 @@ describe('Reducer actions related to activities', () => {
     try {
       const action = {
         type: actions.GET_ACTIVITY_TASK,
+        result: {
+          activityArn: 'my-first-activity-arn',
+          taskToken: 'my-task-token',
+          workerName: 'worker-name',
+          heartbeat: Date.now() / 1000,
+        },
       };
-      const newState = reducer(initialState, action);
-      expect(newState).toMatchObject(initialState);
+      const state = {
+        ...initialState,
+        activities: [
+          {
+            name: 'first-activity',
+            activityArn: 'my-first-activity-arn',
+            creationDate: Date.now() / 1000,
+            tasks: [
+              {
+                taskToken: 'my-task-token',
+              },
+            ],
+          },
+        ],
+      };
+      const { activities } = reducer(state, action);
+      const activity = activities.find(a => a.activityArn === action.result.activityArn);
+      expect(activity.tasks[0]).toMatchObject({
+        taskToken: action.result.taskToken,
+        workerName: action.result.workerName,
+        status: status.activity.IN_PROGRESS,
+        heartbeat: expect.any(Number),
+      });
     } catch (e) {
       expect(e).not.toBeDefined();
     }
@@ -303,7 +330,6 @@ describe('Reducer actions related to activities', () => {
       expect(activity.tasks[0]).toMatchObject({
         taskToken: action.result.taskToken,
         heartbeat: action.result.heartbeat,
-        status: status.activity.IN_PROGRESS,
       });
     } catch (e) {
       expect(e).not.toBeDefined();

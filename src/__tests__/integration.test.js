@@ -7,13 +7,32 @@ const data = {
   stateMachines: [
     {
       name: 'first-state-machine',
-      definition: '\'{"Comment": "This is a simple state machine","StartAt": "MyState","States": {"MyState": {"Type": "Pass", "End": true}}}\'',
+      definition: '\'{"Comment":"This is a simple state machine","StartAt":"MyState","States":{"MyState":{"Type":"Pass","End":true}}}\'',
+      roleArn: 'arn:aws:iam::0123456789:role/service-role/MyRole',
+    },
+    {
+      name: 'activity-state-machine',
+      definition: '\'{"Comment": "This is a simple state machine","StartAt":"Activity","States":{"Activity": {"Type": "Task","Resource": "arn:aws:states:local:0123456789:activity:my-activity","TimeoutSeconds":2,"End": true}}}\'',
       roleArn: 'arn:aws:iam::0123456789:role/service-role/MyRole',
     },
   ],
   executions: [
     {
-      name: 'first-execution',
+      name: 'first-state-machine-execution',
+    },
+    {
+      name: 'activity-succeed-state-machine-execution',
+    },
+    {
+      name: 'activity-timeout-state-machine-execution',
+    },
+    {
+      name: 'activity-fail-state-machine-execution',
+    },
+  ],
+  activities: [
+    {
+      name: 'my-activity',
     },
   ],
 };
@@ -22,11 +41,17 @@ const commands = {
   listStateMachines: 'list-state-machines',
   createStateMachine: 'create-state-machine --name {{name}} --role {{role}} --definition {{definition}}',
   describeStateMachine: 'describe-state-machine --state-machine-arn {{arn}}',
+  describeStateMachineForExecution: 'describe-state-machine-for-execution --execution-arn {{arn}}',
   listExecutions: 'list-executions --state-machine-arn {{arn}}',
   startExecution: 'start-execution --state-machine-arn {{arn}} --name {{name}} --input {{input}}',
   describeExecution: 'describe-execution --execution-arn {{arn}}',
   getExecutionHistory: 'get-execution-history --execution-arn {{arn}}',
   deleteStateMachine: 'delete-state-machine --state-machine-arn {{arn}}',
+  createActivity: 'create-activity --name {{name}}',
+  getActivityTask: 'get-activity-task --activity-arn {{arn}}',
+  sendTaskSuccess: 'send-task-success --task-token {{token}} --task-output {{output}}',
+  sendTaskHeartbeat: 'send-task-heartbeat --task-token {{token}}',
+  sendTaskFailure: 'send-task-failure --task-token {{token}}',
 };
 
 function exec(command, options = { silent: true }) {
@@ -41,7 +66,7 @@ function exec(command, options = { silent: true }) {
   });
 }
 
-describe('Integration tests', () => {
+describe('Integration tests (execute a simple state machine)', () => {
   beforeAll(() => {
     server.start({
       port: PORT,
@@ -140,6 +165,23 @@ describe('Integration tests', () => {
     }
   });
 
+  it('should describe the state machine for an execution', async () => {
+    try {
+      const command = commands.describeStateMachineForExecution
+        .replace('{{arn}}', data.executions[0].executionArn);
+      const stateMachine = data.stateMachines[0];
+      const res = await exec(command);
+      expect(res).toMatchObject({
+        stateMachineArn: stateMachine.stateMachineArn,
+        name: stateMachine.name,
+        definition: expect.any(Object),
+        roleArn: stateMachine.roleArn,
+        updateDate: expect.any(Number),
+      });
+    } catch (e) {
+      expect(e).not.toBeDefined();
+    }
+  });
 
   it('should get execution history', async () => {
     try {
@@ -170,6 +212,123 @@ describe('Integration tests', () => {
     try {
       const { stateMachines } = await exec(commands.listStateMachines);
       expect(stateMachines).toHaveLength(0);
+    } catch (e) {
+      expect(e).not.toBeDefined();
+    }
+  });
+
+  afterAll(() => {
+    server.stop();
+  });
+});
+
+describe('Integration tests (execute a state machine with activity)', () => {
+  jasmine.DEFAULT_TIMEOUT_INTERVAL = 20000;
+  beforeAll(() => {
+    server.start({
+      port: PORT,
+    });
+  });
+
+  it('should create a new state machine', async () => {
+    try {
+      const command = commands.createStateMachine
+        .replace('{{name}}', data.stateMachines[1].name)
+        .replace('{{role}}', data.stateMachines[1].roleArn)
+        .replace('{{definition}}', data.stateMachines[1].definition);
+      const res = await exec(command);
+      Object.assign(data.stateMachines[1], res);
+    } catch (e) {
+      expect(e).not.toBeDefined();
+    }
+  });
+
+  it('should create an activity', async () => {
+    try {
+      const activityName = data.activities[0].name;
+      const command = commands.createActivity
+        .replace('{{name}}', activityName);
+      const res = await exec(command);
+      Object.assign(data.activities[0], res);
+      expect(res.activityArn).toEqual(`arn:aws:states:local:0123456789:activity:${activityName}`);
+    } catch (e) {
+      expect(e).not.toBeDefined();
+    }
+  });
+
+  it('should start two executions of the state machine', async () => {
+    try {
+      const executionName1 = data.executions[1].name;
+      const executionName2 = data.executions[2].name;
+      const executionName3 = data.executions[3].name;
+      const { name, stateMachineArn } = data.stateMachines[1];
+      const command1 = commands.startExecution
+        .replace('{{arn}}', stateMachineArn)
+        .replace('{{name}}', executionName1)
+        .replace('{{input}}', '\'{"comment":"this is my first input"}\'');
+      const command2 = commands.startExecution
+        .replace('{{arn}}', stateMachineArn)
+        .replace('{{name}}', executionName2)
+        .replace('{{input}}', '\'{"comment":"this is my second input"}\'');
+      const command3 = commands.startExecution
+        .replace('{{arn}}', stateMachineArn)
+        .replace('{{name}}', executionName3)
+        .replace('{{input}}', '\'{"comment":"this is my third input"}\'');
+      const res1 = await exec(command1);
+      const res2 = await exec(command2);
+      const res3 = await exec(command3);
+      Object.assign(data.executions[1], res1);
+      Object.assign(data.executions[2], res2);
+      Object.assign(data.executions[3], res3);
+      expect(res1.executionArn).toEqual(`arn:aws:states:local:0123456789:execution:${name}:${executionName1}`);
+      expect(res2.executionArn).toEqual(`arn:aws:states:local:0123456789:execution:${name}:${executionName2}`);
+      expect(res3.executionArn).toEqual(`arn:aws:states:local:0123456789:execution:${name}:${executionName3}`);
+    } catch (e) {
+      expect(e).not.toBeDefined();
+    }
+  });
+
+  it('should fake a worker sending a task success', async () => {
+    try {
+      // get task token of first task and send task success signal
+      const getTaskCommand = commands.getActivityTask
+        .replace('{{arn}}', data.activities[0].activityArn);
+      const { taskToken: taskToken1 } = await exec(getTaskCommand);
+      const sendTaskSuccessCommand = commands.sendTaskSuccess
+        .replace('{{token}}', taskToken1)
+        .replace('{{output}}', '\'{"result":"this is my first activity result"}\'');
+      await exec(sendTaskSuccessCommand);
+
+      // get task token of second task and don't send anything (wait for timeout)
+      const { taskToken: taskToken2 } = await exec(getTaskCommand);
+
+      // get task token of third task and send task fail signal
+      const { taskToken: taskToken3 } = await exec(getTaskCommand);
+      const sendTaskFailureCommand = commands.sendTaskFailure.replace('{{token}}', taskToken3);
+      await exec(sendTaskFailureCommand);
+
+      // wait for the activity to timeout
+      await new Promise(resolve => setTimeout(resolve, 5 * 1000));
+
+      expect(taskToken1).not.toEqual(taskToken2);
+      expect(taskToken2).not.toEqual(taskToken3);
+      expect(taskToken1).not.toEqual(taskToken3);
+    } catch (e) {
+      expect(e).not.toBeDefined();
+    }
+  });
+
+  it('should describe the executions', async () => {
+    try {
+      const command1 = commands.describeExecution.replace('{{arn}}', data.executions[1].executionArn);
+      const command2 = commands.describeExecution.replace('{{arn}}', data.executions[2].executionArn);
+      const command3 = commands.describeExecution.replace('{{arn}}', data.executions[3].executionArn);
+      const res1 = await exec(command1);
+      const res2 = await exec(command2);
+      const res3 = await exec(command3);
+      expect(res1.status).toEqual('SUCCEEDED');
+      expect(res2.status).toEqual('FAILED');
+      expect(res3.status).toEqual('FAILED');
     } catch (e) {
       expect(e).not.toBeDefined();
     }
