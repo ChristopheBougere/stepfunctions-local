@@ -1,6 +1,6 @@
 const shell = require('shelljs');
 const server = require('../server');
-const Worker = require('../lib/tools/worker');
+const Worker = require('./utils/worker');
 
 const PORT = 9999;
 
@@ -67,7 +67,7 @@ function exec(command, options = { silent: true }) {
   });
 }
 
-describe.skip('Integration tests (execute a simple state machine)', () => {
+describe('Integration tests (execute a simple state machine)', () => {
   beforeAll(() => {
     server.start({
       port: PORT,
