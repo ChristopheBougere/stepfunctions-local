@@ -1,5 +1,5 @@
 const State = require('./state');
-const addHistoryEvent = require('../actions/add-history-event');
+const addHistoryEvent = require('../actions/custom/add-history-event');
 const { applyInputPath, applyResultPath, applyOutputPath } = require('../tools/path');
 
 class Parallel extends State {

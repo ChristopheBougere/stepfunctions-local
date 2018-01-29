@@ -4,12 +4,12 @@ const uuidv4 = require('uuid/v4');
 const State = require('./state');
 const Activity = require('./activity');
 
-const addHistoryEvent = require('../actions/add-history-event');
-const updateActivityTask = require('../actions/update-activity-task');
+const addHistoryEvent = require('../actions/custom/add-history-event');
+const updateActivityTask = require('../actions/custom/update-activity-task');
 const { applyInputPath, applyResultPath, applyOutputPath } = require('../tools/path');
 
 const store = require('../../store');
-const { actions, status } = require('../../constants');
+const { actions, status, parameters } = require('../../constants');
 
 const LAMBDA = 'lambda';
 const ACTIVITY = 'activity';
@@ -225,11 +225,11 @@ class Task extends State {
   }
 
   get heartbeatInSeconds() {
-    return this.state.HeartbeatSeconds || 1;
+    return this.state.HeartbeatSeconds || parameters.default.HEARTBEAT_SECONDS;
   }
 
   get timeoutInSeconds() {
-    return this.state.TimeoutSeconds || 99999999;
+    return this.state.TimeoutSeconds || parameters.default.TIMEOUT_SECONDS;
   }
 
   get type() {

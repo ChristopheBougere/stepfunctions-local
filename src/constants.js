@@ -338,37 +338,41 @@ module.exports = {
     },
   },
   parameters: {
+    default: {
+      HEARTBEAT_SECONDS: 99999999,
+      TIMEOUT_SECONDS: 99999999,
+    },
     arn: {
-      min: 1,
-      max: 256,
+      MIN: 1,
+      MAX: 256,
     },
     cause: {
-      max: 32768,
+      MAX: 32768,
     },
     definition: {
-      max: 1048576,
+      MAX: 1048576,
     },
     error: {
-      max: 256,
+      MAX: 256,
     },
     input: {
-      min: 0,
-      max: 32768,
+      MIN: 0,
+      MAX: 32768,
     },
     results: {
-      min: 0,
-      max: 1000,
+      MIN: 0,
+      MAX: 1000,
     },
     name: {
-      min: 1,
-      max: 80,
+      MIN: 1,
+      MAX: 80,
     },
     output: {
-      max: 32768,
+      MAX: 32768,
     },
     token: {
-      min: 1,
-      max: 1024,
+      MIN: 1,
+      MAX: 1024,
     },
   },
 };

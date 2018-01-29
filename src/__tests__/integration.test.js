@@ -12,7 +12,7 @@ const data = {
     },
     {
       name: 'activity-state-machine',
-      definition: '\'{"Comment": "This is a simple state machine","StartAt":"Activity","States":{"Activity": {"Type": "Task","Resource": "arn:aws:states:local:0123456789:activity:my-activity","TimeoutSeconds":2,"End": true}}}\'',
+      definition: '\'{"Comment": "This is a simple state machine","StartAt":"Activity","States":{"Activity": {"Type": "Task","Resource": "arn:aws:states:local:0123456789:activity:my-activity","HeartbeatSeconds":1,"TimeoutSeconds":2,"End": true}}}\'',
       roleArn: 'arn:aws:iam::0123456789:role/service-role/MyRole',
     },
   ],
