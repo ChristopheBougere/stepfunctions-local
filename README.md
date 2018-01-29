@@ -7,7 +7,7 @@
 
 [![NPM](https://nodei.co/npm/stepfunctions-local.png?stars=true)](https://www.npmjs.com/package/stepfunctions-local)
 
-#### :warning: **Important** : This package is a work in progress. It is not ready to be used yet. Any contribution is warm welcome
+#### :warning: **Important** : The package isn't stable yet, but is ready to be used: most features are available. Any contribution is warm welcome
 
 Stepfunctions-local provides a local AWS Step Functions server.
 
@@ -22,7 +22,6 @@ Its API is totally compliant with AWS service, thus you can use it for your test
 
 ## Use cases
 ### I want to run a local state machine with activities
-:warning: Activities are not available yet in this package, but they will be soon.
 You only need to configure your activity worker to use this `stepfunctions` instance. In javascript:
 ```js
 AWS.config.stepfunctions = {
@@ -119,21 +118,21 @@ $> aws stepfunctions --endpoint http://localhost:4599 get-execution-history --ex
 ### Actions compatibility
 | Actions | Support |
 | ------ | ------ |
-| ***CreateActivity*** | At this moment, stepfunctions-local *does not support* activities |
+| ***CreateActivity*** | Following errors are not thrown: *ActivityLimitExceeded* |
 | ***CreateStateMachine***  | Following errors are not thrown: *StateMachineDeleting*, *StateMachineLimitExceeded* |
-| ***DeleteActivity*** | At this moment, stepfunctions-local *does not support* activities |
+| ***DeleteActivity*** | * |
 | ***DeleteStateMachine*** | * |
-| ***DescribeActivity*** | At this moment, stepfunctions-local *does not support* activities |
+| ***DescribeActivity*** | * |
 | ***DescribeStateMachine*** | * |
 | ***DescribeStateMachineForExecution*** | * |
-| ***GetActivityTask*** | At this moment, stepfunctions-local *does not support* activities |
+| ***GetActivityTask*** | Following errors are not thrown: *ActivityWorkerLimitExceeded* |
 | ***GetExecutionHistory*** | * |
-| ***ListActivities*** | At this moment, stepfunctions-local *does not support* activities |
+| ***ListActivities*** | * |
 | ***ListExecutions*** | * |
 | ***ListStateMachines*** | * |
-| ***SendTaskFailure*** | At this moment, stepfunctions-local *does not support* activities |
-| ***SendTaskHeartbeat*** | At this moment, stepfunctions-local *does not support* activities |
-| ***SendTaskSuccess*** | At this moment, stepfunctions-local *does not support* activities |
+| ***SendTaskFailure*** | * |
+| ***SendTaskHeartbeat*** | * |
+| ***SendTaskSuccess*** | * |
 | ***StartExecution*** | Following errors are not thrown: *ExecutionLimitExceeded* |
 | ***StopExecution*** | * |
 | ***UpdateStateMachine*** | Following errors are not thrown: *StateMachineDeleting* |
@@ -164,5 +163,4 @@ $> npm run test
 - [AWS Step Functions SDK](https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/StepFunctions.html)
 
 ## TODO
-- Implement Actions related to activities
 - Add execution abortion related history events
