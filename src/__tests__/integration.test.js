@@ -228,6 +228,7 @@ describe('Integration tests (execute a state machine with activity)', () => {
   beforeAll(() => {
     server.start({
       port: PORT,
+      region: 'local',
     });
   });
 

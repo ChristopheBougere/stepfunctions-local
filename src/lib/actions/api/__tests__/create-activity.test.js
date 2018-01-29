@@ -9,7 +9,10 @@ describe('Create actiity', () => {
       const params = {
         name: 'my-activity',
       };
-      const { activity } = createActivity(params, activities);
+      const config = {
+        region: 'local',
+      };
+      const { activity } = createActivity(params, activities, config);
       expect(activity.creationDate).toEqual(expect.any(Number));
       expect(isValidArn(activity.activityArn, 'activity')).toBe(true);
     } catch (e) {

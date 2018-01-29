@@ -34,7 +34,7 @@ function callAction(state, action, actionParams, config) {
     switch (action) {
       // actions related to state machine
       case actions.CREATE_STATE_MACHINE:
-        return createStateMachine(actionParams, stateMachines);
+        return createStateMachine(actionParams, stateMachines, config);
       case actions.LIST_STATE_MACHINES:
         return listStateMachines(actionParams, stateMachines);
       case actions.DESCRIBE_STATE_MACHINE:
@@ -58,7 +58,7 @@ function callAction(state, action, actionParams, config) {
         return getExecutionHistory(actionParams, executions);
       // actions related to activities
       case actions.CREATE_ACTIVITY:
-        return createActivity(actionParams, activities);
+        return createActivity(actionParams, activities, config);
       case actions.DESCRIBE_ACTIVITY:
         return describeActivity(actionParams, activities);
       case actions.GET_ACTIVITY_TASK:
@@ -88,6 +88,7 @@ function callAction(state, action, actionParams, config) {
 function start(config = {}) {
   const fullConfig = Object.assign({
     port: params.DEFAULT_PORT,
+    region: params.DEFAULT_REGION,
     lambdaEndpoint: params.DEFAULT_LAMBDA_ENDPOINT,
     lambdaRegion: params.DEFAULT_LAMBDA_REGION,
   }, config);

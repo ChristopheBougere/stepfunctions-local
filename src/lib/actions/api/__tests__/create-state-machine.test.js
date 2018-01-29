@@ -10,7 +10,10 @@ describe('Create state machine', () => {
         name: 'my-state-machine',
         roleArn: 'arn:aws:iam::0123:role/this-is-my-role',
       };
-      const { stateMachine } = createStateMachine(params, stateMachines);
+      const config = {
+        region: 'local',
+      };
+      const { stateMachine } = createStateMachine(params, stateMachines, config);
       expect(stateMachine.creationDate).toBeDefined();
       expect(stateMachine.stateMachineArn).toEqual('arn:aws:states:local:0123:stateMachine:my-state-machine');
       expect(stateMachine.definition).toEqual(JSON.parse(params.definition));

@@ -1,7 +1,7 @@
 const { isValidName } = require('../../tools/validate');
 const { errors, parameters } = require('../../../constants');
 
-function createActivity(params, activities) {
+function createActivity(params, activities, config) {
   /* check request parameters */
   if (typeof params.name !== 'string'
     || params.name.length < parameters.name.MIN
@@ -25,7 +25,7 @@ function createActivity(params, activities) {
   }
 
   const activity = {
-    activityArn: `arn:aws:states:local:0123456789:activity:${params.name}`,
+    activityArn: `arn:aws:states:${config.region}:0123456789:activity:${params.name}`,
     creationDate: Date.now() / 1000,
   };
 

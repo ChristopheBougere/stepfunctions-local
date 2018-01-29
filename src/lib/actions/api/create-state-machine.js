@@ -3,7 +3,7 @@ const aslValidator = require('asl-validator');
 const { isValidArn, isValidName } = require('../../tools/validate');
 const { errors, status, parameters } = require('../../../constants');
 
-function createStateMachine(params, stateMachines) {
+function createStateMachine(params, stateMachines, config) {
   /* check request parameters */
   if (typeof params.definition !== 'string'
     || params.definition.length > parameters.definition.MAX
@@ -42,7 +42,7 @@ function createStateMachine(params, stateMachines) {
   }
   const accountId = params.roleArn.split(':')[4];
   const stateMachine = {
-    stateMachineArn: `arn:aws:states:local:${accountId}:stateMachine:${params.name}`,
+    stateMachineArn: `arn:aws:states:${config.region}:${accountId}:stateMachine:${params.name}`,
     definition: parsedDefinition,
     creationDate: Date.now() / 1000,
     roleArn: params.roleArn,
