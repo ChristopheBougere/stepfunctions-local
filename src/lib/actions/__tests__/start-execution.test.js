@@ -6,6 +6,15 @@ const { errors } = require('../../../constants');
 const stateMachines = [
   {
     stateMachineArn: 'arn:aws:states:local:0123456789:stateMachine:my-state-machine',
+    definition: {
+      StartAt: 'FirstState',
+      States: {
+        FirstState: {
+          Type: 'Pass',
+          End: true,
+        },
+      },
+    },
   },
 ];
 
