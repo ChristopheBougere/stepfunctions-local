@@ -9,10 +9,8 @@
 
 #### :warning: **Important** : The package isn't stable yet, but is ready to be used: most features are available. Any contribution is warm welcome
 
-Stepfunctions-local provides a local AWS Step Functions server.
-
-This package only aims at replacing AWS Step Functions in a local context.
-
+Stepfunctions-local provides a local AWS Step Functions server.  
+This package only aims at replacing AWS Step Functions in a local context.  
 Its API is totally compliant with AWS service, thus you can use it for your tests.
 
 ## Why **stepfunctions-local**?
@@ -31,19 +29,15 @@ AWS.config.stepfunctions = {
 ```
 Then, start `stepfunctions-local` server and you will be able to execute requests to StepFunctions API (`GetActivityTask`, `SendTaskSuccess`, ...).
 
-### I want to run a local state machine with distant lambdas
+### I want to run a local state machine with distant Lambdas
 Simply configure your lambda endpoint and region when starting the server:
 ```bash
 $> stepfunctions-local start --lambda-endpoint http://hostname.com:1337 --lambda-region my-region
 ```
 `stepfunctions-local` will directly query lambda using this configuration.
 
-### I want to run a local state machine with local lambdas
-`stepfunctions-local` does not aim to emulate lambda. To do this you need a local lambda server that is compliant to AWS API. We recommand to use [localstack](https://github.com/localstack/localstack) for that. Start a local lambda server using `localstack`, then configure your lambda endpoint and region when starting the server:
-```bash
-$> stepfunctions-local start --lambda-endpoint http://localhost:4574 --lambda-region us-east-1
-```
-`stepfunctions-local` will directly query lambda using this configuration.
+### I want to run a local state machine with local Lambdas
+`stepfunctions-local` does not aim to emulate Lambda. To do this you need a local Lambda server that is compliant to AWS API. We recommand to use [localstack](https://github.com/localstack/localstack) for that. See how to [here](#run-lambdas-with-localstack).
 
 ## Prerequisites
 * [AWS Command Line Interface (CLI)](https://aws.amazon.com/cli/)
@@ -70,6 +64,7 @@ Options:
 
   -V, --version                        output the version number
   --port <port>                        the port the server should run on
+  --region <region>                    the region the server should run on
   --lambda-endpoint <lambda-endpoint>  the endpoint for lambda
   --lambda-region <lambda-region>      the region for lambda
   --silent                             whether you want to run the server in silent mode or not
@@ -82,6 +77,7 @@ const stepfunctionsLocal = require('stepfunctions-local');
 
 stepFunctionsLocal.start({
   port: 4599,
+  region: 'localhost',
   lambdaEndpoint: 'http://localhost:4574',
   lambdaRegion: 'localhost',
 });
@@ -113,6 +109,32 @@ $> aws stepfunctions --endpoint http://localhost:4599 describe-state-machine-for
 # Get execution history
 $> aws stepfunctions --endpoint http://localhost:4599 get-execution-history --execution-arn arn:aws:states:local:0123456789:execution:my-state-machine:my-execution
 ```
+
+### Run Lambdas with Localstack
+
+Start a local Lambda server using `localstack` (you need to clone the repository first):
+```bash
+$> docker-compose up
+```
+Note: you may have to run `TMPDIR=/private$TMPDIR docker-compose up` if you are on Mac OS.
+
+If you need to access AWS services from within your Lambda, the variable `LOCALSTACK_HOSTNAME` will contain the name of the host where Localstack services are available.
+
+For instance, in a NodeJS Lambda function, you can use the following to access S3 functions:
+```js
+const s3 = new AWS.S3({
+  endpoint: 'http://' + process.env.LOCALSTACK_HOSTNAME + ':4572',
+});
+s3.listBuckets({}, function(err, data) {
+  // your callback
+});
+```
+
+Configure your Lambda endpoint and region when starting the server:
+```bash
+$> stepfunctions-local start --lambda-endpoint http://localhost:4574 --lambda-region us-east-1
+```
+`stepfunctions-local` will directly query lambda using this configuration.
 
 ## Compatibility with AWS CLI
 ### Actions compatibility
@@ -149,7 +171,7 @@ $> aws stepfunctions --endpoint http://localhost:4599 get-execution-history --ex
 | ***Parallel*** | *ErrorEquals* parameter from *Catch* field not implemented yet. |
 
 ## Want to contribute ?
-Wow, that's great !  
+**Wow, that's great !**  
 Feedback, bug reports and pull requests are more than welcome !
 
 You can test your code with :
