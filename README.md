@@ -23,7 +23,7 @@ Its API is totally compliant with AWS service, thus you can use it for your test
 You only need to configure your activity worker to use this `stepfunctions` instance. In javascript:
 ```js
 AWS.config.stepfunctions = {
-  region: 'localhost',
+  region: 'local',
   endpoint: 'http://localhost:4599',
 }
 ```
@@ -56,7 +56,7 @@ $> npm install --save stepfunctions-local
 ## How to use it ?
 
 ### Start a server
-Using command line
+#### Using command line
 ```bash
 $> stepfunctions-local start
 
@@ -65,23 +65,29 @@ Options:
   -V, --version                        output the version number
   --port <port>                        the port the server should run on
   --region <region>                    the region the server should run on
-  --lambda-endpoint <lambda-endpoint>  the endpoint for lambda
   --lambda-region <lambda-region>      the region for lambda
+  --lambda-endpoint <lambda-endpoint>  the endpoint for lambda
   --silent                             whether you want to run the server in silent mode or not
   -h, --help                           output usage information
 ```
 
-From your code
+#### From your code
 ```js
 const stepfunctionsLocal = require('stepfunctions-local');
 
 stepFunctionsLocal.start({
   port: 4599,
-  region: 'localhost',
+  region: 'local',
+  lambdaRegion: 'local',
   lambdaEndpoint: 'http://localhost:4574',
-  lambdaRegion: 'localhost',
 });
 ```
+
+#### Default parameters:
+- port: 4599
+- region: local
+- lambda-region: local
+- lambda-endpoint: http://localhost:4574
 
 ### Play with it
 ```bash
@@ -132,7 +138,7 @@ s3.listBuckets({}, function(err, data) {
 
 Configure your Lambda endpoint and region when starting the server:
 ```bash
-$> stepfunctions-local start --lambda-endpoint http://localhost:4574 --lambda-region us-east-1
+$> stepfunctions-local start --lambda-endpoint http://localhost:4574 --lambda-region local
 ```
 `stepfunctions-local` will directly query lambda using this configuration.
 
