@@ -1,7 +1,7 @@
 const shell = require('shelljs');
 
 class Worker {
-  constructor(name, port = 4599) {
+  constructor(name, port = 4584) {
     this.name = name;
     this.port = port;
     this.commandPrefix = `aws stepfunctions --endpoint http://localhost:${this.port}`;

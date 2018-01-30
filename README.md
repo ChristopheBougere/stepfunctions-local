@@ -24,7 +24,7 @@ You only need to configure your activity worker to use this `stepfunctions` inst
 ```js
 AWS.config.stepfunctions = {
   region: 'local',
-  endpoint: 'http://localhost:4599',
+  endpoint: 'http://localhost:4584',
 }
 ```
 Then, start `stepfunctions-local` server and you will be able to execute requests to StepFunctions API (`GetActivityTask`, `SendTaskSuccess`, ...).
@@ -76,7 +76,7 @@ Options:
 const stepfunctionsLocal = require('stepfunctions-local');
 
 stepFunctionsLocal.start({
-  port: 4599,
+  port: 4584,
   region: 'local',
   lambdaRegion: 'local',
   lambdaEndpoint: 'http://localhost:4574',
@@ -84,7 +84,7 @@ stepFunctionsLocal.start({
 ```
 
 #### Default parameters:
-- port: 4599
+- port: 4584
 - region: local
 - lambda-region: local
 - lambda-endpoint: http://localhost:4574
@@ -92,28 +92,28 @@ stepFunctionsLocal.start({
 ### Play with it
 ```bash
 # List state machines
-$> aws stepfunctions --endpoint http://localhost:4599 list-state-machines
+$> aws stepfunctions --endpoint http://localhost:4584 list-state-machines
 
 # Create a new state machine
-$> aws stepfunctions --endpoint http://localhost:4599 create-state-machine --name my-state-machine --definition '{"Comment":"A Hello World example of the Amazon States Language using a Pass state","StartAt":"HelloWorld","States":{"HelloWorld":{"Type":"Pass","End":true}}}' --role-arn arn:aws:iam::0123456789:role/service-role/MyRole
+$> aws stepfunctions --endpoint http://localhost:4584 create-state-machine --name my-state-machine --definition '{"Comment":"A Hello World example of the Amazon States Language using a Pass state","StartAt":"HelloWorld","States":{"HelloWorld":{"Type":"Pass","End":true}}}' --role-arn arn:aws:iam::0123456789:role/service-role/MyRole
 
 # Describe state machine
-$> aws stepfunctions --endpoint http://localhost:4599 describe-state-machine --state-machine-arn arn:aws:states:local:0123456789:stateMachine:my-state-machine
+$> aws stepfunctions --endpoint http://localhost:4584 describe-state-machine --state-machine-arn arn:aws:states:local:0123456789:stateMachine:my-state-machine
 
 # Start state machine execution
-$> aws stepfunctions --endpoint http://localhost:4599 start-execution --state-machine-arn arn:aws:states:local:0123456789:stateMachine:my-state-machine --name my-execution --input '{"comment":"I am a great input !"}'
+$> aws stepfunctions --endpoint http://localhost:4584 start-execution --state-machine-arn arn:aws:states:local:0123456789:stateMachine:my-state-machine --name my-execution --input '{"comment":"I am a great input !"}'
 
 # List state machine executions
-$> aws stepfunctions --endpoint http://localhost:4599 list-executions --state-machine-arn arn:aws:states:local:0123456789:stateMachine:my-state-machine
+$> aws stepfunctions --endpoint http://localhost:4584 list-executions --state-machine-arn arn:aws:states:local:0123456789:stateMachine:my-state-machine
 
 # Describe execution
-$> aws stepfunctions --endpoint http://localhost:4599 describe-execution --execution-arn arn:aws:states:local:0123456789:execution:my-state-machine:my-execution
+$> aws stepfunctions --endpoint http://localhost:4584 describe-execution --execution-arn arn:aws:states:local:0123456789:execution:my-state-machine:my-execution
 
 # Describe state machine related to execution
-$> aws stepfunctions --endpoint http://localhost:4599 describe-state-machine-for-execution --execution-arn arn:aws:states:local:0123456789:execution:my-state-machine:my-execution
+$> aws stepfunctions --endpoint http://localhost:4584 describe-state-machine-for-execution --execution-arn arn:aws:states:local:0123456789:execution:my-state-machine:my-execution
 
 # Get execution history
-$> aws stepfunctions --endpoint http://localhost:4599 get-execution-history --execution-arn arn:aws:states:local:0123456789:execution:my-state-machine:my-execution
+$> aws stepfunctions --endpoint http://localhost:4584 get-execution-history --execution-arn arn:aws:states:local:0123456789:execution:my-state-machine:my-execution
 ```
 
 ### Run Lambdas with Localstack
