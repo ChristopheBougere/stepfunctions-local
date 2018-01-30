@@ -1,9 +1,10 @@
 const reducer = require('../reducer');
-const { actions } = require('../constants');
+const { actions, status } = require('../constants');
 
 const initialState = {
   stateMachines: [],
   executions: [],
+  activities: [],
 };
 
 describe('Reducer actions related to state machines', () => {
@@ -128,9 +129,39 @@ describe('Reducer actions related to activities', () => {
     try {
       const action = {
         type: actions.CREATE_ACTIVITY,
+        result: {
+          activity: {
+            name: 'my-activity',
+            activityArn: 'my-activity-arn',
+            creationDate: Date.now() / 1000,
+          },
+        },
       };
-      const newState = reducer(initialState, action);
-      expect(newState).toMatchObject(initialState);
+      const { activities } = reducer(initialState, action);
+      expect(activities).toHaveLength(1);
+    } catch (e) {
+      expect(e).not.toBeDefined();
+    }
+  });
+
+  it('should call reducer with action CREATE_ACTIVITY with existing activity', () => {
+    try {
+      const action = {
+        type: actions.CREATE_ACTIVITY,
+        result: {},
+      };
+      const state = {
+        ...initialState,
+        activities: [
+          {
+            name: 'first-activity',
+            activityArn: 'my-first-activity-arn',
+            creationDate: Date.now() / 1000,
+          },
+        ],
+      };
+      const newState = reducer(state, action);
+      expect(newState).toMatchObject(state);
     } catch (e) {
       expect(e).not.toBeDefined();
     }
@@ -152,9 +183,28 @@ describe('Reducer actions related to activities', () => {
     try {
       const action = {
         type: actions.DELETE_ACTIVITY,
+        result: {
+          index: 1,
+        },
       };
-      const newState = reducer(initialState, action);
-      expect(newState).toMatchObject(initialState);
+      const state = {
+        ...initialState,
+        activities: [
+          {
+            name: 'first-activity',
+            activityArn: 'my-first-activity-arn',
+            creationDate: Date.now() / 1000,
+          },
+          {
+            name: 'second-activity',
+            activityArn: 'my-second-activity-arn',
+            creationDate: Date.now() / 1000,
+          },
+        ],
+      };
+      const activitiesNb = state.activities.length;
+      const { activities } = reducer(state, action);
+      expect(activities).toHaveLength(activitiesNb - 1);
     } catch (e) {
       expect(e).not.toBeDefined();
     }
@@ -176,9 +226,36 @@ describe('Reducer actions related to activities', () => {
     try {
       const action = {
         type: actions.GET_ACTIVITY_TASK,
+        result: {
+          activityArn: 'my-first-activity-arn',
+          taskToken: 'my-task-token',
+          workerName: 'worker-name',
+          heartbeat: Date.now() / 1000,
+        },
       };
-      const newState = reducer(initialState, action);
-      expect(newState).toMatchObject(initialState);
+      const state = {
+        ...initialState,
+        activities: [
+          {
+            name: 'first-activity',
+            activityArn: 'my-first-activity-arn',
+            creationDate: Date.now() / 1000,
+            tasks: [
+              {
+                taskToken: 'my-task-token',
+              },
+            ],
+          },
+        ],
+      };
+      const { activities } = reducer(state, action);
+      const activity = activities.find(a => a.activityArn === action.result.activityArn);
+      expect(activity.tasks[0]).toMatchObject({
+        taskToken: action.result.taskToken,
+        workerName: action.result.workerName,
+        status: status.activity.IN_PROGRESS,
+        heartbeat: expect.any(Number),
+      });
     } catch (e) {
       expect(e).not.toBeDefined();
     }
@@ -188,9 +265,36 @@ describe('Reducer actions related to activities', () => {
     try {
       const action = {
         type: actions.SEND_TASK_FAILURE,
+        result: {
+          activityArn: 'my-first-activity-arn',
+          taskToken: 'my-task-token',
+          cause: 'This is a cause',
+          error: 'TaskError',
+        },
       };
-      const newState = reducer(initialState, action);
-      expect(newState).toMatchObject(initialState);
+      const state = {
+        ...initialState,
+        activities: [
+          {
+            name: 'first-activity',
+            activityArn: 'my-first-activity-arn',
+            creationDate: Date.now() / 1000,
+            tasks: [
+              {
+                taskToken: 'my-task-token',
+              },
+            ],
+          },
+        ],
+      };
+      const { activities } = reducer(state, action);
+      const activity = activities.find(a => a.activityArn === action.result.activityArn);
+      expect(activity.tasks[0]).toMatchObject({
+        taskToken: action.result.taskToken,
+        status: status.activity.FAILED,
+        cause: action.result.cause,
+        error: action.result.error,
+      });
     } catch (e) {
       expect(e).not.toBeDefined();
     }
@@ -200,9 +304,33 @@ describe('Reducer actions related to activities', () => {
     try {
       const action = {
         type: actions.SEND_TASK_HEARTBEAT,
+        result: {
+          activityArn: 'my-first-activity-arn',
+          taskToken: 'my-task-token',
+          heartbeat: Date.now() / 1000,
+        },
       };
-      const newState = reducer(initialState, action);
-      expect(newState).toMatchObject(initialState);
+      const state = {
+        ...initialState,
+        activities: [
+          {
+            name: 'first-activity',
+            activityArn: 'my-first-activity-arn',
+            creationDate: Date.now() / 1000,
+            tasks: [
+              {
+                taskToken: 'my-task-token',
+              },
+            ],
+          },
+        ],
+      };
+      const { activities } = reducer(state, action);
+      const activity = activities.find(a => a.activityArn === action.result.activityArn);
+      expect(activity.tasks[0]).toMatchObject({
+        taskToken: action.result.taskToken,
+        heartbeat: action.result.heartbeat,
+      });
     } catch (e) {
       expect(e).not.toBeDefined();
     }
@@ -212,9 +340,36 @@ describe('Reducer actions related to activities', () => {
     try {
       const action = {
         type: actions.SEND_TASK_SUCCESS,
+        result: {
+          activityArn: 'my-first-activity-arn',
+          taskToken: 'my-task-token',
+          output: {
+            activityOutput: 'this is a great output',
+          },
+        },
       };
-      const newState = reducer(initialState, action);
-      expect(newState).toMatchObject(initialState);
+      const state = {
+        ...initialState,
+        activities: [
+          {
+            name: 'first-activity',
+            activityArn: 'my-first-activity-arn',
+            creationDate: Date.now() / 1000,
+            tasks: [
+              {
+                taskToken: 'my-task-token',
+              },
+            ],
+          },
+        ],
+      };
+      const { activities } = reducer(state, action);
+      const activity = activities.find(a => a.activityArn === action.result.activityArn);
+      expect(activity.tasks[0]).toMatchObject({
+        taskToken: action.result.taskToken,
+        status: status.activity.SUCCEEDED,
+        output: action.result.output,
+      });
     } catch (e) {
       expect(e).not.toBeDefined();
     }
@@ -375,6 +530,102 @@ describe('Other reducer actions', () => {
       const { executions } = reducer(state, action);
       expect(executions.find(e => e.executionArn === action.result.executionArn))
         .toMatchObject(state.executions.find(e => e.executionArn === action.result.executionArn));
+    } catch (e) {
+      expect(e).not.toBeDefined();
+    }
+  });
+
+  it('should call reducer with action ADD_ACTIVITY_TASK', () => {
+    try {
+      const action = {
+        type: actions.ADD_ACTIVITY_TASK,
+        result: {
+          activityArn: 'my-activity-arn',
+          task: {
+            taskToken: 'my-new-task-token',
+          },
+        },
+      };
+      const state = {
+        ...initialState,
+        activities: [
+          {
+            activityArn: 'my-activity-arn',
+            tasks: [],
+          },
+        ],
+      };
+      const { activities } = reducer(state, action);
+      const activity = activities.find(a => a.activityArn === action.result.activityArn);
+      expect(activity.tasks).toHaveLength(1);
+      expect(activity.tasks[0]).toMatchObject(action.result.task);
+    } catch (e) {
+      expect(e).not.toBeDefined();
+    }
+  });
+
+  it('should call reducer with action REMOVE_ACTIVITY_TASK', () => {
+    try {
+      const action = {
+        type: actions.REMOVE_ACTIVITY_TASK,
+        result: {
+          activityArn: 'my-activity-arn',
+          taskToken: 'my-task-token',
+        },
+      };
+      const state = {
+        ...initialState,
+        activities: [
+          {
+            activityArn: 'my-activity-arn',
+            tasks: [
+              {
+                taskToken: 'my-task-token',
+              },
+            ],
+          },
+        ],
+      };
+      const { activities } = reducer(state, action);
+      const activity = activities.find(a => a.activityArn === action.result.activityArn);
+      expect(activity.tasks).toHaveLength(0);
+    } catch (e) {
+      expect(e).not.toBeDefined();
+    }
+  });
+
+  it('should call reducer with action UPDATE_ACTIVITY_TASK', () => {
+    try {
+      const action = {
+        type: actions.UPDATE_ACTIVITY_TASK,
+        result: {
+          activityArn: 'my-activity-arn',
+          taskToken: 'my-task-token',
+          updateFields: {
+            status: 'UPDATED_STATUS',
+          },
+        },
+      };
+      const state = {
+        ...initialState,
+        activities: [
+          {
+            activityArn: 'my-activity-arn',
+            tasks: [
+              {
+                taskToken: 'my-task-token',
+              },
+            ],
+          },
+        ],
+      };
+      const { activities } = reducer(state, action);
+      const activity = activities.find(a => a.activityArn === action.result.activityArn);
+      expect(activity.tasks).toHaveLength(1);
+      expect(activity.tasks[0]).toMatchObject({
+        ...state.activities[0].tasks[0],
+        ...action.result.task,
+      });
     } catch (e) {
       expect(e).not.toBeDefined();
     }

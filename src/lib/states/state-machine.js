@@ -30,12 +30,6 @@ class StateMachine {
     }
   }
 
-  /* Default behaviour: return input
-   */
-  get output() {
-    return this.input;
-  }
-
   async execute(input) {
     this.input = input;
     let lastIO = input;

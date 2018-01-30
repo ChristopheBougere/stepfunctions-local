@@ -1,6 +1,6 @@
 {
   "name": "stepfunctions-local",
-  "version": "1.0.0-alpha",
+  "version": "1.0.0-beta",
   "description": "A local AWS Step Functions server",
   "main": "./src/server.js",
   "bin": {
@@ -29,6 +29,9 @@
     "url": "https://github.com/airware/stepfunctions-local/issues"
   },
   "homepage": "https://github.com/airware/stepfunctions-local#readme",
+  "jest": {
+    "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.test\\.jsx?$"
+  },
   "dependencies": {
     "asl-validator": "^1.0.6",
     "aws-sdk": "^2.176.0",

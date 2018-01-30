@@ -6,28 +6,35 @@ const { actions, errors } = require('./constants');
 const store = require('./store');
 const params = require('./params');
 
-const listStateMachines = require('./lib/actions/list-state-machines');
-const createStateMachine = require('./lib/actions/create-state-machine');
-const deleteStateMachine = require('./lib/actions/delete-state-machine');
-const describeStateMachine = require('./lib/actions/describe-state-machine');
-const describeStateMachineForExecution = require('./lib/actions/describe-state-machine-for-execution');
-const updateStateMachine = require('./lib/actions/update-state-machine');
-
-const startExecution = require('./lib/actions/start-execution');
-const stopExecution = require('./lib/actions/stop-execution');
-const listExecutions = require('./lib/actions/list-executions');
-const describeExecution = require('./lib/actions/describe-execution');
-const getExecutionHistory = require('./lib/actions/get-execution-history');
+const listStateMachines = require('./lib/actions/api/list-state-machines');
+const createStateMachine = require('./lib/actions/api/create-state-machine');
+const deleteStateMachine = require('./lib/actions/api/delete-state-machine');
+const describeStateMachine = require('./lib/actions/api/describe-state-machine');
+const describeStateMachineForExecution = require('./lib/actions/api/describe-state-machine-for-execution');
+const updateStateMachine = require('./lib/actions/api/update-state-machine');
+const startExecution = require('./lib/actions/api/start-execution');
+const stopExecution = require('./lib/actions/api/stop-execution');
+const listExecutions = require('./lib/actions/api/list-executions');
+const describeExecution = require('./lib/actions/api/describe-execution');
+const getExecutionHistory = require('./lib/actions/api/get-execution-history');
+const createActivity = require('./lib/actions/api/create-activity');
+const deleteActivity = require('./lib/actions/api/delete-activity');
+const describeActivity = require('./lib/actions/api/describe-activity');
+const getActivityTask = require('./lib/actions/api/get-activity-task');
+const listActivities = require('./lib/actions/api/list-activities');
+const sendTaskSuccess = require('./lib/actions/api/send-task-success');
+const sendTaskFailure = require('./lib/actions/api/send-task-failure');
+const sendTaskHeartbeat = require('./lib/actions/api/send-task-heartbeat');
 
 let server;
 
 function callAction(state, action, actionParams, config) {
   try {
-    const { stateMachines, executions } = state;
+    const { stateMachines, executions, activities } = state;
     switch (action) {
       // actions related to state machine
       case actions.CREATE_STATE_MACHINE:
-        return createStateMachine(actionParams, stateMachines);
+        return createStateMachine(actionParams, stateMachines, config);
       case actions.LIST_STATE_MACHINES:
         return listStateMachines(actionParams, stateMachines);
       case actions.DESCRIBE_STATE_MACHINE:
@@ -51,26 +58,21 @@ function callAction(state, action, actionParams, config) {
         return getExecutionHistory(actionParams, executions);
       // actions related to activities
       case actions.CREATE_ACTIVITY:
-        // TODO
-        return {};
+        return createActivity(actionParams, activities, config);
+      case actions.DESCRIBE_ACTIVITY:
+        return describeActivity(actionParams, activities);
       case actions.GET_ACTIVITY_TASK:
-        // TODO
-        return {};
+        return getActivityTask(actionParams, activities);
       case actions.LIST_ACTIVITIES:
-        // TODO
-        return {};
+        return listActivities(actionParams, activities);
       case actions.SEND_TASK_FAILURE:
-        // TODO
-        return {};
+        return sendTaskFailure(actionParams, activities);
       case actions.SEND_TASK_HEARTBEAT:
-        // TODO
-        return {};
+        return sendTaskHeartbeat(actionParams, activities);
       case actions.SEND_TASK_SUCCESS:
-        // TODO
-        return {};
+        return sendTaskSuccess(actionParams, activities);
       case actions.DELETE_ACTIVITY:
-        // TODO
-        return {};
+        return deleteActivity(actionParams, activities);
       // default action
       default:
         return {};
@@ -86,6 +88,7 @@ function callAction(state, action, actionParams, config) {
 function start(config = {}) {
   const fullConfig = Object.assign({
     port: params.DEFAULT_PORT,
+    region: params.DEFAULT_REGION,
     lambdaEndpoint: params.DEFAULT_LAMBDA_ENDPOINT,
     lambdaRegion: params.DEFAULT_LAMBDA_REGION,
   }, config);

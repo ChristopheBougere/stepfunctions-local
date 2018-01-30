@@ -2,7 +2,7 @@ const jp = require('jsonpath');
 
 const State = require('./state');
 
-const addHistoryEvent = require('../actions/add-history-event');
+const addHistoryEvent = require('../actions/custom/add-history-event');
 const { applyInputPath } = require('../tools/path');
 
 // TODO: Add WAIT_STATE_ABORTED event to execution's history

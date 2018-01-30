@@ -1,7 +1,7 @@
 const jp = require('jsonpath');
 
 const State = require('./state');
-const addHistoryEvent = require('../actions/add-history-event');
+const addHistoryEvent = require('../actions/custom/add-history-event');
 const { applyInputPath } = require('../tools/path');
 
 class Choices extends State {

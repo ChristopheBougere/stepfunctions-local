@@ -1,9 +1,11 @@
 module.exports = {
   actions: {
     // Custom
-    REMOVE_RESPONSE: 'RemoveResponse',
     ADD_HISTORY_EVENT: 'AddHistoryEvent',
     UPDATE_EXECUTION: 'UpdateExecution',
+    ADD_ACTIVITY_TASK: 'AddActivityTask',
+    REMOVE_ACTIVITY_TASK: 'RemoveActivityTask',
+    UPDATE_ACTIVITY_TASK: 'UpdateActivityTask',
     // Step functions
     CREATE_ACTIVITY: 'CreateActivity',
     CREATE_STATE_MACHINE: 'CreateStateMachine',
@@ -36,6 +38,13 @@ module.exports = {
       FAILED: 'FAILED',
       TIMED_OUT: 'TIMED_OUT',
       ABORTED: 'ABORTED',
+    },
+    activity: {
+      SCHEDULED: 'SCHEDULED',
+      IN_PROGRESS: 'IN_PROGRESS',
+      SUCCEEDED: 'SUCCEEDED',
+      FAILED: 'FAILED',
+      TIMED_OUT: 'TIMED_OUT',
     },
   },
   errors: { // HTTP 400 except when specified
@@ -119,12 +128,14 @@ module.exports = {
     createActivity: {
       ACTIVITY_LIMIT_EXCEEDED: 'ActivityLimitExceeded',
       INVALID_NAME: 'InvalidName',
+      ACTIVITY_ALREADY_EXISTS: 'ActivityAlreadyExists',
     },
     listActivities: {
       INVALID_TOKEN: 'InvalidToken',
     },
     deleteActivity: {
       INVALID_ARN: 'InvalidArn',
+      ACTIVITY_DOES_NOT_EXIST: 'ActivityDoesNotExist',
     },
     describeActivity: {
       ACTIVITY_DOES_NOT_EXIST: 'ActivityDoesNotExist',
@@ -167,7 +178,7 @@ module.exports = {
     ACTIVITY_SCHEDULED: {
       type: 'ActivityScheduled',
       detailsName: 'activityScheduledEventDetails',
-      detailsFields: ['heartBeatInSeconds', 'input', 'resource', 'timeoutInSeconds'],
+      detailsFields: ['heartbeatInSeconds', 'input', 'resource', 'timeoutInSeconds'],
     },
     ACTIVITY_STARTED: {
       type: 'ActivityStarted',
@@ -324,6 +335,44 @@ module.exports = {
       type: 'WaitStateExited',
       detailsName: 'stateExitedEventDetails',
       detailsFields: ['name', 'output'],
+    },
+  },
+  parameters: {
+    default: {
+      HEARTBEAT_SECONDS: 99999999,
+      TIMEOUT_SECONDS: 99999999,
+    },
+    arn: {
+      MIN: 1,
+      MAX: 256,
+    },
+    cause: {
+      MAX: 32768,
+    },
+    definition: {
+      MAX: 1048576,
+    },
+    error: {
+      MAX: 256,
+    },
+    input: {
+      MIN: 0,
+      MAX: 32768,
+    },
+    results: {
+      MIN: 0,
+      MAX: 1000,
+    },
+    name: {
+      MIN: 1,
+      MAX: 80,
+    },
+    output: {
+      MAX: 32768,
+    },
+    token: {
+      MIN: 1,
+      MAX: 1024,
     },
   },
 };
