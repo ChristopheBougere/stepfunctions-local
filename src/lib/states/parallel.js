@@ -43,19 +43,27 @@ class Parallel extends State {
         cause: e.name,
         error: e.message,
       });
-      // TODO: Implement ErrorEquals
-      // https://docs.aws.amazon.com/step-functions/latest/dg/amazon-states-language-errors.html#amazon-states-language-fallback-states
-      if (!this.state.Catch) {
-        throw e;
-      }
-      this.branchesOutputs = applyResultPath(this.input, this.state.Catch.ResultPath, e);
-      this.nextStateFromCatch = this.state.Catch.Next;
+      this.catchError(e);
     }
 
     return {
       output: this.output,
       nextState: this.nextState,
     };
+  }
+
+  catchError(err) {
+    // Throw error if no catch
+    if (!this.state.Catch) {
+      const error = err instanceof Error ? err : new Error(err.cause);
+      throw error;
+    }
+    // TODO: Implement ErrorEquals
+    // For now, take first Catch value
+    const catchParams = this.state.Catch[0];
+    delete this.state.ResultPath;
+    this.branchesOutputs = applyResultPath(this.input, catchParams.ResultPath, err);
+    this.nextStateFromCatch = catchParams.Next;
   }
 
   /* Return in priority

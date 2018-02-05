@@ -26,6 +26,17 @@ class Activity {
   static getTaskLastHeartbeat(activityArn, taskToken) {
     return parseFloat(Activity.getTaskParameter('heartbeat', activityArn, taskToken));
   }
+
+  static getTaskWorkerName(activityArn, taskToken) {
+    return parseFloat(Activity.getTaskParameter('workerName', activityArn, taskToken));
+  }
+
+  static getTask(activityArn, taskToken) {
+    const { activities } = store.getState();
+    const activity = activities.find(a => a.activityArn === activityArn);
+    const task = activity.tasks.find(t => t.taskToken === taskToken);
+    return task;
+  }
 }
 
 module.exports = Activity;
