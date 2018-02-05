@@ -28,7 +28,7 @@ class Activity {
   }
 
   static getTaskWorkerName(activityArn, taskToken) {
-    return parseFloat(Activity.getTaskParameter('workerName', activityArn, taskToken));
+    return Activity.getTaskParameter('workerName', activityArn, taskToken);
   }
 
   static getTask(activityArn, taskToken) {
