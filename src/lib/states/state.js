@@ -11,7 +11,7 @@ class State {
 
   /* throws error or catch it to send it in output
    */
-  catchError(err) {
+  handleError(err) {
     delete this.state.ResultPath;
     const error = err instanceof Error ? err : new Error(err.cause);
     // Throw error if no catch
@@ -20,20 +20,26 @@ class State {
     }
     // Scan through Catchers
     let errorMatch;
+    let output;
+    let nextState;
     this.state.Catch.forEach((params) => {
       if (!errorMatch) {
         const { ErrorEquals, ResultPath, Next } = params;
         if (errorMatches(err, ErrorEquals)) {
           errorMatch = true;
-          this.taskOutput = applyResultPath(this.input, ResultPath, err);
-          this.nextStateFromCatch = Next;
+          output = applyResultPath(this.input, ResultPath, err);
+          nextState = Next;
         }
       }
     });
-    // Throw if no match
-    if (!errorMatch) {
-      throw error;
+    if (errorMatch) {
+      return {
+        output,
+        nextState,
+      };
     }
+    // Throw if no match
+    throw error;
   }
 
   /* Default behaviour: do nothing

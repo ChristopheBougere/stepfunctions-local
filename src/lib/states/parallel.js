@@ -43,27 +43,15 @@ class Parallel extends State {
         cause: e.name,
         error: e.message,
       });
-      this.catchError(e);
+      const handledError = this.handleError(e);
+      this.branchesOutputs = handledError.output;
+      this.nextStateFromCatch = handledError.nextState;
     }
 
     return {
       output: this.output,
       nextState: this.nextState,
     };
-  }
-
-  catchError(err) {
-    // Throw error if no catch
-    if (!this.state.Catch) {
-      const error = err instanceof Error ? err : new Error(err.cause);
-      throw error;
-    }
-    // TODO: Implement ErrorEquals
-    // For now, take first Catch value
-    const catchParams = this.state.Catch[0];
-    delete this.state.ResultPath;
-    this.branchesOutputs = applyResultPath(this.input, catchParams.ResultPath, err);
-    this.nextStateFromCatch = catchParams.Next;
   }
 
   /* Return in priority
