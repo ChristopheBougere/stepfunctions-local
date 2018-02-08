@@ -1,3 +1,5 @@
+const AWS = require('aws-sdk-mock');
+
 const StateMachine = require('../state-machine');
 
 describe('State machine', () => {
@@ -136,6 +138,116 @@ describe('State machine', () => {
     } catch (e) {
       expect(e.message)
         .toEqual(expect.stringContaining('Invalid state type'));
+    }
+  });
+
+  it('should execute a state machine with a failing (mocked) Lambda and no Catch', async () => {
+    try {
+      const stateMachineDefinition = {
+        StartAt: 'State',
+        States: {
+          State: {
+            Type: 'Task',
+            Resource: 'arn:aws:lambda:local:0123456789:function:MyLambda',
+          },
+          FailState: {
+            Type: 'Succeed',
+            End: true,
+          },
+        },
+      };
+      const execution = {
+        executionArn: 'my-execution-arn',
+        events: [],
+      };
+      const input = {};
+      AWS.mock('Lambda', 'invoke', () => {
+        throw new Error('CustomError');
+      });
+      const stateMachineInstance = new StateMachine(stateMachineDefinition, execution, {});
+      const result = await stateMachineInstance.execute(input);
+      expect(result).not.toBeDefined();
+    } catch (e) {
+      expect(e.name).toEqual('Error');
+      expect(e.message).toEqual('CustomError');
+    }
+  });
+
+  it('should execute a state machine with a failing (mocked) Lambda and Catch', async () => {
+    try {
+      const stateMachineDefinition = {
+        StartAt: 'State',
+        States: {
+          State: {
+            Type: 'Task',
+            Resource: 'arn:aws:lambda:local:0123456789:function:MyLambda',
+            Retry: {
+              BackoffRate: 1,
+              IntervalSeconds: 1,
+              MaxAttempts: 1,
+            },
+            Catch: [{
+              ErrorEquals: ['Error'],
+              Next: 'FailState',
+              ResultPath: '$.exception',
+            }],
+          },
+          FailState: {
+            Type: 'Succeed',
+            End: true,
+          },
+        },
+      };
+      const execution = {
+        executionArn: 'my-execution-arn',
+        events: [],
+      };
+      const input = {};
+      AWS.mock('Lambda', 'invoke', () => {
+        throw new Error('CustomError');
+      });
+      const stateMachineInstance = new StateMachine(stateMachineDefinition, execution, {});
+      const { output } = await stateMachineInstance.execute(input);
+      expect(output.exception).toBeDefined();
+    } catch (e) {
+      expect(e).not.toBeDefined();
+    }
+  });
+
+  it('should execute a state machine with a failing (mocked) Lambda and no match in Catch', async () => {
+    try {
+      const stateMachineDefinition = {
+        StartAt: 'State',
+        States: {
+          State: {
+            Type: 'Task',
+            Resource: 'arn:aws:lambda:local:0123456789:function:MyLambda',
+            Catch: [{
+              ErrorEquals: ['NoMatchingError'],
+              Next: 'FailState',
+              ResultPath: '$.exception',
+            }],
+          },
+          FailState: {
+            Type: 'Succeed',
+            End: true,
+          },
+        },
+      };
+      const execution = {
+        executionArn: 'my-execution-arn',
+        events: [],
+      };
+      const input = {};
+      AWS.mock('Lambda', 'invoke', () => {
+        throw new Error('CustomError');
+      });
+      const stateMachineInstance = new StateMachine(stateMachineDefinition, execution, {});
+      const result = await stateMachineInstance.execute(input);
+      expect(result).not.toBeDefined();
+    } catch (e) {
+      expect(e.name).toEqual('Error');
+      expect(e.message).toEqual('CustomError');
     }
   });
 });

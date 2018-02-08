@@ -24,6 +24,7 @@ describe('Activity', () => {
           input: '{"comment":"input"}',
           taskToken: 'my-task-token',
           status: status.activity.FAILED,
+          workerName: 'worker',
           cause: 'cause',
           error: 'error',
         },
@@ -37,6 +38,7 @@ describe('Activity', () => {
           input: '{"comment":"input-2"}',
           taskToken: 'my-task-token-2',
           status: status.activity.SUCCEEDED,
+          workerName: 'worker',
           output: {
             result: 'this is my output',
           },
@@ -63,6 +65,7 @@ describe('Activity', () => {
           taskToken: 'my-task-token-4',
           status: status.activity.IN_PROGRESS,
           heartbeat: Date.now() / 1000,
+          workerName: 'worker',
         },
       },
     });
@@ -76,6 +79,11 @@ describe('Activity', () => {
   it('should return undefined (no task)', () => {
     const response = Activity.getTaskStatus('my-activity-arn', 'my-undefined-task');
     expect(response).toBeUndefined();
+  });
+
+  it('should get task worker name', () => {
+    const output = Activity.getTaskWorkerName('my-activity-arn', 'my-task-token-2');
+    expect(output).toEqual('worker');
   });
 
   it('should get task output', () => {

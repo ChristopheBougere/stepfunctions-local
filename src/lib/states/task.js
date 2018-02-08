@@ -48,31 +48,42 @@ class Task extends State {
         },
       },
     });
-
     return new Promise(async (resolve, reject) => {
       let taskStatus;
       let taskFinished;
       let lastHeartbeat;
+      let started = false;
+      // wait for the activity to be executed
       do {
-        taskStatus = Activity.getTaskStatus(this.arn, this.taskToken);
-        taskFinished = Task.isActivityTaskFinished(taskStatus);
+        const {
+          status: currentStatus,
+          workerName,
+          heartbeat,
+        } = Activity.getTask(this.arn, this.taskToken);
+        taskStatus = currentStatus;
+        taskFinished = Task.isActivityTaskFinished(currentStatus);
         if (!taskFinished) {
-          lastHeartbeat = Activity.getTaskLastHeartbeat(this.arn, this.taskToken);
+          lastHeartbeat = heartbeat;
+          if (lastHeartbeat && !started) {
+            started = true;
+            addHistoryEvent(this.execution, 'ACTIVITY_STARTED', { workerName });
+          }
           if (lastHeartbeat && ((Date.now() / 1000) > lastHeartbeat + this.heartbeatInSeconds)) {
             taskFinished = true;
             taskStatus = status.activity.TIMED_OUT;
-            const error = 'Timeout';
-            const cause = 'Timeout';
+            const error = 'States.Timeout';
+            const cause = null;
             updateActivityTask(this.arn, this.taskToken, {
               status: taskStatus,
               error,
               cause,
             });
           }
-          await new Promise(res => setTimeout(res, 1 * 1000));
+          await new Promise(res => setTimeout(res, 1000));
         }
       } while (!taskFinished);
 
+      // Activity finished: check status
       process.nextTick(async () => {
         switch (taskStatus) {
           case status.activity.SUCCEEDED: {
@@ -147,35 +158,26 @@ class Task extends State {
             cause: e.name,
             error: e.message,
           });
-          // TODO: Implement ErrorEquals
-          // https://docs.aws.amazon.com/step-functions/latest/dg/amazon-states-language-errors.html#amazon-states-language-fallback-states
-          if (!this.state.Catch) {
-            throw e;
-          }
-          this.taskOutput = applyResultPath(this.input, this.state.Catch.ResultPath, e);
-          this.nextStateFromCatch = this.state.Catch.Next;
+          const handledError = this.handleError(e);
+          this.taskOutput = handledError.output;
+          this.mextStateFromCatch = handledError.nextState;
         }
         break;
       case ACTIVITY:
         try {
+          // TODO: Add ACTIVITY_SCHEDULE_FAILED
           addHistoryEvent(this.execution, 'ACTIVITY_SCHEDULED', {
             input: this.input,
-            resource: this.resource,
+            resource: this.arn,
             heartbeatInSeconds: this.heartbeatInSeconds,
             timeoutInSeconds: this.timeoutInSeconds,
           });
           this.taskOutput = await this.invokeActivity();
         } catch (e) {
-          const { error, cause } = Activity.getTaskFailureError(this.arn, this.taskToken);
-          addHistoryEvent(this.execution, 'ACTIVITY_SCHEDULE_FAILED', { cause, error });
-          // TODO: Implement ErrorEquals
-          // https://docs.aws.amazon.com/step-functions/latest/dg/amazon-states-language-errors.html#amazon-states-language-fallback-states
-          const err = new Error(cause);
-          if (!this.state.Catch) {
-            throw err;
-          }
-          this.taskOutput = applyResultPath(this.input, this.state.Catch.ResultPath, err);
-          this.nextStateFromCatch = this.state.Catch.Next;
+          const err = Activity.getTaskFailureError(this.arn, this.taskToken);
+          const handledError = this.handleError(err);
+          this.taskOutput = handledError.output;
+          this.mextStateFromCatch = handledError.nextState;
         }
         break;
       default:

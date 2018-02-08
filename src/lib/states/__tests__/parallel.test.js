@@ -181,11 +181,13 @@ describe('Parallel', () => {
             },
           },
         ],
-        Catch: {
-          ErrorEquals: ['States.ALL'],
-          ResultPath: '$.myError',
-          Next: 'CatchState',
-        },
+        Catch: [
+          {
+            ErrorEquals: ['States.ALL'],
+            ResultPath: '$.myError',
+            Next: 'CatchState',
+          },
+        ],
       };
       const input = {};
       const config = {

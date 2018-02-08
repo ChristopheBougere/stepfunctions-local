@@ -169,12 +169,12 @@ $> stepfunctions-local start --lambda-endpoint http://localhost:4574 --lambda-re
 | States | Support |
 | ------ | ------ |
 | ***Pass*** | * |
-| ***Task*** | At this moment, stepfunctions-local *does not support* following fields *TimeoutSeconds*, *HeartbeatSeconds*. *ErrorEquals* parameter from *Catch* field not implemented yet. |
+| ***Task*** | * |
 | ***Choice*** | * |
 | ***Wait*** | * |
 | ***Succeed*** | * |
 | ***Fail*** | * |
-| ***Parallel*** | *ErrorEquals* parameter from *Catch* field not implemented yet. |
+| ***Parallel*** | * |
 
 ## Want to contribute ?
 **Wow, that's great !**  
