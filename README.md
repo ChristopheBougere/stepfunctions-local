@@ -75,7 +75,7 @@ Options:
 ```js
 const stepfunctionsLocal = require('stepfunctions-local');
 
-stepFunctionsLocal.start({
+stepfunctionsLocal.start({
   port: 4584,
   region: 'local',
   lambdaRegion: 'local',

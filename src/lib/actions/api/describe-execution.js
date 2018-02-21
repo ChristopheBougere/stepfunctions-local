@@ -22,9 +22,9 @@ function describeExecution(params, executions) {
   return {
     response: {
       executionArn: match.executionArn,
-      input: match.input,
+      input: JSON.stringify(match.input),
       name: match.name,
-      output: match.output,
+      output: JSON.stringify(match.output),
       startDate: match.startDate,
       stateMachineArn: match.stateMachineArn,
       status: match.status,
