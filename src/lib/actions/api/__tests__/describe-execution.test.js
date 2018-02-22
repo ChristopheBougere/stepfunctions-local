@@ -12,9 +12,9 @@ describe('Describe execution', () => {
       };
       const { response } = describeExecution(params, executions);
       expect(response.executionArn).toEqual(execution.executionArn);
-      expect(response.input).toEqual(execution.input);
+      expect(response.input).toEqual(JSON.stringify(execution.input));
       expect(response.name).toEqual(execution.name);
-      expect(response.output).toEqual(execution.output);
+      expect(response.output).toEqual(JSON.stringify(execution.output));
       expect(response.startDate).toEqual(execution.startDate);
       expect(response.stateMachineArn).toEqual(execution.stateMachineArn);
       expect(response.status).toEqual(execution.status);

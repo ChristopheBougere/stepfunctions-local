@@ -158,8 +158,8 @@ describe('Integration tests (execute a simple state machine)', () => {
         status: 'SUCCEEDED',
         startDate: expect.any(Number),
         stopDate: expect.any(Number),
-        input: { comment: 'this is an input' },
-        output: { comment: 'this is an input' },
+        input: JSON.stringify({ comment: 'this is an input' }),
+        output: JSON.stringify({ comment: 'this is an input' }),
       });
     } catch (e) {
       expect(e).not.toBeDefined();
