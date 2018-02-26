@@ -27,7 +27,7 @@ function getActivityTask(params, activities) {
 
   const scheduledTask = match.tasks.find(t => t.status === status.activity.SCHEDULED);
   const response = scheduledTask ? {
-    input: scheduledTask.input,
+    input: JSON.stringify(scheduledTask.input),
     taskToken: scheduledTask.taskToken,
   } : null;
   return {
