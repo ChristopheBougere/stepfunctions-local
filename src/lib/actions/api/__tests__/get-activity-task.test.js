@@ -12,7 +12,7 @@ describe('Get activity task', () => {
       };
       const { response } = getActivityTask(params, activities);
       expect(response).toMatchObject({
-        input: activity.tasks[0].input,
+        input: JSON.stringify(activity.tasks[0].input),
         taskToken: activity.tasks[0].taskToken,
       });
     } catch (e) {
