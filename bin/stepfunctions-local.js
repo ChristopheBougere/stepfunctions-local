@@ -1,7 +1,7 @@
-#!/usr/bin/env DEBUG=stepfunctions-local:* node
+#!/usr/bin/env node
 
 const program = require('commander');
-const packageJson = require('./../package.json');
+const packageJson = require('../package');
 
 program
   .version(packageJson.version)
@@ -12,4 +12,9 @@ program.parse(process.argv)
 if (program.args.length > 0 && undefined === program.runningCommand) {
   console.error(`Error: Unknown command ${program.args[0]}. Please use one of these commands : start`);
   process.exit(1);
+}
+
+if (!process.env.DEBUG) {
+  console.log('DEBUG environment variable not specified.');
+  console.log('Please specify DEBUG=stepfunctions-local:* if you want to have logs.');
 }
