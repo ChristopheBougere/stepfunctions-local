@@ -1,6 +1,8 @@
+#!/usr/bin/env node
+
 const program = require('commander');
-const packageJson = require('./../package.json');
-const server = require('./../src/server');
+const packageJson = require('../package');
+const server = require('../src/server');
 
 program
   .version(packageJson.version)
@@ -8,7 +10,6 @@ program
   .option('--region <region>', 'the region the server should run on')
   .option('--lambda-endpoint <lambda-endpoint>', 'the endpoint for lambda')
   .option('--lambda-region <lambda-region>', 'the region for lambda')
-  .option('--silent', 'whether you want to run the server in silent mode or not')
   .parse(process.argv)
 
 const config = {};
@@ -24,8 +25,5 @@ if (undefined !== program.lambdaEndpoint) {
 if (undefined !== program.lambdaRegion) {
   config.lambdaRegion = program.lambdaRegion;
 }
-if (undefined !== program.silent) {
-  config.silent = true;
-}
-console.log('Starting server...');
+console.log('Starting stepfunctions-local server...');
 server.start(config);

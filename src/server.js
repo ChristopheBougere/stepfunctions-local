@@ -1,7 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 
-const logger = require('./lib/logger')('stepfunctions-local');
+const logger = require('./lib/logger');
 const { actions, errors } = require('./constants');
 const store = require('./store');
 const params = require('./params');

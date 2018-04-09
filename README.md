@@ -67,7 +67,6 @@ Options:
   --region <region>                    the region the server should run on
   --lambda-region <lambda-region>      the region for lambda
   --lambda-endpoint <lambda-endpoint>  the endpoint for lambda
-  --silent                             whether you want to run the server in silent mode or not
   -h, --help                           output usage information
 ```
 
@@ -88,6 +87,14 @@ stepfunctionsLocal.start({
 - region: local
 - lambda-region: local
 - lambda-endpoint: http://localhost:4574
+
+### Configure logs
+The service does not log anything by default. It uses the [debug](https://www.npmjs.com/package/debug) package which is based on the `DEBUG` environment variable. You can log process info by setting it.  
+
+Example:
+ ```bash
+ $> DEBUG=stepfunctions-local:* stepfunctions-local start
+ ```
 
 ### Play with it
 ```bash

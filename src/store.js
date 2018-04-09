@@ -1,7 +1,7 @@
 const { createStore } = require('redux');
 
 const reducer = require('./reducer');
-const logger = require('./lib/logger')('stepfunctions-local');
+const logger = require('./lib/logger');
 
 const store = createStore(reducer);
 store.subscribe(() => {
