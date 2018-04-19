@@ -55,6 +55,8 @@ $> npm install --save stepfunctions-local
 
 ## How to use it ?
 
+You will find some help on the [Wiki](https://github.com/airware/stepfunctions-local/wiki) page.
+
 ### Start a server
 #### Using command line
 ```bash
