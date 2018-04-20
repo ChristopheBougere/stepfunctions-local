@@ -21,7 +21,7 @@ const sendTaskSuccess = require('./lib/actions/api/send-task-success');
 const sendTaskFailure = require('./lib/actions/api/send-task-failure');
 const sendTaskHeartbeat = require('./lib/actions/api/send-task-heartbeat');
 
-const dispatch = function (state, action, actionParams, config) {
+const dispatch = (state, action, actionParams, config) => {
   try {
     const { stateMachines, executions, activities } = state;
     switch (action) {
@@ -76,8 +76,8 @@ const dispatch = function (state, action, actionParams, config) {
       err: e,
     };
   }
-}
+};
 
 module.exports = {
   dispatch,
-}
+};

@@ -32,27 +32,38 @@ function start(config = {}) {
     if (!target.startsWith('AWSStepFunctions.')) {
       return res.status(400).send({ error: 'Malformed header x-amz-target' });
     }
+    const action = target.split('.')[1];
+    req.action = action;
+    return next();
+  });
+
+  // Check if action exists
+  app.use((req, res, next) => {
+    const action = Object.keys(actions)
+      .map(key => actions[key])
+      .find(val => val === req.action);
+    if (!action) {
+      logger.error('Invalid action %s', req.action);
+      return res.status(400).send({ error: errors.common.INVALID_ACTION });
+    }
+    return next();
+  });
+
+  // Log action
+  app.use((req, res, next) => {
+    logger.log('===> %s: %O', req.action, req.body);
     next();
   });
 
   // Route HTTP POST requests
   app.post('/', (req, res) => {
     try {
-      const targetAction = req.headers['x-amz-target'].split('.')[1];
-      const action = Object.keys(actions)
-        .map(key => actions[key])
-        .find(val => val === targetAction);
-      if (!action) {
-        logger.error('Invalid action %s', targetAction);
-        return res.status(400).send({ error: errors.common.INVALID_ACTION });
-      }
-      logger.log('===> %s: %O', action, req.body);
-      const result = dispatch(store.getState(), action, req.body, fullConfig);
+      const result = dispatch(store.getState(), req.action, req.body, fullConfig);
       if (result.err) {
         return res.status(400).send(result.err.message);
       }
       store.dispatch({
-        type: action,
+        type: req.action,
         result,
       });
       return res.send(result.response);
