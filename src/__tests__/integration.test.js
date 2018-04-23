@@ -42,6 +42,7 @@ const commands = {
   listStateMachines: 'list-state-machines',
   createStateMachine: 'create-state-machine --name {{name}} --role {{role}} --definition {{definition}}',
   describeStateMachine: 'describe-state-machine --state-machine-arn {{arn}}',
+  updateStateMachine: 'update-state-machine --state-machine-arn {{arn}} --role-arn {{role}}',
   describeStateMachineForExecution: 'describe-state-machine-for-execution --execution-arn {{arn}}',
   listExecutions: 'list-executions --state-machine-arn {{arn}}',
   startExecution: 'start-execution --state-machine-arn {{arn}} --name {{name}} --input {{input}}',
@@ -87,7 +88,7 @@ describe('Integration tests (execute a simple state machine)', () => {
     }
   });
 
-  it('should describe the state machines', async () => {
+  it('should describe the state machine', async () => {
     try {
       const stateMachine = data.stateMachines[0];
       const command = commands.describeStateMachine
@@ -115,6 +116,23 @@ describe('Integration tests (execute a simple state machine)', () => {
         creationDate: data.stateMachines[0].creationDate,
         stateMachineArn: data.stateMachines[0].stateMachineArn,
       });
+    } catch (e) {
+      expect(e).not.toBeDefined();
+    }
+  });
+
+  it('should update a state machine', async () => {
+    try {
+      const updatedRoleArn = 'arn:aws:iam::0123456789:role/service-role/UpdatedMyRole';
+      const stateMachine = data.stateMachines[0];
+      const command = commands.updateStateMachine
+        .replace('{{arn}}', stateMachine.stateMachineArn)
+        .replace('{{role}}', updatedRoleArn);
+      const res = await exec(command);
+      expect(res).toMatchObject({
+        updateDate: expect.any(Number),
+      });
+      stateMachine.roleArn = updatedRoleArn;
     } catch (e) {
       expect(e).not.toBeDefined();
     }
