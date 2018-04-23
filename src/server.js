@@ -27,10 +27,10 @@ function start(config = {}) {
   app.use((req, res, next) => {
     const target = req.headers['x-amz-target'];
     if (typeof target !== 'string') {
-      return res.status(400).send({ error: 'Missing header x-amz-target' });
+      return res.status(400).send(errors.server.MISSING_HEADER_TARGET);
     }
     if (!target.startsWith('AWSStepFunctions.')) {
-      return res.status(400).send({ error: 'Malformed header x-amz-target' });
+      return res.status(400).send(errors.server.MALFORMED_HEADER);
     }
     const action = target.split('.')[1];
     req.action = action;
@@ -44,7 +44,7 @@ function start(config = {}) {
       .find(val => val === req.action);
     if (!action) {
       logger.error('Invalid action %s', req.action);
-      return res.status(400).send({ error: errors.common.INVALID_ACTION });
+      return res.status(400).send(errors.common.INVALID_ACTION);
     }
     return next();
   });
