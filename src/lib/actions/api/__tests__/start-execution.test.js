@@ -98,7 +98,7 @@ describe('Start execution', () => {
       const res = startExecution(params, stateMachines, executions);
       expect(res).not.toBeDefined();
     } catch (e) {
-      expect(e.message).toEqual(errors.startExecution.STATE_MACHINE_DOES_NOT_EXIST);
+      expect(e.name).toEqual(errors.startExecution.STATE_MACHINE_DOES_NOT_EXIST);
     }
   });
 
@@ -110,7 +110,7 @@ describe('Start execution', () => {
       const res = startExecution(params, stateMachines, executions);
       expect(res).not.toBeDefined();
     } catch (e) {
-      expect(e.message)
+      expect(e.name)
         .toEqual(expect.stringContaining(errors.common.INVALID_PARAMETER_VALUE));
     }
   });
@@ -124,7 +124,7 @@ describe('Start execution', () => {
       const res = startExecution(params, stateMachines, executions);
       expect(res).not.toBeDefined();
     } catch (e) {
-      expect(e.message)
+      expect(e.name)
         .toEqual(expect.stringContaining(errors.common.INVALID_PARAMETER_VALUE));
     }
   });
@@ -138,7 +138,7 @@ describe('Start execution', () => {
       const res = startExecution(params, stateMachines, executions);
       expect(res).not.toBeDefined();
     } catch (e) {
-      expect(e.message).toEqual(errors.startExecution.INVALID_NAME);
+      expect(e.name).toEqual(errors.startExecution.INVALID_NAME);
     }
   });
 
@@ -151,7 +151,7 @@ describe('Start execution', () => {
       const res = startExecution(params, stateMachines, executions);
       expect(res).not.toBeDefined();
     } catch (e) {
-      expect(e.message)
+      expect(e.name)
         .toEqual(expect.stringContaining(errors.common.INVALID_PARAMETER_VALUE));
     }
   });
@@ -165,7 +165,7 @@ describe('Start execution', () => {
       const res = startExecution(params, stateMachines, executions);
       expect(res).not.toBeDefined();
     } catch (e) {
-      expect(e.message).toEqual(errors.startExecution.INVALID_ARN);
+      expect(e.name).toEqual(errors.startExecution.INVALID_ARN);
     }
   });
 
@@ -179,7 +179,7 @@ describe('Start execution', () => {
       const res = startExecution(params, stateMachines, executions);
       expect(res).not.toBeDefined();
     } catch (e) {
-      expect(e.message).toEqual(errors.startExecution.INVALID_EXECUTION_INPUT);
+      expect(e.name).toEqual(errors.startExecution.INVALID_EXECUTION_INPUT);
     }
   });
 
@@ -193,7 +193,7 @@ describe('Start execution', () => {
       const res = startExecution(params, stateMachines, executions);
       expect(res).not.toBeDefined();
     } catch (e) {
-      expect(e.message).toEqual(errors.startExecution.EXECUTION_ALREADY_EXISTS);
+      expect(e.name).toEqual(errors.startExecution.EXECUTION_ALREADY_EXISTS);
     }
   });
 
@@ -206,7 +206,7 @@ describe('Start execution', () => {
       const res = startExecution(params, stateMachines, executions);
       expect(res).not.toBeDefined();
     } catch (e) {
-      expect(e.message).toEqual(errors.startExecution.EXECUTION_ALREADY_EXISTS);
+      expect(e.name).toEqual(errors.startExecution.EXECUTION_ALREADY_EXISTS);
     }
   });
 });

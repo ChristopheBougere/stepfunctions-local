@@ -44,7 +44,7 @@ function startExecution(params, stateMachines, executions, config) {
 
   /* execute action */
   if (!isValidArn(params.stateMachineArn, 'state-machine')) {
-    throw new Error(errors.startExecution.INVALID_ARN);
+    throw new CustomError(`Invalid State Machine Arn: '${params.stateMachineArn}'`, errors.startExecution.INVALID_ARN);
   }
   const match = stateMachines.find(o => o.stateMachineArn === params.stateMachineArn);
   if (!match) {
@@ -79,7 +79,7 @@ function startExecution(params, stateMachines, executions, config) {
     const running = sameName.filter(e => Execution.isRunning(e.status));
     if (running.length) {
       if (running.find(e => e.input !== input)) {
-        throw new Error(errors.startExecution.EXECUTION_ALREADY_EXISTS);
+        throw new CustomError(`Execution Already Exists: '${paramsName}'`, errors.startExecution.EXECUTION_ALREADY_EXISTS);
       }
       const runningExecution = running.splice(-1);
       return {
@@ -92,7 +92,7 @@ function startExecution(params, stateMachines, executions, config) {
     }
     const limitDate = (Date.now() - (SAME_NAME_MAX_DAYS * 24 * 60 * 60)) / 1000;
     if (sameName.find(e => e.stopDate > limitDate)) {
-      throw new Error(errors.startExecution.EXECUTION_ALREADY_EXISTS);
+      throw new CustomError(`Execution Already Exists: '${paramsName}'`, errors.startExecution.EXECUTION_ALREADY_EXISTS);
     }
   }
   // Create execution

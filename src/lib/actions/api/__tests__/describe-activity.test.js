@@ -26,7 +26,7 @@ describe('Describe activity', () => {
       };
       describeActivity(params, activities);
     } catch (e) {
-      expect(e.message).toEqual(errors.describeActivity.INVALID_ARN);
+      expect(e.name).toEqual(errors.describeActivity.INVALID_ARN);
     }
   });
 
@@ -38,7 +38,7 @@ describe('Describe activity', () => {
       const res = describeActivity(params, activities);
       expect(res).not.toBeDefined();
     } catch (e) {
-      expect(e.message)
+      expect(e.name)
         .toEqual(expect.stringContaining(errors.common.INVALID_PARAMETER_VALUE));
     }
   });
@@ -51,7 +51,7 @@ describe('Describe activity', () => {
       const res = describeActivity(params, activities);
       expect(res).not.toBeDefined();
     } catch (e) {
-      expect(e.message).toEqual(errors.describeActivity.ACTIVITY_DOES_NOT_EXIST);
+      expect(e.name).toEqual(errors.describeActivity.ACTIVITY_DOES_NOT_EXIST);
     }
   });
 });

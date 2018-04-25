@@ -29,8 +29,7 @@ describe('Send task heartbeat', () => {
       const res = sendTaskHeartbeat(params, activities);
       expect(res).not.toBeDefined();
     } catch (e) {
-      expect(e.message)
-        .toEqual(expect.stringContaining(errors.common.INVALID_PARAMETER_VALUE));
+      expect(e.name).toEqual(errors.sendTaskHeartbeat.INVALID_TOKEN);
     }
   });
 
@@ -42,7 +41,7 @@ describe('Send task heartbeat', () => {
       const res = sendTaskHeartbeat(params, activities);
       expect(res).not.toBeDefined();
     } catch (e) {
-      expect(e.message).toEqual(errors.sendTaskHeartbeat.TASK_DOES_NOT_EXIST);
+      expect(e.name).toEqual(errors.sendTaskHeartbeat.TASK_DOES_NOT_EXIST);
     }
   });
 
@@ -54,7 +53,7 @@ describe('Send task heartbeat', () => {
       const res = sendTaskHeartbeat(params, activities);
       expect(res).not.toBeDefined();
     } catch (e) {
-      expect(e.message).toEqual(errors.sendTaskHeartbeat.TASK_TIMED_OUT);
+      expect(e.name).toEqual(errors.sendTaskHeartbeat.TASK_TIMED_OUT);
     }
   });
 });

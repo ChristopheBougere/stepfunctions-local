@@ -28,7 +28,7 @@ function listActivities(params, activities) {
         throw new Error('nextToken.boto_truncate_amount should be a number');
       }
     } catch (e) {
-      throw new Error(errors.listActivities.INVALID_TOKEN);
+      throw new CustomError(`Invalid Token: '${params.nextToken}'`, errors.listActivities.INVALID_TOKEN);
     }
   }
   let nextToken = null;

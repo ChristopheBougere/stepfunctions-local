@@ -26,7 +26,7 @@ describe('Delete state machine', () => {
       const res = deleteStateMachine(params, stateMachines);
       expect(res).not.toBeDefined();
     } catch (e) {
-      expect(e.message)
+      expect(e.name)
         .toEqual(expect.stringContaining(errors.common.INVALID_PARAMETER_VALUE));
     }
   });
@@ -39,7 +39,7 @@ describe('Delete state machine', () => {
       const res = deleteStateMachine(params, stateMachines);
       expect(res).not.toBeDefined();
     } catch (e) {
-      expect(e.message).toEqual(errors.deleteStateMachine.INVALID_ARN);
+      expect(e.name).toEqual(errors.deleteStateMachine.INVALID_ARN);
     }
   });
 
@@ -51,7 +51,7 @@ describe('Delete state machine', () => {
       const res = deleteStateMachine(params, stateMachines);
       expect(res).not.toBeDefined();
     } catch (e) {
-      expect(e.message).toEqual(errors.deleteStateMachine.STATE_MACHINE_DOES_NOT_EXIST);
+      expect(e.name).toEqual(errors.deleteStateMachine.STATE_MACHINE_DOES_NOT_EXIST);
     }
   });
 });

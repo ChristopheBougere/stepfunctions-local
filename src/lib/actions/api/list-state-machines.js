@@ -28,7 +28,7 @@ function listStateMachines(params, stateMachines) {
         throw new Error('nextToken.boto_truncate_amount should be a number');
       }
     } catch (e) {
-      throw new Error(errors.listStateMachines.INVALID_TOKEN);
+      throw new CustomError(`Invalid Token: '${params.nextToken}'`, errors.listStateMachines.INVALID_TOKEN);
     }
   }
   let nextToken = null;

@@ -1,13 +1,13 @@
 const { errors, status, parameters } = require('../../../constants');
 const CustomError = require('../../error');
 
-function sendTaskHeartBeat(params, activities) {
+function sendTaskHeartbeat(params, activities) {
   /* check request parameters */
   if (typeof params.taskToken !== 'string'
     || params.taskToken.length < parameters.token.MIN
     || params.taskToken.length > parameters.token.MAX
   ) {
-    throw new CustomError(`Invalid Task Token: '${params.taskToken}'`, errors.sendTaskHeartBeat.INVALID_TOKEN);
+    throw new CustomError(`Invalid Task Token: '${params.taskToken}'`, errors.sendTaskHeartbeat.INVALID_TOKEN);
   }
 
   /* execute action */
@@ -23,9 +23,9 @@ function sendTaskHeartBeat(params, activities) {
   });
 
   if (!task) {
-    throw new CustomError('Task Does Not Exist', errors.sendTaskHeartBeat.TASK_DOES_NOT_EXIST);
+    throw new CustomError('Task Does Not Exist', errors.sendTaskHeartbeat.TASK_DOES_NOT_EXIST);
   } else if (task.status === status.activity.TIMED_OUT) {
-    throw new CustomError('Task Timed Out', errors.sendTaskHeartBeat.TASK_TIMED_OUT);
+    throw new CustomError('Task Timed Out', errors.sendTaskHeartbeat.TASK_TIMED_OUT);
   }
 
   return {
@@ -36,4 +36,4 @@ function sendTaskHeartBeat(params, activities) {
   };
 }
 
-module.exports = sendTaskHeartBeat;
+module.exports = sendTaskHeartbeat;

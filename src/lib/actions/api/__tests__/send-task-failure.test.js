@@ -32,7 +32,7 @@ describe('Send task failure', () => {
       const res = sendTaskFailure(params, activities);
       expect(res).not.toBeDefined();
     } catch (e) {
-      expect(e.message)
+      expect(e.name)
         .toEqual(expect.stringContaining(errors.common.INVALID_PARAMETER_VALUE));
     }
   });
@@ -46,7 +46,7 @@ describe('Send task failure', () => {
       const res = sendTaskFailure(params, activities);
       expect(res).not.toBeDefined();
     } catch (e) {
-      expect(e.message)
+      expect(e.name)
         .toEqual(expect.stringContaining(errors.common.INVALID_PARAMETER_VALUE));
     }
   });
@@ -59,7 +59,7 @@ describe('Send task failure', () => {
       const res = sendTaskFailure(params, activities);
       expect(res).not.toBeDefined();
     } catch (e) {
-      expect(e.message).toEqual(errors.sendTaskFailure.INVALID_TOKEN);
+      expect(e.name).toEqual(errors.sendTaskFailure.INVALID_TOKEN);
     }
   });
 
@@ -71,7 +71,7 @@ describe('Send task failure', () => {
       const res = sendTaskFailure(params, activities);
       expect(res).not.toBeDefined();
     } catch (e) {
-      expect(e.message).toEqual(errors.sendTaskFailure.TASK_DOES_NOT_EXIST);
+      expect(e.name).toEqual(errors.sendTaskFailure.TASK_DOES_NOT_EXIST);
     }
   });
 
@@ -83,7 +83,7 @@ describe('Send task failure', () => {
       const res = sendTaskFailure(params, activities);
       expect(res).not.toBeDefined();
     } catch (e) {
-      expect(e.message).toEqual(errors.sendTaskFailure.TASK_TIMED_OUT);
+      expect(e.name).toEqual(errors.sendTaskFailure.TASK_TIMED_OUT);
     }
   });
 });

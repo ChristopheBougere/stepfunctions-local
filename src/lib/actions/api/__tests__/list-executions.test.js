@@ -39,7 +39,7 @@ describe('List executions', () => {
       const res = listExecutions(params, stateMachines, executions);
       expect(res).not.toBeDefined();
     } catch (e) {
-      expect(e.message)
+      expect(e.name)
         .toEqual(expect.stringContaining(errors.common.INVALID_PARAMETER_VALUE));
     }
   });
@@ -53,7 +53,7 @@ describe('List executions', () => {
       const res = listExecutions(params, stateMachines, executions);
       expect(res).not.toBeDefined();
     } catch (e) {
-      expect(e.message)
+      expect(e.name)
         .toEqual(expect.stringContaining(errors.common.INVALID_PARAMETER_VALUE));
     }
   });
@@ -67,7 +67,7 @@ describe('List executions', () => {
       const res = listExecutions(params, stateMachines, executions);
       expect(res).not.toBeDefined();
     } catch (e) {
-      expect(e.message)
+      expect(e.name)
         .toEqual(expect.stringContaining(errors.common.INVALID_PARAMETER_VALUE));
     }
   });
@@ -81,7 +81,7 @@ describe('List executions', () => {
       const res = listExecutions(params, stateMachines, executions);
       expect(res).not.toBeDefined();
     } catch (e) {
-      expect(e.message)
+      expect(e.name)
         .toEqual(expect.stringContaining(errors.common.INVALID_PARAMETER_VALUE));
     }
   });
@@ -95,8 +95,7 @@ describe('List executions', () => {
       const res = listExecutions(params, stateMachines, executions);
       expect(res).not.toBeDefined();
     } catch (e) {
-      expect(e.message)
-        .toEqual(expect.stringContaining(errors.listExecutions.INVALID_TOKEN));
+      expect(e.name).toEqual(errors.listExecutions.INVALID_TOKEN);
     }
   });
 
@@ -108,7 +107,7 @@ describe('List executions', () => {
       const res = listExecutions(params, stateMachines, executions);
       expect(res).not.toBeDefined();
     } catch (e) {
-      expect(e.message)
+      expect(e.name)
         .toEqual(expect.stringContaining(errors.common.INVALID_PARAMETER_VALUE));
     }
   });
@@ -121,7 +120,7 @@ describe('List executions', () => {
       const res = listExecutions(params, stateMachines, executions);
       expect(res).not.toBeDefined();
     } catch (e) {
-      expect(e.message).toEqual(errors.listExecutions.INVALID_ARN);
+      expect(e.name).toEqual(errors.listExecutions.INVALID_ARN);
     }
   });
 
@@ -133,7 +132,7 @@ describe('List executions', () => {
       const res = listExecutions(params, stateMachines, executions);
       expect(res).not.toBeDefined();
     } catch (e) {
-      expect(e.message).toEqual(errors.listExecutions.STATE_MACHINE_DOES_NOT_EXIST);
+      expect(e.name).toEqual(errors.listExecutions.STATE_MACHINE_DOES_NOT_EXIST);
     }
   });
 
@@ -146,7 +145,7 @@ describe('List executions', () => {
       const res = listExecutions(params, stateMachines, executions);
       expect(res).not.toBeDefined();
     } catch (e) {
-      expect(e.message)
+      expect(e.name)
         .toEqual(expect.stringContaining(errors.common.INVALID_PARAMETER_VALUE));
     }
   });

@@ -42,7 +42,7 @@ describe('Get activity task', () => {
       const res = getActivityTask(params, activities);
       expect(res).not.toBeDefined();
     } catch (e) {
-      expect(e.message)
+      expect(e.name)
         .toEqual(expect.stringContaining(errors.common.INVALID_PARAMETER_VALUE));
     }
   });
@@ -55,7 +55,7 @@ describe('Get activity task', () => {
       const res = getActivityTask(params, activities);
       expect(res).not.toBeDefined();
     } catch (e) {
-      expect(e.message)
+      expect(e.name)
         .toEqual(expect.stringContaining(errors.common.INVALID_PARAMETER_VALUE));
     }
   });
@@ -68,7 +68,7 @@ describe('Get activity task', () => {
       const res = getActivityTask(params, activities);
       expect(res).not.toBeDefined();
     } catch (e) {
-      expect(e.message).toEqual(errors.getActivityTask.INVALID_ARN);
+      expect(e.name).toEqual(errors.getActivityTask.INVALID_ARN);
     }
   });
 
@@ -80,7 +80,7 @@ describe('Get activity task', () => {
       const res = getActivityTask(params, activities);
       expect(res).not.toBeDefined();
     } catch (e) {
-      expect(e.message).toEqual(errors.getActivityTask.ACTIVITY_DOES_NOT_EXIST);
+      expect(e.name).toEqual(errors.getActivityTask.ACTIVITY_DOES_NOT_EXIST);
     }
   });
 });

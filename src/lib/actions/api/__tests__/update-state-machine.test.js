@@ -45,7 +45,7 @@ describe('Update state machine', () => {
       const res = updateStateMachine(params, stateMachines);
       expect(res).not.toBeDefined();
     } catch (e) {
-      expect(e.message)
+      expect(e.name)
         .toEqual(expect.stringContaining(errors.common.MISSING_REQUIRED_PARAMETER));
     }
   });
@@ -59,7 +59,7 @@ describe('Update state machine', () => {
       const res = updateStateMachine(params, stateMachines);
       expect(res).not.toBeDefined();
     } catch (e) {
-      expect(e.message)
+      expect(e.name)
         .toEqual(expect.stringContaining(errors.common.INVALID_PARAMETER_VALUE));
     }
   });
@@ -73,7 +73,7 @@ describe('Update state machine', () => {
       const res = updateStateMachine(params, stateMachines);
       expect(res).not.toBeDefined();
     } catch (e) {
-      expect(e.message)
+      expect(e.name)
         .toEqual(expect.stringContaining(errors.common.INVALID_PARAMETER_VALUE));
     }
   });
@@ -87,7 +87,7 @@ describe('Update state machine', () => {
       const res = updateStateMachine(params, stateMachines);
       expect(res).not.toBeDefined();
     } catch (e) {
-      expect(e.message)
+      expect(e.name)
         .toEqual(expect.stringContaining(errors.common.INVALID_PARAMETER_VALUE));
     }
   });
@@ -101,7 +101,7 @@ describe('Update state machine', () => {
       const res = updateStateMachine(params, stateMachines);
       expect(res).not.toBeDefined();
     } catch (e) {
-      expect(e.message)
+      expect(e.name)
         .toEqual(expect.stringContaining(errors.updateStateMachine.INVALID_ARN));
     }
   });
@@ -115,7 +115,7 @@ describe('Update state machine', () => {
       const res = updateStateMachine(params, stateMachines);
       expect(res).not.toBeDefined();
     } catch (e) {
-      expect(e.message)
+      expect(e.name)
         .toEqual(expect.stringContaining(errors.updateStateMachine.STATE_MACHINE_DOES_NOT_EXIST));
     }
   });
@@ -130,7 +130,7 @@ describe('Update state machine', () => {
       const res = updateStateMachine(params, stateMachines);
       expect(res).not.toBeDefined();
     } catch (e) {
-      expect(e.message)
+      expect(e.name)
         .toEqual(expect.stringContaining(errors.updateStateMachine.INVALID_DEFINITION));
     }
   });
@@ -145,7 +145,7 @@ describe('Update state machine', () => {
       const res = updateStateMachine(params, stateMachines);
       expect(res).not.toBeDefined();
     } catch (e) {
-      expect(e.message)
+      expect(e.name)
         .toEqual(expect.stringContaining(errors.updateStateMachine.INVALID_DEFINITION));
     }
   });
@@ -160,7 +160,7 @@ describe('Update state machine', () => {
       const res = updateStateMachine(params, stateMachines);
       expect(res).not.toBeDefined();
     } catch (e) {
-      expect(e.message).toEqual(expect.stringContaining(errors.updateStateMachine.INVALID_ARN));
+      expect(e.name).toEqual(expect.stringContaining(errors.updateStateMachine.INVALID_ARN));
     }
   });
 });

@@ -42,7 +42,7 @@ function listExecutions(params, stateMachines, executions) {
         throw new Error('nextToken.boto_truncate_amount should be a number');
       }
     } catch (e) {
-      throw new Error(errors.listExecutions.INVALID_TOKEN);
+      throw new CustomError(`Invalid Token: '${params.nextToken}'`, errors.listExecutions.INVALID_TOKEN);
     }
   }
 
