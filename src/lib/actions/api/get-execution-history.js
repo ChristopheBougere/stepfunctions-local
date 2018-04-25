@@ -1,5 +1,6 @@
 const { isValidArn } = require('../../tools/validate');
 const { errors, parameters } = require('../../../constants');
+const CustomError = require('../../error');
 
 function getExecutionHistory(params, executions) {
   /* check request parameters */
@@ -7,24 +8,24 @@ function getExecutionHistory(params, executions) {
     || params.executionArn.length < parameters.arn.MIN
     || params.executionArn.length > parameters.arn.MAX
   ) {
-    throw new Error(`${errors.common.INVALID_PARAMETER_VALUE}: --execution-arn`);
+    throw new CustomError('Invalid Parameter Value: execution-arn', errors.common.INVALID_PARAMETER_VALUE);
   }
   if (params.maxResults &&
     (parseInt(params.maxResults, 10) !== params.maxResults
     || params.maxResults < parameters.results.MIN
     || params.maxResults > parameters.results.MAX)
   ) {
-    throw new Error(`${errors.common.INVALID_PARAMETER_VALUE}: --max-results`);
+    throw new CustomError('Invalid Parameter Value: max-results', errors.common.INVALID_PARAMETER_VALUE);
   }
   if (params.nextToken &&
     (typeof params.nextToken !== 'string'
     || params.nextToken.length < parameters.token.MIN
     || params.nextToken.length > parameters.token.MAX)
   ) {
-    throw new Error(`${errors.common.INVALID_PARAMETER_VALUE}: --next-token`);
+    throw new CustomError('Invalid Parameter Value: next-token', errors.common.INVALID_PARAMETER_VALUE);
   }
   if (params.reverseOrder && typeof params.reverseOrder !== 'boolean') {
-    throw new Error(`${errors.common.INVALID_PARAMETER_VALUE}: --reverse-order`);
+    throw new CustomError('Invalid Parameter Value: reserve-order', errors.common.INVALID_PARAMETER_VALUE);
   }
 
   /* execute action */
@@ -41,11 +42,11 @@ function getExecutionHistory(params, executions) {
     }
   }
   if (!isValidArn(params.executionArn, 'execution')) {
-    throw new Error(errors.getExecutionHistory.INVALID_ARN);
+    throw new CustomError(`Invalid Execution Arn '${params.executionArn}'`, errors.getExecutionHistory.INVALID_ARN);
   }
   const match = executions.find(e => e.executionArn === params.executionArn);
   if (!match) {
-    throw new Error(errors.getExecutionHistory.EXECUTION_DOES_NOT_EXIST);
+    throw new CustomError(`Execution Does Not Exist: '${params.executionArn}'`, errors.getExecutionHistory.EXECUTION_DOES_NOT_EXIST);
   }
   const { events } = match;
   if (params.reverseOrder) {

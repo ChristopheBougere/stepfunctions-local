@@ -60,7 +60,10 @@ function start(config = {}) {
     try {
       const result = dispatch(store.getState(), req.action, req.body, fullConfig);
       if (result.err) {
-        return res.status(400).send(result.err.message);
+        return res.status(400).send({
+          __type: result.err.name,
+          message: result.err.message,
+        });
       }
       store.dispatch({
         type: req.action,
