@@ -51,7 +51,7 @@ describe('Describe state machine for execution', () => {
       const res = describeStateMachineForExecution(params, stateMachines, executions);
       expect(res).not.toBeDefined();
     } catch (e) {
-      expect(e.message)
+      expect(e.name)
         .toEqual(expect.stringContaining(errors.common.INVALID_PARAMETER_VALUE));
     }
   });
@@ -64,7 +64,7 @@ describe('Describe state machine for execution', () => {
       const res = describeStateMachineForExecution(params, stateMachines, executions);
       expect(res).not.toBeDefined();
     } catch (e) {
-      expect(e.message).toEqual(errors.describeStateMachineForExecution.INVALID_ARN);
+      expect(e.name).toEqual(errors.describeStateMachineForExecution.INVALID_ARN);
     }
   });
 
@@ -76,7 +76,7 @@ describe('Describe state machine for execution', () => {
       const res = describeStateMachineForExecution(params, stateMachines, executions);
       expect(res).not.toBeDefined();
     } catch (e) {
-      expect(e.message).toEqual(errors.describeStateMachineForExecution.EXECUTION_DOES_NOT_EXIST);
+      expect(e.name).toEqual(errors.describeStateMachineForExecution.EXECUTION_DOES_NOT_EXIST);
     }
   });
 });

@@ -48,6 +48,10 @@ module.exports = {
     },
   },
   errors: { // HTTP 400 except when specified
+    server: {
+      MISSING_HEADER_TARGET: 'Missing header x-amz-target',
+      MALFORMED_HEADER: 'Malformed header x-amz-target',
+    },
     common: {
       ACCESS_DENIED_EXCEPTION: 'AccessDeniedException',
       INCOMPLETE_SIGNATURE: 'IncompleteSignature',

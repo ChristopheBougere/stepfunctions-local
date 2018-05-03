@@ -1,4 +1,5 @@
 const { errors, parameters } = require('../../../constants');
+const CustomError = require('../../error');
 
 function listActivities(params, activities) {
   /* check request parameters */
@@ -7,14 +8,14 @@ function listActivities(params, activities) {
     || params.maxResults < parameters.results.MIN
     || params.maxResults > parameters.results.MAX)
   ) {
-    throw new Error(`${errors.common.INVALID_PARAMETER_VALUE}: --max-results`);
+    throw new CustomError('Invalid Parameter Value: max-results', errors.common.INVALID_PARAMETER_VALUE);
   }
   if (params.nextToken &&
     (typeof params.nextToken !== 'string'
     || params.nextToken.length < parameters.token.MIN
     || params.nextToken.length > parameters.token.MAX)
   ) {
-    throw new Error(`${errors.common.INVALID_PARAMETER_VALUE}: --next-token`);
+    throw new CustomError('Invalid Parameter Value: next-token', errors.common.INVALID_PARAMETER_VALUE);
   }
 
   /* execution action */
@@ -27,7 +28,7 @@ function listActivities(params, activities) {
         throw new Error('nextToken.boto_truncate_amount should be a number');
       }
     } catch (e) {
-      throw new Error(errors.listActivities.INVALID_TOKEN);
+      throw new CustomError(`Invalid Token: '${params.nextToken}'`, errors.listActivities.INVALID_TOKEN);
     }
   }
   let nextToken = null;

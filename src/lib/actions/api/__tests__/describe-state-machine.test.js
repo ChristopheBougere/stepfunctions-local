@@ -26,7 +26,7 @@ describe('Describe state machine', () => {
       const res = describeStateMachine(params, stateMachines);
       expect(res).not.toBeDefined();
     } catch (e) {
-      expect(e.message)
+      expect(e.name)
         .toEqual(expect.stringContaining(errors.common.INVALID_PARAMETER_VALUE));
     }
   });
@@ -39,7 +39,7 @@ describe('Describe state machine', () => {
       const res = describeStateMachine(params, stateMachines);
       expect(res).not.toBeDefined();
     } catch (e) {
-      expect(e.message).toEqual(errors.describeStateMachine.INVALID_ARN);
+      expect(e.name).toEqual(errors.describeStateMachine.INVALID_ARN);
     }
   });
 
@@ -51,7 +51,7 @@ describe('Describe state machine', () => {
       const res = describeStateMachine(params, stateMachines);
       expect(res).not.toBeDefined();
     } catch (e) {
-      expect(e.message).toEqual(errors.describeStateMachine.STATE_MACHINE_DOES_NOT_EXIST);
+      expect(e.name).toEqual(errors.describeStateMachine.STATE_MACHINE_DOES_NOT_EXIST);
     }
   });
 });

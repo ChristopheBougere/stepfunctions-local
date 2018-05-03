@@ -45,7 +45,7 @@ describe('List state machines', () => {
       const res = listStateMachines(params, stateMachines);
       expect(res).not.toBeDefined();
     } catch (e) {
-      expect(e.message)
+      expect(e.name)
         .toEqual(expect.stringContaining(errors.common.INVALID_PARAMETER_VALUE));
     }
   });
@@ -58,7 +58,7 @@ describe('List state machines', () => {
       const res = listStateMachines(params, stateMachines);
       expect(res).not.toBeDefined();
     } catch (e) {
-      expect(e.message)
+      expect(e.name)
         .toEqual(expect.stringContaining(errors.common.INVALID_PARAMETER_VALUE));
     }
   });
@@ -71,7 +71,7 @@ describe('List state machines', () => {
       const res = listStateMachines(params, stateMachines);
       expect(res).not.toBeDefined();
     } catch (e) {
-      expect(e.message).toEqual(errors.listStateMachines.INVALID_TOKEN);
+      expect(e.name).toEqual(errors.listStateMachines.INVALID_TOKEN);
     }
   });
 });

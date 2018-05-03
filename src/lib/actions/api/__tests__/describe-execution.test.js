@@ -31,7 +31,7 @@ describe('Describe execution', () => {
       };
       describeExecution(params, executions);
     } catch (e) {
-      expect(e.message).toEqual(errors.describeExecution.INVALID_ARN);
+      expect(e.name).toEqual(errors.describeExecution.INVALID_ARN);
     }
   });
 
@@ -43,7 +43,7 @@ describe('Describe execution', () => {
       const res = describeExecution(params, executions);
       expect(res).not.toBeDefined();
     } catch (e) {
-      expect(e.message)
+      expect(e.name)
         .toEqual(expect.stringContaining(errors.common.INVALID_PARAMETER_VALUE));
     }
   });
@@ -56,7 +56,7 @@ describe('Describe execution', () => {
       const res = describeExecution(params, executions);
       expect(res).not.toBeDefined();
     } catch (e) {
-      expect(e.message).toEqual(errors.describeExecution.EXECUTION_DOES_NOT_EXIST);
+      expect(e.name).toEqual(errors.describeExecution.EXECUTION_DOES_NOT_EXIST);
     }
   });
 });

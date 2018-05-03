@@ -27,7 +27,7 @@ describe('Stop execution', () => {
       const res = stopExecution(params, executions);
       expect(res).not.toBeDefined();
     } catch (e) {
-      expect(e.message)
+      expect(e.name)
         .toEqual(expect.stringContaining(errors.common.INVALID_PARAMETER_VALUE));
     }
   });
@@ -40,7 +40,7 @@ describe('Stop execution', () => {
       const res = stopExecution(params, executions);
       expect(res).not.toBeDefined();
     } catch (e) {
-      expect(e.message).toEqual(errors.stopExecution.INVALID_ARN);
+      expect(e.name).toEqual(errors.stopExecution.INVALID_ARN);
     }
   });
 
@@ -52,7 +52,7 @@ describe('Stop execution', () => {
       const res = stopExecution(params, executions);
       expect(res).not.toBeDefined();
     } catch (e) {
-      expect(e.message).toEqual(errors.stopExecution.EXECUTION_DOES_NOT_EXIST);
+      expect(e.name).toEqual(errors.stopExecution.EXECUTION_DOES_NOT_EXIST);
     }
   });
 
@@ -65,7 +65,7 @@ describe('Stop execution', () => {
       const res = stopExecution(params, executions);
       expect(res).not.toBeDefined();
     } catch (e) {
-      expect(e.message)
+      expect(e.name)
         .toEqual(expect.stringContaining(errors.common.INVALID_PARAMETER_VALUE));
     }
   });
@@ -79,7 +79,7 @@ describe('Stop execution', () => {
       const res = stopExecution(params, executions);
       expect(res).not.toBeDefined();
     } catch (e) {
-      expect(e.message)
+      expect(e.name)
         .toEqual(expect.stringContaining(errors.common.INVALID_PARAMETER_VALUE));
     }
   });

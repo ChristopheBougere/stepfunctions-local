@@ -30,7 +30,7 @@ describe('Send task success', () => {
       const res = sendTaskSuccess(params, activities);
       expect(res).not.toBeDefined();
     } catch (e) {
-      expect(e.message)
+      expect(e.name)
         .toEqual(expect.stringContaining(errors.common.INVALID_PARAMETER_VALUE));
     }
   });
@@ -44,7 +44,7 @@ describe('Send task success', () => {
       const res = sendTaskSuccess(params, activities);
       expect(res).not.toBeDefined();
     } catch (e) {
-      expect(e.message).toEqual(errors.sendTaskSuccess.INVALID_OUTPUT);
+      expect(e.name).toEqual(errors.sendTaskSuccess.INVALID_OUTPUT);
     }
   });
 
@@ -57,8 +57,8 @@ describe('Send task success', () => {
       const res = sendTaskSuccess(params, activities);
       expect(res).not.toBeDefined();
     } catch (e) {
-      expect(e.message)
-        .toEqual(expect.stringContaining(errors.common.INVALID_PARAMETER_VALUE));
+      expect(e.name)
+        .toEqual(expect.stringContaining(errors.sendTaskSuccess.INVALID_TOKEN));
     }
   });
 
@@ -71,7 +71,7 @@ describe('Send task success', () => {
       const res = sendTaskSuccess(params, activities);
       expect(res).not.toBeDefined();
     } catch (e) {
-      expect(e.message).toEqual(errors.sendTaskSuccess.TASK_DOES_NOT_EXIST);
+      expect(e.name).toEqual(errors.sendTaskSuccess.TASK_DOES_NOT_EXIST);
     }
   });
 
@@ -84,7 +84,7 @@ describe('Send task success', () => {
       const res = sendTaskSuccess(params, activities);
       expect(res).not.toBeDefined();
     } catch (e) {
-      expect(e.message).toEqual(errors.sendTaskFailure.TASK_TIMED_OUT);
+      expect(e.name).toEqual(errors.sendTaskFailure.TASK_TIMED_OUT);
     }
   });
 });

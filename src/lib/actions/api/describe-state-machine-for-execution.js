@@ -1,5 +1,6 @@
 const { isValidArn } = require('../../tools/validate');
 const { errors, parameters } = require('../../../constants');
+const CustomError = require('../../error');
 
 function describeStateMachineForExecution(params, stateMachines, executions) {
   /* check request parameters */
@@ -7,16 +8,16 @@ function describeStateMachineForExecution(params, stateMachines, executions) {
     || params.executionArn.length < parameters.arn.MIN
     || params.executionArn.length > parameters.arn.MAX
   ) {
-    throw new Error(`${errors.common.INVALID_PARAMETER_VALUE}: --execution-arn`);
+    throw new CustomError('Invalid Parameter Value: execution-arn', errors.common.INVALID_PARAMETER_VALUE);
   }
 
   /* execute action */
   if (!isValidArn(params.executionArn, 'execution')) {
-    throw new Error(errors.describeStateMachineForExecution.INVALID_ARN);
+    throw new CustomError(`Invalid Execution Arn '${params.executionArn}'`, errors.describeStateMachineForExecution.INVALID_ARN);
   }
   const execution = executions.find(e => e.executionArn === params.executionArn);
   if (!execution) {
-    throw new Error(errors.describeStateMachineForExecution.EXECUTION_DOES_NOT_EXIST);
+    throw new CustomError(`Execution Does Not Exist: '${params.executionArn}'`, errors.describeStateMachineForExecution.EXECUTION_DOES_NOT_EXIST);
   }
   const stateMachine = stateMachines.find(o => o.stateMachineArn === execution.stateMachineArn);
 

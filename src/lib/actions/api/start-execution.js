@@ -11,6 +11,7 @@ const {
 } = require('../../../constants');
 const StateMachine = require('../../states/state-machine');
 const Execution = require('../../states/execution');
+const CustomError = require('../../error');
 
 const addHistoryEvent = require('../custom/add-history-event');
 
@@ -24,33 +25,33 @@ function startExecution(params, stateMachines, executions, config) {
     || params.stateMachineArn.length < parameters.arn.MIN
     || params.stateMachineArn.length > parameters.arn.MAX
   ) {
-    throw new Error(`${errors.common.INVALID_PARAMETER_VALUE}: --state-machine-arn`);
+    throw new CustomError('Invalid Parameter Value: state-machine-arn', errors.common.INVALID_PARAMETER_VALUE);
   }
   if (params.input &&
     (typeof params.input !== 'string'
     || params.input.length < parameters.input.MIN
     || params.input.length > parameters.input.MAX)
   ) {
-    throw new Error(`${errors.common.INVALID_PARAMETER_VALUE}: --input`);
+    throw new CustomError('Invalid Parameter Value: input', errors.common.INVALID_PARAMETER_VALUE);
   }
   if (paramsName &&
     (typeof paramsName !== 'string'
     || paramsName.length < parameters.name.MIN
     || paramsName.length > parameters.name.MAX)
   ) {
-    throw new Error(`${errors.common.INVALID_PARAMETER_VALUE}: --name`);
+    throw new CustomError('Invalid Parameter Value: name', errors.common.INVALID_PARAMETER_VALUE);
   }
 
   /* execute action */
   if (!isValidArn(params.stateMachineArn, 'state-machine')) {
-    throw new Error(errors.startExecution.INVALID_ARN);
+    throw new CustomError(`Invalid State Machine Arn: '${params.stateMachineArn}'`, errors.startExecution.INVALID_ARN);
   }
   const match = stateMachines.find(o => o.stateMachineArn === params.stateMachineArn);
   if (!match) {
-    throw new Error(errors.startExecution.STATE_MACHINE_DOES_NOT_EXIST);
+    throw new CustomError(`State Machine Does Not Exist: '${params.stateMachineArn}'`, errors.startExecution.STATE_MACHINE_DOES_NOT_EXIST);
   }
   if (paramsName && !isValidName(paramsName)) {
-    throw new Error(errors.startExecution.INVALID_NAME);
+    throw new CustomError(`Invalid Name '${paramsName}'`, errors.startExecution.INVALID_NAME);
   }
   const name = paramsName || uuidv4();
   let input;
@@ -58,7 +59,7 @@ function startExecution(params, stateMachines, executions, config) {
     try {
       input = JSON.parse(params.input);
     } catch (e) {
-      throw new Error(errors.startExecution.INVALID_EXECUTION_INPUT);
+      throw new CustomError('Invalid Input', errors.startExecution.INVALID_EXECUTION_INPUT);
     }
   } else {
     input = {};
@@ -78,7 +79,7 @@ function startExecution(params, stateMachines, executions, config) {
     const running = sameName.filter(e => Execution.isRunning(e.status));
     if (running.length) {
       if (running.find(e => e.input !== input)) {
-        throw new Error(errors.startExecution.EXECUTION_ALREADY_EXISTS);
+        throw new CustomError(`Execution Already Exists: '${paramsName}'`, errors.startExecution.EXECUTION_ALREADY_EXISTS);
       }
       const runningExecution = running.splice(-1);
       return {
@@ -91,7 +92,7 @@ function startExecution(params, stateMachines, executions, config) {
     }
     const limitDate = (Date.now() - (SAME_NAME_MAX_DAYS * 24 * 60 * 60)) / 1000;
     if (sameName.find(e => e.stopDate > limitDate)) {
-      throw new Error(errors.startExecution.EXECUTION_ALREADY_EXISTS);
+      throw new CustomError(`Execution Already Exists: '${paramsName}'`, errors.startExecution.EXECUTION_ALREADY_EXISTS);
     }
   }
   // Create execution

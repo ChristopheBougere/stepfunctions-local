@@ -1,6 +1,6 @@
 {
   "name": "stepfunctions-local",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "A local AWS Step Functions server",
   "main": "./src/server.js",
   "bin": {
@@ -52,6 +52,7 @@
     "eslint-plugin-import": "^2.8.0",
     "eslint-plugin-jest": "^21.3.2",
     "jest": "^21.2.1",
-    "jest-junit": "^3.4.1"
+    "jest-junit": "^3.4.1",
+    "request-promise-native": "^1.0.5"
   }
 }

@@ -45,14 +45,14 @@ describe('Test mocked lambda task', () => {
     try {
       // mock failing execution
       AWS.mock('Lambda', 'invoke', Promise.resolve({
-        StatusCode: 500,
+        FunctionError: 'Unhandled',
         Payload: '{"errorMessage":"error"}',
       }));
       const input = { comment: 'input' };
       const res = await task.execute(input);
       expect(res).not.toBeDefined();
     } catch (e) {
-      expect(e.name).toEqual('Error');
+      expect(e.name).toEqual('Unhandled');
       expect(e.message).toEqual('error');
     }
   });

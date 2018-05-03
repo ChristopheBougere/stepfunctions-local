@@ -35,7 +35,7 @@ describe('List activities', () => {
       const res = listActivities(params, activities);
       expect(res).not.toBeDefined();
     } catch (e) {
-      expect(e.message)
+      expect(e.name)
         .toEqual(expect.stringContaining(errors.common.INVALID_PARAMETER_VALUE));
     }
   });
@@ -48,7 +48,7 @@ describe('List activities', () => {
       const res = listActivities(params, activities);
       expect(res).not.toBeDefined();
     } catch (e) {
-      expect(e.message)
+      expect(e.name)
         .toEqual(expect.stringContaining(errors.common.INVALID_PARAMETER_VALUE));
     }
   });
@@ -61,7 +61,7 @@ describe('List activities', () => {
       const res = listActivities(params, activities);
       expect(res).not.toBeDefined();
     } catch (e) {
-      expect(e.message).toEqual(errors.listActivities.INVALID_TOKEN);
+      expect(e.name).toEqual(errors.listActivities.INVALID_TOKEN);
     }
   });
 });

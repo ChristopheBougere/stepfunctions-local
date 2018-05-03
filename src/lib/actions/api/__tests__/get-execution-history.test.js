@@ -61,7 +61,7 @@ describe('Get execution history', () => {
       const res = getExecutionHistory(params, executions);
       expect(res).not.toBeDefined();
     } catch (e) {
-      expect(e.message)
+      expect(e.name)
         .toEqual(expect.stringContaining(errors.common.INVALID_PARAMETER_VALUE));
     }
   });
@@ -76,7 +76,7 @@ describe('Get execution history', () => {
       const res = getExecutionHistory(params, executions);
       expect(res).not.toBeDefined();
     } catch (e) {
-      expect(e.message)
+      expect(e.name)
         .toEqual(expect.stringContaining(errors.common.INVALID_PARAMETER_VALUE));
     }
   });
@@ -91,7 +91,7 @@ describe('Get execution history', () => {
       const res = getExecutionHistory(params, executions);
       expect(res).not.toBeDefined();
     } catch (e) {
-      expect(e.message)
+      expect(e.name)
         .toEqual(expect.stringContaining(errors.common.INVALID_PARAMETER_VALUE));
     }
   });
@@ -106,7 +106,7 @@ describe('Get execution history', () => {
       const res = getExecutionHistory(params, executions);
       expect(res).not.toBeDefined();
     } catch (e) {
-      expect(e.message)
+      expect(e.name)
         .toEqual(expect.stringContaining(errors.common.INVALID_PARAMETER_VALUE));
     }
   });
@@ -121,7 +121,7 @@ describe('Get execution history', () => {
       const res = getExecutionHistory(params, executions);
       expect(res).not.toBeDefined();
     } catch (e) {
-      expect(e.message)
+      expect(e.name)
         .toEqual(expect.stringContaining(errors.common.INVALID_PARAMETER_VALUE));
     }
   });
@@ -134,7 +134,7 @@ describe('Get execution history', () => {
       const res = getExecutionHistory(params, executions);
       expect(res).not.toBeDefined();
     } catch (e) {
-      expect(e.message)
+      expect(e.name)
         .toEqual(expect.stringContaining(errors.common.INVALID_PARAMETER_VALUE));
     }
   });
@@ -161,7 +161,7 @@ describe('Get execution history', () => {
       const res = getExecutionHistory(params, executions);
       expect(res).not.toBeDefined();
     } catch (e) {
-      expect(e.message).toEqual(errors.getExecutionHistory.INVALID_ARN);
+      expect(e.name).toEqual(errors.getExecutionHistory.INVALID_ARN);
     }
   });
 
@@ -173,7 +173,7 @@ describe('Get execution history', () => {
       const res = getExecutionHistory(params, executions);
       expect(res).not.toBeDefined();
     } catch (e) {
-      expect(e.message).toEqual(errors.getExecutionHistory.EXECUTION_DOES_NOT_EXIST);
+      expect(e.name).toEqual(errors.getExecutionHistory.EXECUTION_DOES_NOT_EXIST);
     }
   });
 });

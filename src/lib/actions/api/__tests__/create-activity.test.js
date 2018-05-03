@@ -52,7 +52,7 @@ describe('Create actiity', () => {
       const res = createActivity(params, activities);
       expect(res).not.toBeDefined();
     } catch (e) {
-      expect(e.message)
+      expect(e.name)
         .toEqual(expect.stringContaining(errors.common.INVALID_PARAMETER_VALUE));
     }
   });
@@ -66,7 +66,7 @@ describe('Create actiity', () => {
       const res = createActivity(params, activities);
       expect(res).not.toBeDefined();
     } catch (e) {
-      expect(e.message).toEqual(errors.createActivity.INVALID_NAME);
+      expect(e.name).toEqual(errors.createActivity.INVALID_NAME);
     }
   });
 });

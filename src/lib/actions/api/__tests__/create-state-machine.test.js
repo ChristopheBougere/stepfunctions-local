@@ -35,7 +35,7 @@ describe('Create state machine', () => {
       const res = createStateMachine(params, stateMachines);
       expect(res).not.toBeDefined();
     } catch (e) {
-      expect(e.message)
+      expect(e.name)
         .toEqual(expect.stringContaining(errors.common.INVALID_PARAMETER_VALUE));
     }
   });
@@ -51,7 +51,7 @@ describe('Create state machine', () => {
       const res = createStateMachine(params, stateMachines);
       expect(res).not.toBeDefined();
     } catch (e) {
-      expect(e.message)
+      expect(e.name)
         .toEqual(expect.stringContaining(errors.common.INVALID_PARAMETER_VALUE));
     }
   });
@@ -67,7 +67,7 @@ describe('Create state machine', () => {
       const res = createStateMachine(params, stateMachines);
       expect(res).not.toBeDefined();
     } catch (e) {
-      expect(e.message)
+      expect(e.name)
         .toEqual(expect.stringContaining(errors.common.INVALID_PARAMETER_VALUE));
     }
   });
@@ -89,7 +89,7 @@ describe('Create state machine', () => {
       const res = createStateMachine(params, stateMachines);
       expect(res).not.toBeDefined();
     } catch (e) {
-      expect(e.message).toEqual(errors.createStateMachine.STATE_MACHINE_ALREADY_EXISTS);
+      expect(e.name).toEqual(errors.createStateMachine.STATE_MACHINE_ALREADY_EXISTS);
     }
   });
 
@@ -105,7 +105,7 @@ describe('Create state machine', () => {
       const res = createStateMachine(params, stateMachines);
       expect(res).not.toBeDefined();
     } catch (e) {
-      expect(e.message).toEqual(`${errors.createStateMachine.INVALID_ARN}: ${arn}`);
+      expect(e.name).toEqual(errors.createStateMachine.INVALID_ARN);
     }
   });
 
@@ -120,7 +120,7 @@ describe('Create state machine', () => {
       const res = createStateMachine(params, stateMachines);
       expect(res).not.toBeDefined();
     } catch (e) {
-      expect(e.message).toEqual(`${errors.createStateMachine.INVALID_DEFINITION}: INVALID_JSON_DESCRIPTION`);
+      expect(e.name).toEqual(errors.createStateMachine.INVALID_DEFINITION);
     }
   });
 
@@ -135,7 +135,7 @@ describe('Create state machine', () => {
       const res = createStateMachine(params, stateMachines);
       expect(res).not.toBeDefined();
     } catch (e) {
-      expect(e.message).toEqual(`${errors.createStateMachine.INVALID_DEFINITION}: SCHEMA_VALIDATION_FAILED`);
+      expect(e.name).toEqual(errors.createStateMachine.INVALID_DEFINITION);
     }
   });
 
@@ -150,7 +150,7 @@ describe('Create state machine', () => {
       const res = createStateMachine(params, stateMachines);
       expect(res).not.toBeDefined();
     } catch (e) {
-      expect(e.message)
+      expect(e.name)
         .toEqual(expect.stringContaining(errors.createStateMachine.INVALID_NAME));
     }
   });

@@ -1,5 +1,6 @@
 const { isValidArn } = require('../../tools/validate');
 const { errors, status, parameters } = require('../../../constants');
+const CustomError = require('../../error');
 
 function listExecutions(params, stateMachines, executions) {
   /* check request parameters */
@@ -7,30 +8,30 @@ function listExecutions(params, stateMachines, executions) {
     || params.stateMachineArn.length < parameters.arn.MIN
     || params.stateMachineArn.length > parameters.arn.MAX
   ) {
-    throw new Error(`${errors.common.INVALID_PARAMETER_VALUE}: --execution-arn`);
+    throw new CustomError('Invalid parameter value: execution-arn', errors.common.INVALID_PARAMETER_VALUE);
   }
   if (params.maxResults &&
     (parseInt(params.maxResults, 10) !== params.maxResults
     || params.maxResults < parameters.results.MIN
     || params.maxResults > parameters.results.MAX)
   ) {
-    throw new Error(`${errors.common.INVALID_PARAMETER_VALUE}: --max-results`);
+    throw new CustomError('Invalid parameter value: max-results', errors.common.INVALID_PARAMETER_VALUE);
   }
   if (params.nextToken &&
     (typeof params.nextToken !== 'string'
     || params.nextToken.length < parameters.token.MIN
     || params.nextToken.length > parameters.token.MAX)
   ) {
-    throw new Error(`${errors.common.INVALID_PARAMETER_VALUE}: --next-token`);
+    throw new CustomError('Invalid parameter value: next-token', errors.common.INVALID_PARAMETER_VALUE);
   }
   if (params.statusFilter && !Object.keys(status.execution).find(s =>
     status.execution[s] === params.statusFilter)) {
-    throw new Error(`${errors.common.INVALID_PARAMETER_VALUE}: --status-filter`);
+    throw new CustomError('Invalid parameter value: status-filter', errors.common.INVALID_PARAMETER_VALUE);
   }
 
   /* execution action */
   if (!isValidArn(params.stateMachineArn, 'state-machine')) {
-    throw new Error(errors.listExecutions.INVALID_ARN);
+    throw new CustomError(`Invalid State Machine Arn: ${params.stateMachineArn}`, errors.listExecutions.INVALID_ARN);
   }
   const maxResults = params.maxResults || 100;
   let truncateAmount = 0;
@@ -41,13 +42,13 @@ function listExecutions(params, stateMachines, executions) {
         throw new Error('nextToken.boto_truncate_amount should be a number');
       }
     } catch (e) {
-      throw new Error(errors.listExecutions.INVALID_TOKEN);
+      throw new CustomError(`Invalid Token: '${params.nextToken}'`, errors.listExecutions.INVALID_TOKEN);
     }
   }
 
   const match = stateMachines.find(o => o.stateMachineArn === params.stateMachineArn);
   if (!match) {
-    throw new Error(errors.listExecutions.STATE_MACHINE_DOES_NOT_EXIST);
+    throw new CustomError(`State Machine Does Not Exist: '${params.stateMachineArn}'`, errors.listExecutions.STATE_MACHINE_DOES_NOT_EXIST);
   }
   const filteredExecutions = executions
     .filter(execution => execution.stateMachineArn === params.stateMachineArn)
