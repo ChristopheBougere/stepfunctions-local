@@ -4,6 +4,7 @@
 [![CircleCI](https://circleci.com/gh/airware/stepfunctions-local/tree/master.svg?style=shield&circle-token=75641357fe0d5c8f643d714aa37009fa65037f40)](https://circleci.com/gh/airware/stepfunctions-local/tree/master)
 [![codecov](https://codecov.io/gh/airware/stepfunctions-local/branch/master/graph/badge.svg)](https://codecov.io/gh/airware/stepfunctions-local)
 [![NSP Status](https://nodesecurity.io/orgs/airware/projects/3546314c-5afc-49a0-9d8d-e29a86e6dc71/badge)](https://nodesecurity.io/orgs/airware/projects/3546314c-5afc-49a0-9d8d-e29a86e6dc71)
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fairware%2Fstepfunctions-local.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fairware%2Fstepfunctions-local?ref=badge_shield)
 
 [![NPM](https://nodei.co/npm/stepfunctions-local.png?stars=true)](https://www.npmjs.com/package/stepfunctions-local)
 
@@ -201,3 +202,7 @@ $> npm run test
 
 ## TODO
 - Add execution abortion related history events
+
+
+## License
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fairware%2Fstepfunctions-local.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Fairware%2Fstepfunctions-local?ref=badge_large)
