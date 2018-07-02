@@ -50,6 +50,8 @@ const commands = {
   getExecutionHistory: 'get-execution-history --execution-arn {{arn}}',
   deleteStateMachine: 'delete-state-machine --state-machine-arn {{arn}}',
   createActivity: 'create-activity --name {{name}}',
+  listActivities: 'list-activities',
+  describeActivity: 'describe-activity --activity-arn {{arn}}',
   getActivityTask: 'get-activity-task --activity-arn {{arn}}',
   sendTaskSuccess: 'send-task-success --task-token {{token}} --task-output {{output}}',
   sendTaskHeartbeat: 'send-task-heartbeat --task-token {{token}}',
@@ -263,14 +265,27 @@ describe('Integration tests (execute a state machine with activity)', () => {
     }
   });
 
-  it('should create an activity', async () => {
+  it('should create an activity, list and describe it', async () => {
     try {
       const activityName = data.activities[0].name;
-      const command = commands.createActivity
+      const commandCreate = commands.createActivity
         .replace('{{name}}', activityName);
-      const res = await exec(command);
+      const res = await exec(commandCreate);
       Object.assign(data.activities[0], res);
       expect(res.activityArn).toEqual(`arn:aws:states:local:0123456789:activity:${activityName}`);
+
+      const commandList = commands.listActivities;
+      const resList = await exec(commandList);
+      expect(resList.activities).toHaveLength(1);
+
+      const commandDescribe = commands.describeActivity
+        .replace('{{arn}}', `arn:aws:states:local:0123456789:activity:${activityName}`);
+      const resDescribe = await exec(commandDescribe);
+      expect(resDescribe.activityArn).toEqual(`arn:aws:states:local:0123456789:activity:${activityName}`);
+      expect(resDescribe.name).toEqual(activityName);
+      expect(resDescribe.creationDate).toBeLessThan(Date.now());
+
+      expect(resList.activities).toContainEqual(resDescribe);
     } catch (e) {
       expect(e).not.toBeDefined();
     }

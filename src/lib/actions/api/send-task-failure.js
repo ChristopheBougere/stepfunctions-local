@@ -3,14 +3,14 @@ const CustomError = require('../../error');
 
 function sendTaskFailure(params, activities) {
   /* check request parameters */
-  if (params.cause &&
-    (typeof params.cause !== 'string'
+  if (params.cause
+    && (typeof params.cause !== 'string'
     || params.cause.length > parameters.cause.MAX)
   ) {
     throw new CustomError('Invalid Parameter Value: cause', errors.common.INVALID_PARAMETER_VALUE);
   }
-  if (params.error &&
-    (typeof params.error !== 'string'
+  if (params.error
+    && (typeof params.error !== 'string'
     || params.error.length > parameters.error.MAX)
   ) {
     throw new CustomError('Invalid Parameter Value: error', errors.common.INVALID_PARAMETER_VALUE);

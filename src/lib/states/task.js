@@ -243,7 +243,9 @@ class Task extends State {
     const activityRegexp = /^arn:aws:states:.+:[0-9]+:activity:.+$/;
     if (lambdaRegexp.exec(this.arn)) {
       return LAMBDA;
-    } else if (activityRegexp.exec(this.arn)) {
+    }
+
+    if (activityRegexp.exec(this.arn)) {
       return ACTIVITY;
     }
     throw new Error(`Error while retrieving task type of resource: ${this.arn}`);

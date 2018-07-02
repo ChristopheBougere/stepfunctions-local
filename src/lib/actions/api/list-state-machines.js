@@ -3,15 +3,15 @@ const CustomError = require('../../error');
 
 function listStateMachines(params, stateMachines) {
   /* check request parameters */
-  if (params.maxResults &&
-    (parseInt(params.maxResults, 10) !== params.maxResults
+  if (params.maxResults
+    && (parseInt(params.maxResults, 10) !== params.maxResults
     || params.maxResults < parameters.results.MIN
     || params.maxResults > parameters.results.MAX)
   ) {
     throw new CustomError('Invalid Parameter Value: max-results', errors.common.INVALID_PARAMETER_VALUE);
   }
-  if (params.nextToken &&
-    (typeof params.nextToken !== 'string'
+  if (params.nextToken
+    && (typeof params.nextToken !== 'string'
     || params.nextToken.length < parameters.token.MIN
     || params.nextToken.length > parameters.token.MAX)
   ) {

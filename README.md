@@ -4,14 +4,13 @@
 [![CircleCI](https://circleci.com/gh/airware/stepfunctions-local/tree/master.svg?style=shield&circle-token=75641357fe0d5c8f643d714aa37009fa65037f40)](https://circleci.com/gh/airware/stepfunctions-local/tree/master)
 [![codecov](https://codecov.io/gh/airware/stepfunctions-local/branch/master/graph/badge.svg)](https://codecov.io/gh/airware/stepfunctions-local)
 [![NSP Status](https://nodesecurity.io/orgs/airware/projects/3546314c-5afc-49a0-9d8d-e29a86e6dc71/badge)](https://nodesecurity.io/orgs/airware/projects/3546314c-5afc-49a0-9d8d-e29a86e6dc71)
-[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fairware%2Fstepfunctions-local.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fairware%2Fstepfunctions-local?ref=badge_shield)
 
 [![NPM](https://nodei.co/npm/stepfunctions-local.png?stars=true)](https://www.npmjs.com/package/stepfunctions-local)
 
 #### :warning: **Important** : The package isn't stable yet, but is ready to be used: most features are available. Any contribution is warm welcome
 
-Stepfunctions-local provides a local AWS Step Functions server.  
-This package only aims at replacing AWS Step Functions in a local context.  
+Stepfunctions-local provides a local AWS Step Functions server.
+This package only aims at replacing AWS Step Functions in a local context.
 Its API is totally compliant with AWS service, thus you can use it for your tests.
 
 ## Why **stepfunctions-local**?
@@ -92,7 +91,7 @@ stepfunctionsLocal.start({
 - lambda-endpoint: http://localhost:4574
 
 ### Configure logs
-The service does not log anything by default. It uses the [debug](https://www.npmjs.com/package/debug) package which is based on the `DEBUG` environment variable. You can log process info by setting it.  
+The service does not log anything by default. It uses the [debug](https://www.npmjs.com/package/debug) package which is based on the `DEBUG` environment variable. You can log process info by setting it.
 
 Example:
  ```bash
@@ -187,7 +186,7 @@ $> stepfunctions-local start --lambda-endpoint http://localhost:4574 --lambda-re
 | ***Parallel*** | * |
 
 ## Want to contribute ?
-**Wow, that's great !**  
+**Wow, that's great !**
 Feedback, bug reports and pull requests are more than welcome !
 
 You can test your code with :
@@ -203,6 +202,5 @@ $> npm run test
 ## TODO
 - Add execution abortion related history events
 
-
 ## License
-[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fairware%2Fstepfunctions-local.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Fairware%2Fstepfunctions-local?ref=badge_large)
+See [LICENSE](./LICENSE).

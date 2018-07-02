@@ -27,15 +27,15 @@ function startExecution(params, stateMachines, executions, config) {
   ) {
     throw new CustomError('Invalid Parameter Value: state-machine-arn', errors.common.INVALID_PARAMETER_VALUE);
   }
-  if (params.input &&
-    (typeof params.input !== 'string'
+  if (params.input
+    && (typeof params.input !== 'string'
     || params.input.length < parameters.input.MIN
     || params.input.length > parameters.input.MAX)
   ) {
     throw new CustomError('Invalid Parameter Value: input', errors.common.INVALID_PARAMETER_VALUE);
   }
-  if (paramsName &&
-    (typeof paramsName !== 'string'
+  if (paramsName
+    && (typeof paramsName !== 'string'
     || paramsName.length < parameters.name.MIN
     || paramsName.length > parameters.name.MAX)
   ) {
