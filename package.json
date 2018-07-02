@@ -46,7 +46,7 @@
   },
   "devDependencies": {
     "aws-sdk-mock": "^1.7.0",
-    "codecov": "^3.0.0",
+    "codecov": "^3.0.2",
     "eslint": "^4.9.0",
     "eslint-config-airbnb-base": "^12.1.0",
     "eslint-plugin-import": "^2.8.0",
