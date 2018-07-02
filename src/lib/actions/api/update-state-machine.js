@@ -17,15 +17,15 @@ function updateStateMachine(params, stateMachines) {
   ) {
     throw new CustomError('Invalid Parameter Value: state-machine-arn', errors.common.INVALID_PARAMETER_VALUE);
   }
-  if (params.roleArn &&
-    (typeof params.roleArn !== 'string'
+  if (params.roleArn
+    && (typeof params.roleArn !== 'string'
     || params.roleArn.length < parameters.arn.MIN
     || params.roleArn.length > parameters.arn.MAX)
   ) {
     throw new CustomError('Invalid Parameter Value: role-arn', errors.common.INVALID_PARAMETER_VALUE);
   }
-  if (params.definition &&
-    (typeof params.definition !== 'string'
+  if (params.definition
+    && (typeof params.definition !== 'string'
     || params.definition.length < parameters.definition.MIN
     || params.definition.length > parameters.definition.MAX)
   ) {

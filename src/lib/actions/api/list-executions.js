@@ -10,22 +10,22 @@ function listExecutions(params, stateMachines, executions) {
   ) {
     throw new CustomError('Invalid parameter value: execution-arn', errors.common.INVALID_PARAMETER_VALUE);
   }
-  if (params.maxResults &&
-    (parseInt(params.maxResults, 10) !== params.maxResults
+  if (params.maxResults
+    && (parseInt(params.maxResults, 10) !== params.maxResults
     || params.maxResults < parameters.results.MIN
     || params.maxResults > parameters.results.MAX)
   ) {
     throw new CustomError('Invalid parameter value: max-results', errors.common.INVALID_PARAMETER_VALUE);
   }
-  if (params.nextToken &&
-    (typeof params.nextToken !== 'string'
+  if (params.nextToken
+    && (typeof params.nextToken !== 'string'
     || params.nextToken.length < parameters.token.MIN
     || params.nextToken.length > parameters.token.MAX)
   ) {
     throw new CustomError('Invalid parameter value: next-token', errors.common.INVALID_PARAMETER_VALUE);
   }
-  if (params.statusFilter && !Object.keys(status.execution).find(s =>
-    status.execution[s] === params.statusFilter)) {
+  if (params.statusFilter
+    && !Object.keys(status.execution).find(s => status.execution[s] === params.statusFilter)) {
     throw new CustomError('Invalid parameter value: status-filter', errors.common.INVALID_PARAMETER_VALUE);
   }
 
