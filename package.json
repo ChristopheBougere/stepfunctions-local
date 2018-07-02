@@ -1,6 +1,6 @@
 {
   "name": "stepfunctions-local",
-  "version": "1.0.4",
+  "version": "1.1.0",
   "description": "A local AWS Step Functions server",
   "main": "./src/server.js",
   "bin": {
@@ -33,26 +33,26 @@
     "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.test\\.jsx?$"
   },
   "dependencies": {
-    "asl-validator": "^1.0.6",
-    "aws-sdk": "^2.176.0",
-    "body-parser": "^1.18.2",
-    "commander": "^2.13.0",
+    "asl-validator": "^1.1.0",
+    "aws-sdk": "^2.266.1",
+    "body-parser": "^1.18.3",
+    "commander": "^2.15.1",
     "debug": "^3.1.0",
-    "express": "^4.16.2",
+    "express": "^4.16.3",
     "jsonpath": "^1.0.0",
-    "redux": "^3.7.2",
-    "shelljs": "^0.8.1",
-    "uuid": "^3.1.0"
+    "redux": "^4.0.0",
+    "shelljs": "^0.8.2",
+    "uuid": "^3.3.2"
   },
   "devDependencies": {
-    "aws-sdk-mock": "^1.7.0",
+    "aws-sdk-mock": "^4.0.0",
     "codecov": "^3.0.2",
-    "eslint": "^4.9.0",
-    "eslint-config-airbnb-base": "^12.1.0",
-    "eslint-plugin-import": "^2.8.0",
-    "eslint-plugin-jest": "^21.3.2",
-    "jest": "^21.2.1",
-    "jest-junit": "^3.4.1",
+    "eslint": "^4.19.1",
+    "eslint-config-airbnb-base": "^13.0.0",
+    "eslint-plugin-import": "^2.12.0",
+    "eslint-plugin-jest": "^21.17.0",
+    "jest": "^23.1.0",
+    "jest-junit": "^5.1.0",
     "request-promise-native": "^1.0.5"
   }
 }
