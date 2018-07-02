@@ -24,6 +24,14 @@
     "serverless"
   ],
   "author": "Christophe Bougère",
+  "contributors": [
+    {
+      "name": "Tristan Bénier"
+    },
+    {
+      "name": "Hervé Nivon"
+    }
+  ],
   "license": "Apache-2.0",
   "bugs": {
     "url": "https://github.com/airware/stepfunctions-local/issues"
