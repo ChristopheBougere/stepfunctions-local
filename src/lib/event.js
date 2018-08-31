@@ -15,7 +15,11 @@ class Event {
       if (fields) {
         fields.forEach((field) => {
           if (params[field]) {
-            this[detailsNameKey][field] = params[field];
+            if (field === 'input' || field === 'output') {
+              this[detailsNameKey][field] = JSON.stringify(params[field]);
+            } else {
+              this[detailsNameKey][field] = params[field];
+            }
           }
         });
       }

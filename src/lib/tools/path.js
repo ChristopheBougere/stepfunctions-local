@@ -26,7 +26,13 @@ function applyOutputPath(object, path) {
 // TODO: use a lib to implement reference paths
 function applyResultPath(object, path = '$', value) {
   const regex = /[^$.[\]]+/g; // regexp to split the reference paths
-  return path === '$' ? value : Object.assign({}, object, createNestedObject({}, path.match(regex), value));
+  if (path === '$') {
+    return value; // return output
+  }
+  if (path === null) {
+    return object; // return input
+  }
+  return Object.assign({}, object, createNestedObject({}, path.match(regex), value));
 }
 
 module.exports = {

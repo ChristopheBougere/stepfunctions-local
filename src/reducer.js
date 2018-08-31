@@ -100,41 +100,49 @@ function reducer(state = initialState, action = null) {
       const stateCopy = Object.assign({}, state);
       const activity = stateCopy.activities.find(a => a.activityArn === result.activityArn);
       const task = activity.tasks.find(t => t.taskToken === result.taskToken);
-      Object.assign(task, {
-        workerName: result.workerName,
-        heartbeat: result.heartbeat,
-        status: status.activity.IN_PROGRESS,
-      });
+      if (task) {
+        Object.assign(task, {
+          workerName: result.workerName,
+          heartbeat: result.heartbeat,
+          status: status.activity.IN_PROGRESS,
+        });
+      }
       return stateCopy;
     }
     case actions.SEND_TASK_FAILURE: {
       const stateCopy = Object.assign({}, state);
       const activity = stateCopy.activities.find(a => a.activityArn === result.activityArn);
       const task = activity.tasks.find(t => t.taskToken === result.taskToken);
-      Object.assign(task, {
-        cause: result.cause,
-        error: result.error,
-        status: status.activity.FAILED,
-      });
+      if (task) {
+        Object.assign(task, {
+          cause: result.cause,
+          error: result.error,
+          status: status.activity.FAILED,
+        });
+      }
       return stateCopy;
     }
     case actions.SEND_TASK_HEARTBEAT: {
       const stateCopy = Object.assign({}, state);
       const activity = stateCopy.activities.find(a => a.activityArn === result.activityArn);
       const task = activity.tasks.find(t => t.taskToken === result.taskToken);
-      Object.assign(task, {
-        heartbeat: result.heartbeat,
-      });
+      if (task) {
+        Object.assign(task, {
+          heartbeat: result.heartbeat,
+        });
+      }
       return stateCopy;
     }
     case actions.SEND_TASK_SUCCESS: {
       const stateCopy = Object.assign({}, state);
       const activity = stateCopy.activities.find(a => a.activityArn === result.activityArn);
       const task = activity.tasks.find(t => t.taskToken === result.taskToken);
-      Object.assign(task, {
-        output: result.output,
-        status: status.activity.SUCCEEDED,
-      });
+      if (task) {
+        Object.assign(task, {
+          output: result.output,
+          status: status.activity.SUCCEEDED,
+        });
+      }
       return stateCopy;
     }
     // Actions related to executions
