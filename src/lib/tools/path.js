@@ -28,7 +28,8 @@ function applyResultPath(object, path = '$', value) {
   const regex = /[^$.[\]]+/g; // regexp to split the reference paths
   if (path === '$') {
     return value; // return output
-  } else if (path === null) {
+  }
+  if (path === null) {
     return object; // return input
   }
   return Object.assign({}, object, createNestedObject({}, path.match(regex), value));
