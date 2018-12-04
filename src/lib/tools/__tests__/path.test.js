@@ -33,4 +33,9 @@ describe('Path', () => {
       },
     });
   });
+
+  it('should apply undefined objects', () => {
+    expect(applyInputPath(undefined)).toMatchObject({});
+    expect(applyOutputPath(undefined)).toMatchObject({});
+  });
 });
