@@ -35,11 +35,11 @@ function createStateMachine(params, stateMachines, config) {
   try {
     parsedDefinition = JSON.parse(params.definition);
   } catch (e) {
-    throw new CustomError('Invalid State Machine Definition: \'INVALID_JSON_DESCRIPTION\'', errors.createStateMachine.INVALID_DEFINITION);
+    throw new CustomError(`Invalid State Machine Definition: 'INVALID_JSON_DESCRIPTION', ${JSON.stringify(e.message)}`, errors.createStateMachine.INVALID_DEFINITION);
   }
-  const { isValid } = aslValidator(parsedDefinition);
-  if (!isValid) {
-    throw new CustomError('Invalid State Machine Definition: \'SCHEMA_VALIDATION_FAILED\'', errors.createStateMachine.INVALID_DEFINITION);
+  const { isValid, errors: validatorErrors } = aslValidator(parsedDefinition);
+  if (!isValid || validatorErrors.length) {
+    throw new CustomError(`Invalid State Machine Definition: 'SCHEMA_VALIDATION_FAILED', ${JSON.stringify(validatorErrors)}`, errors.createStateMachine.INVALID_DEFINITION);
   }
   const accountId = params.roleArn.split(':')[4];
   const stateMachine = {
