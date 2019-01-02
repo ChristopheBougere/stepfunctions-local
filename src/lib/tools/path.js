@@ -12,7 +12,7 @@ function createNestedObject(object, keys, defaultValue) {
 }
 
 function applyJsonPath(object, path = '$') {
-  if (typeof object === 'object' && object !=== null) {
+  if (typeof object === 'object' && object !== null) {
     return jp.value(object, path) || {};
   }
   return {};
