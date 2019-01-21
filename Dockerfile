@@ -2,10 +2,12 @@ FROM node:8-alpine
 
 WORKDIR /app
 COPY package*.json ./
-RUN npm install
+RUN npm install --only=production
 
 COPY . .
 
 ENV DEBUG=stepfunctions-local:*
 EXPOSE 4584
-CMD ["./bin/stepfunctions-local.js", "start"]
+ENTRYPOINT ["./bin/stepfunctions-local.js"]
+
+CMD ["start"]
