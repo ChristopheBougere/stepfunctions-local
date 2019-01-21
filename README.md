@@ -43,7 +43,7 @@ $> stepfunctions-local start --lambda-endpoint http://hostname.com:1337 --lambda
 * [AWS Command Line Interface (CLI)](https://aws.amazon.com/cli/)
 * [Node 8 or greater](https://nodejs.org/)
 
-## Install
+### Install
 ```bash
 # Use it using command lines
 $> npm install -g stepfunctions-local
@@ -51,6 +51,12 @@ $> npm install -g stepfunctions-local
 # Use it in your code
 $> cd /your/project/using/stepfunctions
 $> npm install --save stepfunctions-local
+```
+
+### Or build docker container
+
+```bash
+$> docker build -t stepfunctions-local .
 ```
 
 ## How to use it ?
@@ -70,6 +76,12 @@ Options:
   --lambda-region <lambda-region>      the region for lambda
   --lambda-endpoint <lambda-endpoint>  the endpoint for lambda
   -h, --help                           output usage information
+```
+
+#### Using docker
+```bash
+# Options are same as above
+$> docker run -it --rm -p 4584:4584 stepfunctions-local start <options>  
 ```
 
 #### From your code
