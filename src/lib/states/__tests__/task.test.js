@@ -1,6 +1,6 @@
 const AWS = require('aws-sdk-mock');
 
-const Task = require('../task');
+const StateMachine = require('../state-machine');
 
 // TODO: add tests for activity execution
 
@@ -19,7 +19,7 @@ describe('Test mocked lambda task', () => {
     lambdaEndpoint: 'http://my-endpoint:9999',
     lambdaRegion: 'my-region',
   };
-  const task = new Task(state, execution, name, config);
+  const task = StateMachine.instantiateTask(state, execution, name, config);
 
   afterEach(() => {
     AWS.restore('Lambda');
@@ -69,15 +69,14 @@ describe('Test task of unknown type', () => {
     events: [],
   };
   const name = 'MyTask';
-  const task = new Task(state, execution, name, {});
 
   it('should mock the failure of the execution of the lambda', async () => {
     try {
-      const input = { comment: 'input' };
-      await task.execute(input);
+      const task = StateMachine.instantiateTask(state, execution, name, {});
+      expect(task).not.toBeDefined();
     } catch (e) {
       expect(e.name).toEqual('Error');
-      expect(e.message).toEqual(`Error while retrieving task type of resource: ${state.Resource}`);
+      expect(e.message).toEqual(`Unsupported Resource type: ${state.Resource}`);
     }
   });
 });
