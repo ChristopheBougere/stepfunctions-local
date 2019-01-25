@@ -63,9 +63,9 @@ describe('Test mocked ECS task, synchronous', () => {
     Type: 'Task',
     Resource: 'arn:aws:states:::ecs:runTask.sync',
     Parameters: {
-      "Cluster": "my-ecs-cluster",
-      "LaunchType": "FARGATE",
-      "TaskDefinition": "example-ecs-task:1"
+      Cluster: 'my-ecs-cluster',
+      LaunchType: 'FARGATE',
+      TaskDefinition: 'example-ecs-task:1',
     },
     Next: 'NextState',
   };
@@ -89,24 +89,24 @@ describe('Test mocked ECS task, synchronous', () => {
     AWS.mock('ECS', 'runTask', Promise.resolve({
       tasks: [
         {
-          taskArn: "mock-task-arn-for-test",
-          clusterArn: "mock-cluster-arn-for-test",
-          taskDefinitionArn: "example-ecs-task:1",
-          containerInstanceArn: "mock-container-instance-arn-for-test",
-          lastStatus: "PENDING"
-        }
-      ]
+          taskArn: 'mock-task-arn-for-test',
+          clusterArn: 'mock-cluster-arn-for-test',
+          taskDefinitionArn: 'example-ecs-task:1',
+          containerInstanceArn: 'mock-container-instance-arn-for-test',
+          lastStatus: 'PENDING',
+        },
+      ],
     }));
     AWS.mock('ECS', 'describeTasks', Promise.resolve({
       tasks: [
         {
-          taskArn: "mock-task-arn-for-test",
-          clusterArn: "mock-cluster-arn-for-test",
-          taskDefinitionArn: "example-ecs-task:1",
-          containerInstanceArn: "mock-container-instance-arn-for-test",
-          lastStatus: "STOPPED"
-        }
-      ]
+          taskArn: 'mock-task-arn-for-test',
+          clusterArn: 'mock-cluster-arn-for-test',
+          taskDefinitionArn: 'example-ecs-task:1',
+          containerInstanceArn: 'mock-container-instance-arn-for-test',
+          lastStatus: 'STOPPED',
+        },
+      ],
     }));
     const input = { comment: 'input' };
     const res = await task.execute(input);
@@ -115,39 +115,40 @@ describe('Test mocked ECS task, synchronous', () => {
   });
 
   it('should successfully mock the execution of an ECS task that is pending for a while and then stops', async () => {
-    // This test is intentionally checking that the ECS code retries several times, and with a default retry of 3
-    // seconds between retries, we'll need a slightly longer timeout than the jest default of 5 seconds.
+    // This test is intentionally checking that the ECS code retries several times, and with
+    // a default retry of 3 seconds between retries, we'll need a slightly longer timeout than
+    // the jest default of 5 seconds.
     jest.setTimeout(15000);
 
     // mock successfull execution
     AWS.mock('ECS', 'runTask', Promise.resolve({
       tasks: [
         {
-          taskArn: "mock-task-arn-for-test",
-          clusterArn: "mock-cluster-arn-for-test",
-          taskDefinitionArn: "example-ecs-task:1",
-          containerInstanceArn: "mock-container-instance-arn-for-test",
-          lastStatus: "PENDING"
-        }
-      ]
+          taskArn: 'mock-task-arn-for-test',
+          clusterArn: 'mock-cluster-arn-for-test',
+          taskDefinitionArn: 'example-ecs-task:1',
+          containerInstanceArn: 'mock-container-instance-arn-for-test',
+          lastStatus: 'PENDING',
+        },
+      ],
     }));
 
     let describeTasksCalls = 0;
 
     AWS.mock('ECS', 'describeTasks', () => {
-      describeTasksCalls++;
-      const lastStatus = describeTasksCalls < 3 ? "PENDING" : "STOPPED";
+      describeTasksCalls += 1;
+      const lastStatus = describeTasksCalls < 3 ? 'PENDING' : 'STOPPED';
       return Promise.resolve({
         tasks: [
           {
-            taskArn: "mock-task-arn-for-test",
-            clusterArn: "mock-cluster-arn-for-test",
-            taskDefinitionArn: "example-ecs-task:1",
-            containerInstanceArn: "mock-container-instance-arn-for-test",
-            lastStatus
-          }
-        ]
-      })
+            taskArn: 'mock-task-arn-for-test',
+            clusterArn: 'mock-cluster-arn-for-test',
+            taskDefinitionArn: 'example-ecs-task:1',
+            containerInstanceArn: 'mock-container-instance-arn-for-test',
+            lastStatus,
+          },
+        ],
+      });
     });
 
     const input = { comment: 'input' };
@@ -162,9 +163,9 @@ describe('Test mocked ECS task, asynchronous', () => {
     Type: 'Task',
     Resource: 'arn:aws:states:::ecs:runTask',
     Parameters: {
-      "Cluster": "my-ecs-cluster",
-      "LaunchType": "FARGATE",
-      "TaskDefinition": "example-ecs-task:1"
+      Cluster: 'my-ecs-cluster',
+      LaunchType: 'FARGATE',
+      TaskDefinition: 'example-ecs-task:1',
     },
     Next: 'NextState',
   };
@@ -188,13 +189,13 @@ describe('Test mocked ECS task, asynchronous', () => {
     AWS.mock('ECS', 'runTask', Promise.resolve({
       tasks: [
         {
-          taskArn: "mock-task-arn-for-test",
-          clusterArn: "mock-cluster-arn-for-test",
-          taskDefinitionArn: "example-ecs-task:1",
-          containerInstanceArn: "mock-container-instance-arn-for-test",
-          lastStatus: "PENDING"
-        }
-      ]
+          taskArn: 'mock-task-arn-for-test',
+          clusterArn: 'mock-cluster-arn-for-test',
+          taskDefinitionArn: 'example-ecs-task:1',
+          containerInstanceArn: 'mock-container-instance-arn-for-test',
+          lastStatus: 'PENDING',
+        },
+      ],
     }));
 
     const input = { comment: 'input' };
@@ -232,7 +233,7 @@ describe('Test task.runUntilCompletionOrTimeout', () => {
     Type: 'Task',
     Resource: 'arn:aws:lambda:us-east-1:000000000000:function:MyLambda',
     Next: 'NextState',
-    TimeoutSeconds: 1
+    TimeoutSeconds: 1,
   };
   const execution = {
     executionArn: 'my-execution-arn',
@@ -241,24 +242,22 @@ describe('Test task.runUntilCompletionOrTimeout', () => {
   const name = 'MyTask';
   const task = StateMachine.instantiateTask(state, execution, name);
 
-  it("Should return the output if done is true immediately", async () => {
-    const expected = "return value";
-
-    const actual = await task.runUntilCompletionOrTimeout(() => {
-      return { done: true, output: expected };
-    }, 100);
+  it('Should return the output if done is true immediately', async () => {
+    const expected = 'return value';
+    const result = { done: true, output: expected };
+    const actual = await task.runUntilCompletionOrTimeout(() => result, 100);
 
     expect(actual).toEqual(expected);
   });
 
-  it("Should return the output after several retries if done is false a few times and then true", async () => {
-    const expected = "return value";
+  it('Should return the output after several retries if done is false a few times and then true', async () => {
+    const expected = 'return value';
     const expectedRetries = 3;
 
     let retries = 0;
 
     const actual = await task.runUntilCompletionOrTimeout(() => {
-      retries++;
+      retries += 1;
       return { done: retries >= expectedRetries, output: expected };
     }, 100);
 
@@ -266,8 +265,7 @@ describe('Test task.runUntilCompletionOrTimeout', () => {
     expect(retries).toEqual(expectedRetries);
   });
 
-  it("Should throw an exception if the timeout is exceeded", async () => {
-    await expect(task.runUntilCompletionOrTimeout(() => { return { done: false }; }, 100)).rejects.toThrow("Exceeded timeout");
+  it('Should throw an exception if the timeout is exceeded', async () => {
+    await expect(task.runUntilCompletionOrTimeout(() => ({ done: false }), 100)).rejects.toThrow('Exceeded timeout');
   });
-
 });

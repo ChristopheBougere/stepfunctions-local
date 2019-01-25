@@ -10,7 +10,6 @@ const store = require('../../store');
 const { actions, status } = require('../../constants');
 
 class TaskActivity extends Task {
-
   async invokeActivity() {
     this.taskToken = uuidv4();
     store.dispatch({

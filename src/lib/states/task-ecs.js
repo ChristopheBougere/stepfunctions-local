@@ -1,10 +1,9 @@
 const AWS = require('aws-sdk');
 const Task = require('./task');
-const { pascalCaseToCamelCase } = require("../tools/case");
+const { pascalCaseToCamelCase } = require('../tools/case');
 const addHistoryEvent = require('../actions/custom/add-history-event');
 
 class TaskEcs extends Task {
-
   async invokeEcsTask() {
     const ecsConfig = {};
     if (this.config.ecsEndpoint) {
@@ -18,9 +17,11 @@ class TaskEcs extends Task {
     this.validateParams();
     const parameters = this.state.Parameters;
 
-    // Pass in only the supported parameters from this page: https://docs.aws.amazon.com/step-functions/latest/dg/connectors-ecs.html
-    // Note that we need to call pascalCaseToCamelCase on any objects below as Step Functions requires all object keys
-    // to be PascalCase, whereas the ECS API requires them all to be camelCase.
+    // Pass in only the supported parameters from this page:
+    // https://docs.aws.amazon.com/step-functions/latest/dg/connectors-ecs.html
+    // Note that we need to call pascalCaseToCamelCase on any objects below as Step
+    // Functions requires all object keys to be PascalCase, whereas the ECS API requires
+    // them all to be camelCase.
     const params = {
       cluster: parameters.Cluster,
       group: parameters.Group,
@@ -30,7 +31,7 @@ class TaskEcs extends Task {
       placementConstraints: pascalCaseToCamelCase(parameters.PlacementConstraints),
       placementStrategy: pascalCaseToCamelCase(parameters.PlacementStrategy),
       platformVersion: parameters.PlatformVersion,
-      taskDefinition: parameters.TaskDefinition
+      taskDefinition: parameters.TaskDefinition,
     };
 
     const runTaskResult = await ecs.runTask(params).promise();
@@ -38,33 +39,34 @@ class TaskEcs extends Task {
     addHistoryEvent(this.execution, 'TASK_SCHEDULED');
 
     if (this.useSync) {
-      const task = this.getTaskFromEcsTaskResult(runTaskResult);
+      const task = TaskEcs.getTaskFromEcsTaskResult(runTaskResult);
       await this.waitForEcsTaskToFinish(ecs, task.taskArn);
     }
   }
 
   async waitForEcsTaskToFinish(ecs, parameters, taskArn) {
-    // TODO: I've seen a history event called TaskSubmitted... What does that mean and how is it different than TaskScheduled?
+    // TODO: I've seen a history event called TaskSubmitted...
+    // What does that mean and how is it different than TaskScheduled?
 
     const params = {
       cluster: parameters.Cluster,
-      tasks: [taskArn]
+      tasks: [taskArn],
     };
 
     let historyEventRunningFired = false;
 
     await this.runUntilCompletionOrTimeout(async () => {
       const describeTaskResult = await ecs.describeTasks(params).promise();
-      const task = this.getTaskFromEcsTaskResult(describeTaskResult);
-      
+      const task = TaskEcs.getTaskFromEcsTaskResult(describeTaskResult);
+
       switch (task.lastStatus) {
-        case "RUNNING":
+        case 'RUNNING':
           if (!historyEventRunningFired) {
             historyEventRunningFired = true;
             addHistoryEvent(this.execution, 'TASK_STARTED');
           }
           return { done: false };
-        case "STOPPED":
+        case 'STOPPED':
           return { done: true };
         default:
           return { done: false };
@@ -102,7 +104,7 @@ class TaskEcs extends Task {
    *
    * @param ecsTaskResult
    */
-  getTaskFromEcsTaskResult(ecsTaskResult) {
+  static getTaskFromEcsTaskResult(ecsTaskResult) {
     if (!ecsTaskResult.tasks || ecsTaskResult.tasks.length > 1) {
       throw new Error(`Expected to find one ECS Task in the results, but got: ${JSON.stringify(ecsTaskResult.tasks)}`);
     }

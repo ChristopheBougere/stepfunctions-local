@@ -1,5 +1,5 @@
 const State = require('./state');
-const { sleep } = require("../tools/sleep");
+const { sleep } = require('../tools/sleep');
 
 const addHistoryEvent = require('../actions/custom/add-history-event');
 const { applyInputPath, applyResultPath, applyOutputPath } = require('../tools/path');
@@ -11,7 +11,8 @@ class Task extends State {
   // TODO: Implement TimeoutSeconds + HeartbeatSeconds
 
   /**
-   * Abstract method that MUST be overwritten by Task subclasses. Should return an object with two optional fields:
+   * Abstract method that MUST be overwritten by Task subclasses.
+   * Should return an object with two optional fields:
    *
    * - output: the output from invoking this task, if any
    * - next: the next state to go to, if any
@@ -26,8 +27,9 @@ class Task extends State {
    * @param input
    * @returns {Promise<{ output, next }>}
    */
+  // eslint-disable-next-line class-methods-use-this
   async invoke() {
-    throw new Error("The Task.invoke method must be overridden by Task subclasses!");
+    throw new Error('The Task.invoke method must be overridden by Task subclasses!');
   }
 
   async execute(input) {
@@ -67,9 +69,10 @@ class Task extends State {
   }
 
   /**
-   * Run the given action repeatedly until it either indicates it's done or the timeout for this task is exceeded.
-   * The action should return a Promise of an object of the form { done, output }. If done is true, this method returns
-   * output. Otherwise, it keeps retrying, waiting timeBetweenRetriesMillis between retries, until done is true, or
+   * Run the given action repeatedly until it either indicates it's done or the timeout
+   * for this task is exceeded. The action should return a Promise of an object of the form
+   * { done, output }. If done is true, this method returns output. Otherwise, it keeps
+   * retrying, waiting timeBetweenRetriesMillis between retries, until done is true, or
    * the timeout is hit. If the timeout is hit, this method throws an exception.
    *
    * @param action<() => Promise<{done, output}>>
@@ -91,6 +94,7 @@ class Task extends State {
       }
 
       await sleep(timeBetweenRetriesMillis);
+    // eslint-disable-next-line no-constant-condition
     } while (true);
   }
 
@@ -119,7 +123,7 @@ class Task extends State {
   }
 
   get useSync() {
-    return this.arn.endsWith(".sync");
+    return this.arn.endsWith('.sync');
   }
 }
 
