@@ -39,6 +39,16 @@ $> stepfunctions-local start --lambda-endpoint http://hostname.com:1337 --lambda
 ### I want to run a local state machine with local Lambdas
 `stepfunctions-local` does not aim to emulate Lambda. To do this you need a local Lambda server that is compliant to AWS API. We recommand to use [localstack](https://github.com/localstack/localstack) for that. See how to [here](#run-lambdas-with-localstack).
 
+### I want to run a local state machine with distant ECS Tasks
+Simply configure your ECS endpoint and region when starting the server:
+```bash
+$> stepfunctions-local start --ecs-endpoint http://hostname.com:1337 --ecs-region my-region
+```
+`stepfunctions-local` will directly query ECS using this configuration.
+
+### I want to run a local state machine with local ECS Tasks
+`stepfunctions-local` does not aim to emulate ECS. To do this you need a local ECS server that is compliant to AWS API. You may have to create a mock server to do this yourself.
+
 ## Prerequisites
 * [AWS Command Line Interface (CLI)](https://aws.amazon.com/cli/)
 * [Node 8 or greater](https://nodejs.org/)
@@ -75,6 +85,8 @@ Options:
   --region <region>                    the region the server should run on
   --lambda-region <lambda-region>      the region for lambda
   --lambda-endpoint <lambda-endpoint>  the endpoint for lambda
+  --ecs-region <ecs-region>            the region for ECS
+  --ecs-endpoint <ecs-endpoint>        the endpoint for ECS
   -h, --help                           output usage information
 ```
 
@@ -93,6 +105,8 @@ stepfunctionsLocal.start({
   region: 'local',
   lambdaRegion: 'local',
   lambdaEndpoint: 'http://localhost:4574',
+  ecsRegion: 'local',
+  ecsEndpoint: 'http://localhost:4600',
 });
 ```
 
@@ -101,6 +115,8 @@ stepfunctionsLocal.start({
 - region: local
 - lambda-region: local
 - lambda-endpoint: http://localhost:4574
+- ecs-region: local
+- ecs-endpoint: http://localhost:4600
 
 ### Configure logs
 The service does not log anything by default. It uses the [debug](https://www.npmjs.com/package/debug) package which is based on the `DEBUG` environment variable. You can log process info by setting it.
