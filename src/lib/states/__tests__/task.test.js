@@ -156,6 +156,21 @@ describe('Test mocked ECS task, synchronous', () => {
     expect(res.output).toEqual({});
     expect(res.nextState).toEqual('NextState');
   });
+
+  it('should successfully mock the execution of an ECS task that has failures launching', async () => {
+    // mock successfull execution
+    AWS.mock('ECS', 'runTask', Promise.resolve({
+      failures: [
+        {
+          arn: 'mock-failure-arn-for-test',
+          reason: 'mock test failure reason',
+        },
+      ],
+    }));
+
+    const input = { comment: 'input' };
+    await expect(task.execute(input)).rejects.toThrow('There were failures running the ECS Task');
+  });
 });
 
 describe('Test mocked ECS task, asynchronous', () => {

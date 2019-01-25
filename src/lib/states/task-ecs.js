@@ -36,6 +36,10 @@ class TaskEcs extends Task {
 
     const runTaskResult = await ecs.runTask(params).promise();
 
+    if (runTaskResult.failures) {
+      throw new Error(`There were failures running the ECS Task for state ${this.name}: ${JSON.stringify(runTaskResult.failures)}`);
+    }
+
     addHistoryEvent(this.execution, 'TASK_SCHEDULED');
 
     if (this.useSync) {
