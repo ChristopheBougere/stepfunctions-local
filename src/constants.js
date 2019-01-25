@@ -282,6 +282,15 @@ module.exports = {
       detailsName: 'stateExitedEventDetails',
       detailsFields: ['name', 'output'],
     },
+    TASK_FAILED: {
+      type: 'TaskFailed',
+    },
+    TASK_SCHEDULED: {
+      type: 'TaskScheduled',
+    },
+    TASK_STARTED: {
+      type: 'TaskStarted',
+    },
     TASK_STATE_ABORTED: {
       type: 'TaskStateAborted',
     },
@@ -294,6 +303,9 @@ module.exports = {
       type: 'TaskStateExited',
       detailsName: 'stateExitedEventDetails',
       detailsFields: ['name', 'output'],
+    },
+    TASK_SUCCEEDED: {
+      type: 'TaskSucceeded',
     },
     PASS_STATE_ENTERED: {
       type: 'PassStateEntered',
