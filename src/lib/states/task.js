@@ -1,4 +1,5 @@
 const State = require('./state');
+const { sleep } = require("../tools/sleep");
 
 const addHistoryEvent = require('../actions/custom/add-history-event');
 const { applyInputPath, applyResultPath, applyOutputPath } = require('../tools/path');
@@ -65,6 +66,34 @@ class Task extends State {
     return applyOutputPath(output, this.state.OutputPath);
   }
 
+  /**
+   * Run the given action repeatedly until it either indicates it's done or the timeout for this task is exceeded.
+   * The action should return a Promise of an object of the form { done, output }. If done is true, this method returns
+   * output. Otherwise, it keeps retrying, waiting timeBetweenRetriesMillis between retries, until done is true, or
+   * the timeout is hit. If the timeout is hit, this method throws an exception.
+   *
+   * @param action<() => Promise<{done, output}>>
+   * @param timeBetweenRetriesMillis
+   * @returns {Promise<*>}
+   */
+  async runUntilCompletionOrTimeout(action, timeBetweenRetriesMillis = 3000) {
+    const start = Date.now();
+
+    do {
+      const { done, output } = await action();
+      if (done) {
+        return output;
+      }
+
+      const timeElapsedSeconds = (Date.now() - start) / 1000;
+      if (timeElapsedSeconds > this.timeoutInSeconds) {
+        throw new Error(`Exceeded timeout of ${this.timeoutInSeconds} seconds waiting for task ${this.name} to complete.`);
+      }
+
+      await sleep(timeBetweenRetriesMillis);
+    } while (true);
+  }
+
   get arn() {
     return this.state.Resource;
   }
@@ -87,6 +116,10 @@ class Task extends State {
 
   get timeoutInSeconds() {
     return this.state.TimeoutSeconds || parameters.default.TIMEOUT_SECONDS;
+  }
+
+  get useSync() {
+    return this.arn.endsWith(".sync");
   }
 }
 
