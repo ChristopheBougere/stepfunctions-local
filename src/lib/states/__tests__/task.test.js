@@ -58,6 +58,63 @@ describe('Test mocked lambda task', () => {
   });
 });
 
+describe('Test mocked ECS task', () => {
+  const state = {
+    Type: 'Task',
+    Resource: 'arn:aws:states:::ecs:runTask.sync',
+    Parameters: {
+      "Cluster": "my-ecs-cluster",
+      "LaunchType": "FARGATE",
+      "TaskDefinition": "example-ecs-task:1"
+    },
+    Next: 'NextState',
+  };
+  const execution = {
+    executionArn: 'my-execution-arn',
+    events: [],
+  };
+  const name = 'MyTask';
+  const config = {
+    ecsEndpoint: 'http://my-endpoint:9999',
+    ecsRegion: 'my-region',
+  };
+  const task = StateMachine.instantiateTask(state, execution, name, config);
+
+  afterEach(() => {
+    AWS.restore('ECS');
+  });
+
+  it('should successfully mock the execution of an ECS task', async () => {
+      // mock successfull execution
+      AWS.mock('ECS', 'runTask', Promise.resolve({
+        tasks: [
+          {
+            taskArn: "mock-task-arn-for-test",
+            clusterArn: "mock-cluster-arn-for-test",
+            taskDefinitionArn: "example-ecs-task:1",
+            containerInstanceArn: "mock-container-instance-arn-for-test",
+            lastStatus: "PENDING"
+          }
+        ]
+      }));
+      AWS.mock('ECS', 'describeTasks', Promise.resolve({
+        tasks: [
+          {
+            taskArn: "mock-task-arn-for-test",
+            clusterArn: "mock-cluster-arn-for-test",
+            taskDefinitionArn: "example-ecs-task:1",
+            containerInstanceArn: "mock-container-instance-arn-for-test",
+            lastStatus: "STOPPED"
+          }
+        ]
+      }));
+      const input = { comment: 'input' };
+      const res = await task.execute(input);
+      expect(res.output).toEqual({});
+      expect(res.nextState).toEqual('NextState');
+  });
+});
+
 describe('Test task of unknown type', () => {
   const state = {
     Type: 'Task',
