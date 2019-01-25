@@ -201,11 +201,23 @@ $> stepfunctions-local start --lambda-endpoint http://localhost:4574 --lambda-re
 **Wow, that's great !**
 Feedback, bug reports and pull requests are more than welcome !
 
-You can test your code with :
+To run the tests, you must first [authenticate to AWS](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-configure.html),
+including setting a default region. You can do this via the `aws configure` command or by setting environment variables:
+
 ```bash
+$> export AWS_ACCESS_KEY_ID=(your access key)
+$> export AWS_SECRET_ACCESS_KEY=(your secret key)
+$> export AWS_DEFAULT_REGION=us-east-1
+```
+
+You can then run the tests as follows:
+
+```bash
+
 $> npm run lint
 $> npm run test
 ```
+
 
 ## See also
 - [AWS Step Functions Documentation](https://docs.aws.amazon.com/step-functions/latest/dg/welcome.html)
