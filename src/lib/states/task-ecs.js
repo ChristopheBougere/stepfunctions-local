@@ -1,6 +1,7 @@
 const AWS = require('aws-sdk');
 const Task = require('./task');
 const { pascalCaseToCamelCase } = require("../tools/case");
+const addHistoryEvent = require('../actions/custom/add-history-event');
 
 class TaskEcs extends Task {
 
