@@ -220,6 +220,43 @@ describe('Test mocked ECS task, asynchronous', () => {
   });
 });
 
+describe('Test mocked ECS task with invalid configuration', () => {
+  it('should throw on ECS Task without Parameters', async () => {
+    const state = {
+      Type: 'Task',
+      Resource: 'arn:aws:states:::ecs:runTask.sync',
+      Next: 'NextState',
+    };
+    const execution = {
+      executionArn: 'my-execution-arn',
+      events: [],
+    };
+    const name = 'MyTask';
+    const task = StateMachine.instantiateTask(state, execution, name);
+
+    const input = { comment: 'input' };
+    await expect(task.execute(input)).rejects.toThrow('Required attribute \'Parameters\' not found');
+  });
+
+  it('should throw on ECS Task without Parameters.TaskDefinition', async () => {
+    const state = {
+      Type: 'Task',
+      Resource: 'arn:aws:states:::ecs:runTask.sync',
+      Parameters: {},
+      Next: 'NextState',
+    };
+    const execution = {
+      executionArn: 'my-execution-arn',
+      events: [],
+    };
+    const name = 'MyTask';
+    const task = StateMachine.instantiateTask(state, execution, name);
+
+    const input = { comment: 'input' };
+    await expect(task.execute(input)).rejects.toThrow('Required attribute \'Parameters.TaskDefinition\' not found');
+  });
+});
+
 describe('Test task of unknown type', () => {
   const state = {
     Type: 'Task',

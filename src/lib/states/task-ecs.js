@@ -6,10 +6,10 @@ const addHistoryEvent = require('../actions/custom/add-history-event');
 class TaskEcs extends Task {
   async invokeEcsTask() {
     const ecsConfig = {};
-    if (this.config.ecsEndpoint) {
+    if (this.config && this.config.ecsEndpoint) {
       ecsConfig.endpoint = this.config.ecsEndpoint;
     }
-    if (this.config.ecsRegion) {
+    if (this.config && this.config.ecsRegion) {
       ecsConfig.region = this.config.ecsRegion;
     }
     const ecs = new AWS.ECS(ecsConfig);
