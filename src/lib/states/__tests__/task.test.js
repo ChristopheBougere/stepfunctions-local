@@ -84,34 +84,76 @@ describe('Test mocked ECS task', () => {
     AWS.restore('ECS');
   });
 
-  it('should successfully mock the execution of an ECS task', async () => {
-      // mock successfull execution
-      AWS.mock('ECS', 'runTask', Promise.resolve({
+  it('should successfully mock the execution of an ECS task that stops immediately', async () => {
+    // mock successfull execution
+    AWS.mock('ECS', 'runTask', Promise.resolve({
+      tasks: [
+        {
+          taskArn: "mock-task-arn-for-test",
+          clusterArn: "mock-cluster-arn-for-test",
+          taskDefinitionArn: "example-ecs-task:1",
+          containerInstanceArn: "mock-container-instance-arn-for-test",
+          lastStatus: "PENDING"
+        }
+      ]
+    }));
+    AWS.mock('ECS', 'describeTasks', Promise.resolve({
+      tasks: [
+        {
+          taskArn: "mock-task-arn-for-test",
+          clusterArn: "mock-cluster-arn-for-test",
+          taskDefinitionArn: "example-ecs-task:1",
+          containerInstanceArn: "mock-container-instance-arn-for-test",
+          lastStatus: "STOPPED"
+        }
+      ]
+    }));
+    const input = { comment: 'input' };
+    const res = await task.execute(input);
+    expect(res.output).toEqual({});
+    expect(res.nextState).toEqual('NextState');
+  });
+
+  it('should successfully mock the execution of an ECS task that is pending for a while and then stops', async () => {
+    // This test is intentionally checking that the ECS code retries several times, and with a default retry of 3
+    // seconds between retries, we'll need a slightly longer timeout than the jest default of 5 seconds.
+    jest.setTimeout(15000);
+
+    // mock successfull execution
+    AWS.mock('ECS', 'runTask', Promise.resolve({
+      tasks: [
+        {
+          taskArn: "mock-task-arn-for-test",
+          clusterArn: "mock-cluster-arn-for-test",
+          taskDefinitionArn: "example-ecs-task:1",
+          containerInstanceArn: "mock-container-instance-arn-for-test",
+          lastStatus: "PENDING"
+        }
+      ]
+    }));
+
+    let describeTasksCalls = 0;
+
+    AWS.mock('ECS', 'describeTasks', () => {
+      describeTasksCalls++;
+      const lastStatus = describeTasksCalls < 3 ? "PENDING" : "STOPPED";
+      return Promise.resolve({
         tasks: [
           {
             taskArn: "mock-task-arn-for-test",
             clusterArn: "mock-cluster-arn-for-test",
             taskDefinitionArn: "example-ecs-task:1",
             containerInstanceArn: "mock-container-instance-arn-for-test",
-            lastStatus: "PENDING"
+            lastStatus
           }
         ]
-      }));
-      AWS.mock('ECS', 'describeTasks', Promise.resolve({
-        tasks: [
-          {
-            taskArn: "mock-task-arn-for-test",
-            clusterArn: "mock-cluster-arn-for-test",
-            taskDefinitionArn: "example-ecs-task:1",
-            containerInstanceArn: "mock-container-instance-arn-for-test",
-            lastStatus: "STOPPED"
-          }
-        ]
-      }));
-      const input = { comment: 'input' };
-      const res = await task.execute(input);
-      expect(res.output).toEqual({});
-      expect(res.nextState).toEqual('NextState');
+      })
+    });
+
+    const input = { comment: 'input' };
+    const res = await task.execute(input);
+    expect(res.output).toEqual({});
+    expect(res.nextState).toEqual('NextState');
   });
 });
 
