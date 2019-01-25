@@ -179,3 +179,48 @@ describe('Test task of unknown type', () => {
     }
   });
 });
+
+describe('Test task.runUntilCompletionOrTimeout', () => {
+  const state = {
+    Type: 'Task',
+    Resource: 'arn:aws:lambda:us-east-1:000000000000:function:MyLambda',
+    Next: 'NextState',
+    TimeoutSeconds: 1
+  };
+  const execution = {
+    executionArn: 'my-execution-arn',
+    events: [],
+  };
+  const name = 'MyTask';
+  const task = StateMachine.instantiateTask(state, execution, name);
+
+  it("Should return the output if done is true immediately", async () => {
+    const expected = "return value";
+
+    const actual = await task.runUntilCompletionOrTimeout(() => {
+      return { done: true, output: expected };
+    }, 100);
+
+    expect(actual).toEqual(expected);
+  });
+
+  it("Should return the output after several retries if done is false a few times and then true", async () => {
+    const expected = "return value";
+    const expectedRetries = 3;
+
+    let retries = 0;
+
+    const actual = await task.runUntilCompletionOrTimeout(() => {
+      retries++;
+      return { done: retries >= expectedRetries, output: expected };
+    }, 100);
+
+    expect(actual).toEqual(expected);
+    expect(retries).toEqual(expectedRetries);
+  });
+
+  it("Should throw an exception if the timeout is exceeded", async () => {
+    await expect(task.runUntilCompletionOrTimeout(() => { return { done: false }; }, 100)).rejects.toThrow("Exceeded timeout");
+  });
+
+});
