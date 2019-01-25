@@ -54,7 +54,7 @@ class TaskEcs extends Task {
     let historyEventRunningFired = false;
 
     await this.runUntilCompletionOrTimeout(async () => {
-      const describeTaskResult = await ecs.describeTask(params).promise();
+      const describeTaskResult = await ecs.describeTasks(params).promise();
       const task = this.getTaskFromEcsTaskResult(describeTaskResult);
       
       switch (task.lastStatus) {
