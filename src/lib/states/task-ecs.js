@@ -44,11 +44,13 @@ class TaskEcs extends Task {
 
     if (this.useSync) {
       const task = TaskEcs.getTaskFromEcsTaskResult(runTaskResult);
-      await this.waitForEcsTaskToFinish(ecs, task.taskArn);
+      return this.waitForEcsTaskToFinish(ecs, task.taskArn);
     }
+
+    return runTaskResult;
   }
 
-  async waitForEcsTaskToFinish(ecs, parameters, taskArn) {
+  waitForEcsTaskToFinish(ecs, parameters, taskArn) {
     // TODO: I've seen a history event called TaskSubmitted...
     // What does that mean and how is it different than TaskScheduled?
 
@@ -59,7 +61,7 @@ class TaskEcs extends Task {
 
     let historyEventRunningFired = false;
 
-    await this.runUntilCompletionOrTimeout(async () => {
+    return this.runUntilCompletionOrTimeout(async () => {
       const describeTaskResult = await ecs.describeTasks(params).promise();
       const task = TaskEcs.getTaskFromEcsTaskResult(describeTaskResult);
 
@@ -69,11 +71,11 @@ class TaskEcs extends Task {
             historyEventRunningFired = true;
             addHistoryEvent(this.execution, 'TASK_STARTED');
           }
-          return { done: false };
+          return { done: false, output: describeTaskResult };
         case 'STOPPED':
-          return { done: true };
+          return { done: true, output: describeTaskResult };
         default:
-          return { done: false };
+          return { done: false, output: describeTaskResult };
       }
     });
   }
