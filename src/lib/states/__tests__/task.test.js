@@ -85,32 +85,36 @@ describe('Test mocked ECS task, synchronous', () => {
   });
 
   it('should successfully mock the execution of an ECS task that stops immediately', async () => {
-    // mock successfull execution
-    AWS.mock('ECS', 'runTask', Promise.resolve({
+    const runTaskResult = {
       tasks: [
         {
-          taskArn: 'mock-task-arn-for-test',
+          taskArn: 'mock-task-arn-for-test-run',
           clusterArn: 'mock-cluster-arn-for-test',
           taskDefinitionArn: 'example-ecs-task:1',
           containerInstanceArn: 'mock-container-instance-arn-for-test',
           lastStatus: 'PENDING',
         },
       ],
-    }));
-    AWS.mock('ECS', 'describeTasks', Promise.resolve({
+    };
+
+    const describeTasksResult = {
       tasks: [
         {
-          taskArn: 'mock-task-arn-for-test',
+          taskArn: 'mock-task-arn-for-test-describe',
           clusterArn: 'mock-cluster-arn-for-test',
           taskDefinitionArn: 'example-ecs-task:1',
           containerInstanceArn: 'mock-container-instance-arn-for-test',
           lastStatus: 'STOPPED',
         },
       ],
-    }));
+    };
+
+    // mock successfull execution
+    AWS.mock('ECS', 'runTask', Promise.resolve(runTaskResult));
+    AWS.mock('ECS', 'describeTasks', Promise.resolve(describeTasksResult));
     const input = { comment: 'input' };
     const res = await task.execute(input);
-    expect(res.output).toEqual({});
+    expect(res.output).toEqual(describeTasksResult);
     expect(res.nextState).toEqual('NextState');
   });
 
@@ -120,40 +124,43 @@ describe('Test mocked ECS task, synchronous', () => {
     // the jest default of 5 seconds.
     jest.setTimeout(15000);
 
-    // mock successfull execution
-    AWS.mock('ECS', 'runTask', Promise.resolve({
+    const runTaskResult = {
       tasks: [
         {
-          taskArn: 'mock-task-arn-for-test',
+          taskArn: 'mock-task-arn-for-test-run',
           clusterArn: 'mock-cluster-arn-for-test',
           taskDefinitionArn: 'example-ecs-task:1',
           containerInstanceArn: 'mock-container-instance-arn-for-test',
           lastStatus: 'PENDING',
         },
       ],
-    }));
+    };
+
+    const describeTasksResult = {
+      tasks: [
+        {
+          taskArn: 'mock-task-arn-for-test-describe',
+          clusterArn: 'mock-cluster-arn-for-test',
+          taskDefinitionArn: 'example-ecs-task:1',
+          containerInstanceArn: 'mock-container-instance-arn-for-test',
+        },
+      ],
+    };
+
+    // mock successfull execution
+    AWS.mock('ECS', 'runTask', Promise.resolve(runTaskResult));
 
     let describeTasksCalls = 0;
 
     AWS.mock('ECS', 'describeTasks', () => {
       describeTasksCalls += 1;
-      const lastStatus = describeTasksCalls < 3 ? 'PENDING' : 'STOPPED';
-      return Promise.resolve({
-        tasks: [
-          {
-            taskArn: 'mock-task-arn-for-test',
-            clusterArn: 'mock-cluster-arn-for-test',
-            taskDefinitionArn: 'example-ecs-task:1',
-            containerInstanceArn: 'mock-container-instance-arn-for-test',
-            lastStatus,
-          },
-        ],
-      });
+      describeTasksResult.tasks[0].lastStatus = describeTasksCalls < 3 ? 'PENDING' : 'STOPPED';
+      return Promise.resolve(describeTasksResult);
     });
 
     const input = { comment: 'input' };
     const res = await task.execute(input);
-    expect(res.output).toEqual({});
+    expect(res.output).toEqual(describeTasksResult);
     expect(res.nextState).toEqual('NextState');
   });
 
@@ -200,8 +207,7 @@ describe('Test mocked ECS task, asynchronous', () => {
   });
 
   it('should successfully mock the execution of an ECS task', async () => {
-    // mock successfull execution
-    AWS.mock('ECS', 'runTask', Promise.resolve({
+    const runTaskResult = {
       tasks: [
         {
           taskArn: 'mock-task-arn-for-test',
@@ -211,11 +217,14 @@ describe('Test mocked ECS task, asynchronous', () => {
           lastStatus: 'PENDING',
         },
       ],
-    }));
+    };
+
+    // mock successful execution
+    AWS.mock('ECS', 'runTask', Promise.resolve(runTaskResult));
 
     const input = { comment: 'input' };
     const res = await task.execute(input);
-    expect(res.output).toEqual({});
+    expect(res.output).toEqual(runTaskResult);
     expect(res.nextState).toEqual('NextState');
   });
 });
