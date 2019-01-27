@@ -15,7 +15,7 @@ const lambdaRegexp = /^arn:aws:lambda:.+:[0-9]+:function:.+$/;
 const activityRegexp = /^arn:aws:states:.+:[0-9]+:activity:.+$/;
 
 // ECS arn syntax: arn:aws:states:::ecs:runTask.sync
-const ecsRegexp = /^arn:aws:states:::ecs:runTask(\.sync)?/;
+const ecsRegexp = /^arn:aws:states:::ecs:runTask(\.sync)?$/;
 
 class StateMachine {
   constructor(stateMachine, execution, config) {
