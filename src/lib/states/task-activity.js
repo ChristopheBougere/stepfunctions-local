@@ -2,6 +2,7 @@ const uuidv4 = require('uuid/v4');
 
 const Activity = require('./activity');
 const Task = require('./task');
+const { sleep } = require('../tools/sleep');
 
 const addHistoryEvent = require('../actions/custom/add-history-event');
 const updateActivityTask = require('../actions/custom/update-activity-task');
@@ -54,7 +55,7 @@ class TaskActivity extends Task {
               cause,
             });
           }
-          await new Promise(res => setTimeout(res, 1000));
+          await sleep(1000);
         }
       } while (!taskFinished);
 
