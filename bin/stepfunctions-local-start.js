@@ -10,7 +10,9 @@ program
   .option('--region <region>', 'the region the server should run on')
   .option('--lambda-endpoint <lambda-endpoint>', 'the endpoint for lambda')
   .option('--lambda-region <lambda-region>', 'the region for lambda')
-  .parse(process.argv)
+  .option('--ecs-endpoint <ecs-endpoint>', 'the endpoint for ECS')
+  .option('--ecs-region <ecs-region>', 'the region for ECS')
+  .parse(process.argv);
 
 const config = {};
 if (undefined !== program.port) {
@@ -24,6 +26,12 @@ if (undefined !== program.lambdaEndpoint) {
 }
 if (undefined !== program.lambdaRegion) {
   config.lambdaRegion = program.lambdaRegion;
+}
+if (undefined !== program.ecsEndpoint) {
+  config.ecsEndpoint = program.ecsEndpoint;
+}
+if (undefined !== program.ecsRegion) {
+  config.ecsRegion = program.ecsRegion;
 }
 console.log('Starting stepfunctions-local server...');
 server.start(config);
