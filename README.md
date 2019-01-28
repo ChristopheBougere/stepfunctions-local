@@ -3,11 +3,8 @@
 [![license](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://github.com/airware/stepfunctions-local/blob/master/LICENSE)
 [![CircleCI](https://circleci.com/gh/airware/stepfunctions-local/tree/master.svg?style=shield&circle-token=75641357fe0d5c8f643d714aa37009fa65037f40)](https://circleci.com/gh/airware/stepfunctions-local/tree/master)
 [![codecov](https://codecov.io/gh/airware/stepfunctions-local/branch/master/graph/badge.svg)](https://codecov.io/gh/airware/stepfunctions-local)
-[![NSP Status](https://nodesecurity.io/orgs/airware/projects/3546314c-5afc-49a0-9d8d-e29a86e6dc71/badge)](https://nodesecurity.io/orgs/airware/projects/3546314c-5afc-49a0-9d8d-e29a86e6dc71)
 
 [![NPM](https://nodei.co/npm/stepfunctions-local.png?stars=true)](https://www.npmjs.com/package/stepfunctions-local)
-
-#### :warning: **Important** : The package isn't stable yet, but is ready to be used: most features are available. Any contribution is warm welcome
 
 Stepfunctions-local provides a local AWS Step Functions server.
 This package only aims at replacing AWS Step Functions in a local context.
@@ -202,6 +199,19 @@ $> stepfunctions-local start --lambda-endpoint http://localhost:4574 --lambda-re
 | ***StopExecution*** | * |
 | ***UpdateStateMachine*** | Following errors are not thrown: *StateMachineDeleting* |
 
+### Supported service integrations
+AWS added support for executing [a variety of AWS services](https://docs.aws.amazon.com/step-functions/latest/dg/connectors-supported-services.html) from Step Functions. For now, only Lambda and ECS are supported. Adding new integrations should be quite straightforward (see [#44](https://github.com/airware/stepfunctions-local/pull/44)), feel free to submit pull requests.
+| Service | Support |
+| ------- | ------ |
+| ***AWS Lambda*** | * |
+| ***AWS Batch*** | Not yet |
+| ***Amazon DynamoDB*** | Not yet |
+| ***Amazon ECS/Fargate*** | * |
+| ***Amazon SNS*** | Not yet |
+| ***Amazon SQS*** | Not yet |
+| ***AWS Glue*** | Not yet |
+| ***Amazon SageMaker*** | Not yet |
+
 ### States compatibility
 | States | Support |
 | ------ | ------ |
@@ -241,6 +251,7 @@ $> npm run test
 
 ## TODO
 - Add execution abortion related history events
+- Continue services integration
 
 ## License
 See [LICENSE](./LICENSE).
