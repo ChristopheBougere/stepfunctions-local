@@ -201,6 +201,7 @@ $> stepfunctions-local start --lambda-endpoint http://localhost:4574 --lambda-re
 
 ### Supported service integrations
 AWS added support for executing [a variety of AWS services](https://docs.aws.amazon.com/step-functions/latest/dg/connectors-supported-services.html) from Step Functions. For now, only Lambda and ECS are supported. Adding new integrations should be quite straightforward (see [#44](https://github.com/airware/stepfunctions-local/pull/44)), feel free to submit pull requests.
+
 | Service | Support |
 | ------- | ------ |
 | ***AWS Lambda*** | * |
