@@ -110,8 +110,20 @@ describe('Test mocked ECS task, synchronous', () => {
     };
 
     // mock successfull execution
-    AWS.mock('ECS', 'runTask', Promise.resolve(runTaskResult));
-    AWS.mock('ECS', 'describeTasks', Promise.resolve(describeTasksResult));
+    AWS.mock('ECS', 'runTask', (params) => {
+      expect(params.cluster).toEqual(state.Parameters.Cluster);
+      expect(params.taskDefinition).toEqual(state.Parameters.TaskDefinition);
+
+      return Promise.resolve(runTaskResult);
+    });
+
+    AWS.mock('ECS', 'describeTasks', (params) => {
+      expect(params.cluster).toEqual(state.Parameters.Cluster);
+      expect(params.tasks).toEqual([runTaskResult.tasks[0].taskArn]);
+
+      return Promise.resolve(describeTasksResult);
+    });
+
     const input = { comment: 'input' };
     const res = await task.execute(input);
     expect(res.output).toEqual(describeTasksResult);
@@ -148,11 +160,19 @@ describe('Test mocked ECS task, synchronous', () => {
     };
 
     // mock successfull execution
-    AWS.mock('ECS', 'runTask', Promise.resolve(runTaskResult));
+    AWS.mock('ECS', 'runTask', (params) => {
+      expect(params.cluster).toEqual(state.Parameters.Cluster);
+      expect(params.taskDefinition).toEqual(state.Parameters.TaskDefinition);
+
+      return Promise.resolve(runTaskResult);
+    });
 
     let describeTasksCalls = 0;
 
-    AWS.mock('ECS', 'describeTasks', () => {
+    AWS.mock('ECS', 'describeTasks', (params) => {
+      expect(params.cluster).toEqual(state.Parameters.Cluster);
+      expect(params.tasks).toEqual([runTaskResult.tasks[0].taskArn]);
+
       describeTasksCalls += 1;
       describeTasksResult.tasks[0].lastStatus = describeTasksCalls < 3 ? 'PENDING' : 'STOPPED';
       return Promise.resolve(describeTasksResult);
@@ -221,7 +241,12 @@ describe('Test mocked ECS task, asynchronous', () => {
     };
 
     // mock successful execution
-    AWS.mock('ECS', 'runTask', Promise.resolve(runTaskResult));
+    AWS.mock('ECS', 'runTask', (params) => {
+      expect(params.cluster).toEqual(state.Parameters.Cluster);
+      expect(params.taskDefinition).toEqual(state.Parameters.TaskDefinition);
+
+      return Promise.resolve(runTaskResult);
+    });
 
     const input = { comment: 'input' };
     const res = await task.execute(input);

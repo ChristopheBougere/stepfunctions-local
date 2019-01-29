@@ -44,7 +44,7 @@ class TaskEcs extends Task {
 
     if (this.useSync) {
       const task = TaskEcs.getTaskFromEcsTaskResult(runTaskResult);
-      return this.waitForEcsTaskToFinish(ecs, task.taskArn);
+      return this.waitForEcsTaskToFinish(ecs, parameters, task.taskArn);
     }
 
     return runTaskResult;
