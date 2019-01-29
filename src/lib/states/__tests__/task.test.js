@@ -217,6 +217,7 @@ describe('Test mocked ECS task, asynchronous', () => {
           lastStatus: 'PENDING',
         },
       ],
+      failures: [],
     };
 
     // mock successful execution
