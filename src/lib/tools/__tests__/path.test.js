@@ -35,10 +35,10 @@ describe('Path', () => {
   });
 
   it('should apply pass through non-objects untouched', () => {
-    expect(applyInputPath(undefined)).toBe(undefined);
-    expect(applyInputPath(1)).toBe(1);
-    expect(applyInputPath('foobar')).toBe('foobar');
-    expect(applyInputPath([1,2,3])).toBe([1,2,3]);
-    expect(applyInputPath([])).toBe([]);
+    expect(applyInputPath(undefined)).toEqual(undefined);
+    expect(applyInputPath(1)).toEqual(1);
+    expect(applyInputPath('foobar')).toEqual('foobar');
+    expect(applyInputPath([1,2,3])).toEqual([1,2,3]);
+    expect(applyInputPath([])).toEqual([]);
   });
 });
