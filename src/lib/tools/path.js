@@ -15,7 +15,7 @@ function applyJsonPath(object, path = '$') {
   if (typeof object === 'object' && object !== null) {
     return jp.value(object, path) || {};
   }
-  return {};
+  return object;
 }
 
 function applyInputPath(object, path) {
