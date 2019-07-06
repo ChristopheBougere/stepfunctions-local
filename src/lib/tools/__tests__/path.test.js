@@ -34,8 +34,11 @@ describe('Path', () => {
     });
   });
 
-  it('should apply undefined objects', () => {
-    expect(applyInputPath(undefined)).toMatchObject({});
-    expect(applyOutputPath(undefined)).toMatchObject({});
+  it('should apply pass through non-objects untouched', () => {
+    expect(applyInputPath(undefined)).toEqual(undefined);
+    expect(applyInputPath(1)).toEqual(1);
+    expect(applyInputPath('foobar')).toEqual('foobar');
+    expect(applyInputPath([1,2,3])).toEqual([1,2,3]);
+    expect(applyInputPath([])).toEqual([]);
   });
 });
