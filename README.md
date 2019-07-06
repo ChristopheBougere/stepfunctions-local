@@ -10,6 +10,11 @@ Stepfunctions-local provides a local AWS Step Functions server.
 This package only aims at replacing AWS Step Functions in a local context.
 Its API is totally compliant with AWS service, thus you can use it for your tests.
 
+## Project status
+In [February 2019](https://aws.amazon.com/about-aws/whats-new/2019/02/develop-and-test-aws-step-functions-workflows-locally/), AWS released an **offical local version of Step Functions**, available as a [docker image](https://hub.docker.com/r/amazon/aws-stepfunctions-local). We will still accept pull requests, but we encourage you to use the official local version.
+
+More information: [Setting Up Step Functions Local (Downloadable Version)](https://docs.aws.amazon.com/step-functions/latest/dg/sfn-local.html)
+
 ## Why **stepfunctions-local**?
 - Ease development and tests. You don't have to upload all your resources on AWS to run a state machine.
 - 100% compliant with AWS API. You can query it using the AWS cli by changing the endpoint. Errors and responses follow the same format.
