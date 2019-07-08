@@ -101,7 +101,7 @@ describe('Parallel', () => {
           States: {
             Pass: {
               Type: 'Pass',
-              InputPath: "$.first",
+              InputPath: '$.first',
               End: true,
             },
           },
@@ -111,7 +111,7 @@ describe('Parallel', () => {
           States: {
             Pass: {
               Type: 'Pass',
-              InputPath: "$.second",
+              InputPath: '$.second',
               End: true,
             },
           },
@@ -120,13 +120,13 @@ describe('Parallel', () => {
     };
     const input = {
       first: 1,
-      second: 2
+      second: 2,
     };
 
     const expectedOutput = {
       first: 1,
       second: 2,
-      result: [1, 2]
+      result: [1, 2],
     };
     const parallelInstance = new Parallel(state, execution, 'ParallelState', {});
     const { output } = await parallelInstance.execute(input);
