@@ -22,8 +22,7 @@ class Parallel extends State {
             const branch = new StateMachine(branchObj, this.execution, this.config);
 
             const result = await branch.execute(this.input);
-            const output = applyResultPath(this.input, this.state.ResultPath, result.output);
-            return applyOutputPath(output, this.state.OutputPath);
+            return result.output;
           }));
           addHistoryEvent(this.execution, 'PARALLEL_STATE_SUCCEEDED');
           addHistoryEvent(this.execution, 'PARALLEL_STATE_EXITED');
@@ -37,7 +36,8 @@ class Parallel extends State {
           }
         }
       } while (!branchesOutputs);
-      this.branchesOutputs = branchesOutputs;
+      const output = applyResultPath(this.input, this.state.ResultPath, branchesOutputs);
+      this.branchesOutputs = applyOutputPath(output, this.state.OutputPath);
     } catch (e) {
       addHistoryEvent(this.execution, 'PARALLEL_STATE_FAILED', {
         cause: e.name,

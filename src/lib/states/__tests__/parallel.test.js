@@ -90,6 +90,49 @@ describe('Parallel', () => {
     expect(nextState).toEqual('Final State');
   });
 
+  it('should send branch output to ResultPath', async () => {
+    const state = {
+      Type: 'Parallel',
+      Next: 'Final State',
+      ResultPath: '$.result',
+      Branches: [
+        {
+          StartAt: 'Pass',
+          States: {
+            Pass: {
+              Type: 'Pass',
+              InputPath: '$.first',
+              End: true,
+            },
+          },
+        },
+        {
+          StartAt: 'Pass',
+          States: {
+            Pass: {
+              Type: 'Pass',
+              InputPath: '$.second',
+              End: true,
+            },
+          },
+        },
+      ],
+    };
+    const input = {
+      first: 1,
+      second: 2,
+    };
+
+    const expectedOutput = {
+      first: 1,
+      second: 2,
+      result: [1, 2],
+    };
+    const parallelInstance = new Parallel(state, execution, 'ParallelState', {});
+    const { output } = await parallelInstance.execute(input);
+    expect(output).toEqual(expectedOutput);
+  });
+
   it('should fail and retry', async () => {
     AWS.mock('Lambda', 'invoke', () => {
       throw new Error('I am a failing Lambda...');
